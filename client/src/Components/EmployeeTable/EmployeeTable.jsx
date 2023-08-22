@@ -7,11 +7,26 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortAttribute, setSortAttribute] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortDirection, setSortDirection] = useState(1); // 1 for ascending, -1 for descending
+
+  const handleSort = (attribute) => {
+    if (attribute === sortAttribute) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortAttribute(attribute);
+      setSortOrder("asc");
+    }
+    setSortDirection(sortOrder === "asc" ? 1 : -1); // For lists to work in both ascending and descending order
+  };
 
   const filteredEmployees = employees.filter((employee) => {
-    const matchesPosition = !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
-    const matchesLevel = !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
-    const matchesSearch = 
+    const matchesPosition =
+      !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
+    const matchesLevel =
+      !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
+    const matchesSearch =
       employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.level.toLowerCase().includes(searchQuery.toLowerCase());
@@ -19,7 +34,36 @@ const EmployeeTable = ({ employees, onDelete }) => {
     return matchesPosition && matchesLevel && matchesSearch;
   });
 
+  const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
+      const aNames = a.name.split(" ");
+      const bNames = b.name.split(" ");
   
+      let aValue, bValue;
+  
+      if (sortAttribute === "firstName") {
+        aValue = aNames[0];
+        bValue = bNames[0];
+      } else if (sortAttribute === "middleName") {
+        aValue = aNames.length === 3 ? aNames[1] : "";
+        bValue = bNames.length === 3 ? bNames[1] : "";
+      } else if (sortAttribute === "lastName") {
+        aValue = aNames.length === 3 ? aNames[2] : aNames[1];
+        bValue = bNames.length === 3 ? bNames[2] : bNames[1];
+      }
+  
+      return sortDirection * aValue.localeCompare(bValue);
+    }
+  
+    if (sortAttribute === "position" || sortAttribute === "level") {
+      return sortDirection * a[sortAttribute].localeCompare(b[sortAttribute]);
+    }
+  
+    return 0;
+  });
+  
+
+
   return (
     <div className="EmployeeTable">
       <div className="filters">
@@ -40,7 +84,14 @@ const EmployeeTable = ({ employees, onDelete }) => {
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-        />        
+        />
+      </div>
+      <div className="sort-buttons">
+        <button onClick={() => handleSort("firstName")}>First Name</button>
+        <button onClick={() => handleSort("lastName")}>Last Name</button>
+        <button onClick={() => handleSort("middleName")}>Middle Name</button>
+        <button onClick={() => handleSort("position")}>Position</button>
+        <button onClick={() => handleSort("level")}>Level</button>
       </div>
       <table>
         <thead>
@@ -52,7 +103,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredEmployees.map((employee) => (
+          {sortedEmployees.map((employee) => (
             <tr key={employee._id}>
               <td>{employee.name}</td>
               <td>{employee.level}</td>
@@ -63,9 +114,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
                     Update
                   </button>
                 </Link>
-                  <button type="button" onClick={() => onDelete(employee._id)}>
-                    Delete
-                  </button>
+                <button type="button" onClick={() => onDelete(employee._id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
