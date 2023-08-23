@@ -1,15 +1,14 @@
 import React from "react";
-import Loading from "../Components/Loading";
+import EquipmentTable from "../Components/EquipmentTable/EquipmentTable";
 
 const EquipmentList = () => {
 
-
-return (
-    <div>
-        <h2>Hello</h2>
-        <h3>bello</h3>
-    </div>
-)
+    return (
+        <div>
+            <h2>Equipment List</h2>
+            <EquipmentTable />
+        </div>
+    )
 };
 
 
