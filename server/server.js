@@ -32,6 +32,7 @@ app.get("/api/employees/:id", async (req, res) => {
   return res.json(employee);
 });
 
+// Alkalmazottra valo kereses azonosito alapjan
 app.get("/api/employees/:search", async (req, res, next) => {
   try {
     const searchQuery = req.params.search;
@@ -46,6 +47,16 @@ app.get("/api/employees/:search", async (req, res, next) => {
     return res.json(matchingEmployees);
   } catch (error) {
     return next(err);
+  }
+});
+
+// Kipipalt alkalmazottak lekerdezese
+app.get("/api/missing", async (req, res, next) => {
+  try {
+    const missingEmployees = await EmployeeModel.find({ isPicked: true });
+    return res.json(missingEmployees)
+  } catch (error) {
+    return next(error);
   }
 });
 
