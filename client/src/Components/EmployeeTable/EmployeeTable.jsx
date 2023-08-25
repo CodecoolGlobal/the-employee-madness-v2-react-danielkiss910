@@ -10,6 +10,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [sortAttribute, setSortAttribute] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [sortDirection, setSortDirection] = useState(1); // 1 for ascending, -1 for descending
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -62,6 +63,13 @@ const EmployeeTable = ({ employees, onDelete }) => {
     return 0;
   });
   
+  const handleSelect = (id) => {
+    if (selectedEmployees.includes(id)) {
+      setSelectedEmployees(selectedEmployees.filter((employeeId) => employeeId !== id));
+    } else {
+      setSelectedEmployees([...selectedEmployees, id]);
+    }
+  };
 
 
   return (
@@ -96,6 +104,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
       <table>
         <thead>
           <tr>
+            <th>Select</th>
             <th>Name</th>
             <th>Level</th>
             <th>Position</th>
@@ -105,6 +114,13 @@ const EmployeeTable = ({ employees, onDelete }) => {
         <tbody>
           {sortedEmployees.map((employee) => (
             <tr key={employee._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  onChange={() => handleSelect(employee._id)}
+                  checked={selectedEmployees.includes(employee._id)}
+                  />
+              </td>
               <td>{employee.name}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>

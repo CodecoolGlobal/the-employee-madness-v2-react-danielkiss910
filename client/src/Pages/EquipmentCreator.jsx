@@ -22,7 +22,7 @@ const EquipmentCreator = () => {
     createEquipment(employee)
       .then(() => {
         setLoading(false);
-        navigate("/");
+        navigate("/equipment");
       })
   };
 

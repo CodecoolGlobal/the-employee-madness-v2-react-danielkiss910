@@ -15,6 +15,7 @@ const deleteEmployee = (id) => {
 const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState(null);
+  // const [searchQuery, setSearchQuery] = useState("");
 
   const handleDelete = (id) => {
     deleteEmployee(id);
@@ -24,19 +25,47 @@ const EmployeeList = () => {
     });
   };
 
+  // const handleSearch = () => {
+  //   setLoading(true);
+  //   fetch(`/api/employees/${searchQuery}`)
+  //   .then((res) => res.json())
+  //   .then((matchingEmployees) => {
+  //     setLoading(false);
+  //     setEmployees(matchingEmployees);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     setLoading(false);
+  //   });
+  // };
+
   useEffect(() => {
     fetchEmployees()
       .then((employees) => {
         setLoading(false);
         setEmployees(employees);
       })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
     return <Loading />;
   }
 
-  return <EmployeeTable employees={employees} onDelete={handleDelete} />;
+  return (
+    <div>
+      {/* <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button> */}
+      <EmployeeTable employees={employees} onDelete={handleDelete} />;
+    </div>
+  );
 };
 
 export default EmployeeList;

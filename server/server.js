@@ -1,31 +1,55 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const EmployeeModel = require("./db/employee.model");
-const EquipmentModel = require("./db/equipment.model");
+// Szükséges modulok importálása
+require("dotenv").config(); // Környezeti változók kezelése
+const express = require("express"); // Express keretrendszer
+const mongoose = require("mongoose"); // MongoDB kezelése
+const EmployeeModel = require("./db/employee.model"); // Az alkalmazottak adatmodellje
+const EquipmentModel = require("./db/equipment.model"); // Az eszközök adatmodellje
 
+// Környezeti változók beállítása
 const { MONGO_URL, PORT = 8080 } = process.env;
 
+// MongoDB URL ellenőrzése
 if (!MONGO_URL) {
   console.error("Missing MONGO_URL environment variable");
   process.exit(1);
 }
 
+// Express alkalmazás inicializálása
 const app = express();
-app.use(express.json());
+app.use(express.json()); // JSON adatok kezelése
 
-// Employees
+// Alkalmazottak kezelése
 
+// Alkalmazottak lekérdezése
 app.get("/api/employees/", async (req, res) => {
   const employees = await EmployeeModel.find().sort({ created: "desc" });
   return res.json(employees);
 });
 
+// Egy alkalmazott lekérdezése azonosító alapján
 app.get("/api/employees/:id", async (req, res) => {
   const employee = await EmployeeModel.findById(req.params.id);
   return res.json(employee);
 });
 
+app.get("/api/employees/:search", async (req, res, next) => {
+  try {
+    const searchQuery = req.params.search;
+    const matchingEmployees = await EmployeeModel.find({
+      $or: [ // Az `$or` operátor miatt bármelyik feltétel teljesülése esetén az adott dokumentum bekerül a lekérdezés eredményébe.
+        { firstName: { $regex: searchQuery, $options: "i" } }, // $regex operátor a reguláris kifejezés illesztésére szolgál.
+        { middleName: { $regex: searchQuery, $options: "i" } }, // $options: "i" pedig azt jelzi, hogy a keresés legyen nem kis- és nagybetűk közötti különbség érzékeny.
+        { lastName: { $regex: searchQuery, $options: "i" } },
+      ]
+    }).sort({ created: "desc" }); // `created` mező alapján csökkenő sorrendben rendezzük őket
+
+    return res.json(matchingEmployees);
+  } catch (error) {
+    return next(err);
+  }
+});
+
+// Új alkalmazott létrehozása
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
@@ -37,6 +61,7 @@ app.post("/api/employees/", async (req, res, next) => {
   }
 });
 
+// Alkalmazott frissítése azonosító alapján
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findOneAndUpdate(
@@ -50,6 +75,7 @@ app.patch("/api/employees/:id", async (req, res, next) => {
   }
 });
 
+// Alkalmazott törlése azonosító alapján
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findById(req.params.id);
@@ -60,21 +86,21 @@ app.delete("/api/employees/:id", async (req, res, next) => {
   }
 });
 
-// Equipment
+// Eszközök kezelése
 
-// Fetch all equipment
+// Összes eszköz lekérdezése
 app.get("/api/equipment", async (req, res) => {
   const equipment = await EquipmentModel.find().sort({ created: "desc" });
   return res.json(equipment);
 });
 
-// Fetch a single equipment by ID
+// Egy eszköz lekérdezése azonosító alapján
 app.get("/api/equipment/:id", async (req, res) => {
   const equipment = await EquipmentModel.findById(req.params.id);
   return res.json(equipment);
 });
 
-// Create new equipment
+// Új eszköz létrehozása
 app.post("/api/equipment/", async (req, res, next) => {
   const equipment = req.body;
 
@@ -86,7 +112,7 @@ app.post("/api/equipment/", async (req, res, next) => {
   }
 });
 
-// Update equipment bt ID
+// Egy eszköz frissítése azonosító alapján
 app.patch("/api/equipment/:id", async (req, res, next) => {
   try {
     const equipment = await EquipmentModel.findOneAndUpdate(
@@ -100,7 +126,7 @@ app.patch("/api/equipment/:id", async (req, res, next) => {
   }
 });
 
-// Delete equipment by ID
+// Egy eszköz törlése azonosító alapján
 app.delete("/api/equipment/:id", async (req, res, next) => {
   try {
     const equipment = await EquipmentModel.findById(req.params.id);
@@ -111,11 +137,12 @@ app.delete("/api/equipment/:id", async (req, res, next) => {
   }
 });
 
+// Fő függvény indítása
 const main = async () => {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URL); // MongoDB kapcsolat létrehozása
 
   app.listen(PORT, () => {
-    console.log("App is listening on 8080");
+    console.log(`App is listening on ${PORT}`);
     console.log("Try /api/employees route right now");
   });
 };
