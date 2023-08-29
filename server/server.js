@@ -65,6 +65,7 @@ app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
   try {
+    employee.isPicked = false // Alapertelmezett ertek false (nem hianyzo)
     const saved = await EmployeeModel.create(employee);
     return res.json(saved);
   } catch (err) {
@@ -75,6 +76,10 @@ app.post("/api/employees/", async (req, res, next) => {
 // Alkalmazott frissítése azonosító alapján
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
+    if (req.body.isPicked === undefined) {
+      req.body.isPicked = false;
+    }
+
     const employee = await EmployeeModel.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { ...req.body } },
