@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "./EquipmentTable.css";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 const EquipmentTable = () => {
   const [equipment, setEquipment] = useState([]);
@@ -10,6 +12,36 @@ const EquipmentTable = () => {
   const [amountFilter, setAmountFilter] = useState("");
   const [sortField, setSortField] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [deleteEquipmentId, setDeleteEquipmentId] = useState(null);
+
+  const handleOpenConfirmDialog = (id) => {
+    setDeleteEquipmentId(id);
+    setShowConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setDeleteEquipmentId(null);
+    setShowConfirmDialog(false);
+  };
+
+  const handleDelete = (id) => {
+    handleOpenConfirmDialog(id);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteEquipmentId) {
+      try {
+        await axios.delete(`/api/equipment/${deleteEquipmentId}`);
+
+        const updatedEquipment = equipment.filter(item => item._id !== deleteEquipmentId);
+        setEquipment(updatedEquipment);
+        handleCloseConfirmDialog();
+      } catch (error) {
+        console.error("Error deleting equipment", error);
+      }
+    }
+  };
 
   const fetchEquipment = useCallback(async () => {
     try {
@@ -151,8 +183,27 @@ const EquipmentTable = () => {
               <td>{item.name}</td>
               <td>{item.type}</td>
               <td>{item.amount}</td>
+              <td>
+                <Link to={`/update-equipment/${item._id}`}>
+                  <button type="button">
+                    Update
+                  </button>
+                  </Link>
+                  <button
+                    type="button"
+                    className="delete-button"
+                    onClick={() => handleDelete(item._id)}>
+                    Delete
+                  </button>
+              </td>
             </tr>
           ))}
+          {showConfirmDialog && (
+            <ConfirmationModal
+              onCancel={handleCloseConfirmDialog}
+              onConfirm={handleConfirmDelete}
+              />
+          )}
         </tbody>
       </table>
     </div>
