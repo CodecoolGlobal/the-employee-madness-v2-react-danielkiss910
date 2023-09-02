@@ -80,6 +80,29 @@ const EmployeeTable = ({ employees, onDelete, }) => {
 
   return (
     <div className="EmployeeTable">
+      <div className="search-container">
+        <div className="search-label">Find Employee:</div>
+        <div className="search-input">
+        <input
+          type="text"
+          placeholder="Enter employee name"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        {searchInput.trim() !== "" ? (
+        <Link to={`/search/${searchInput}`}>
+          <button type="button" className="search-button">
+            <span className="search-icon">&#x1F50D;</span>
+          </button>
+        </Link>
+        ) : (
+          <button type="button" className="search-button" disabled>
+            <span className="search-icon">&#x1F50D;</span>
+          </button>
+        )}
+        </div>
+      </div>
+
       <div className="filters">
         <input
           type="text"
@@ -99,17 +122,9 @@ const EmployeeTable = ({ employees, onDelete, }) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Enter employee name"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <Link to={`/search/${searchInput}`}>
-          <button type="button" >Find Employee</button>
-        </Link>
       </div>
 
+      <div className="sort-label">Sort Employees By:</div>
       <div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>
           First Name {sortAttribute === "firstName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
