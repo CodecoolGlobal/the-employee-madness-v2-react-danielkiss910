@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./EmployeeTable.css";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
-const EmployeeTable = ({ employees, onDelete }) => {
+
+const EmployeeTable = ({ employees, onDelete, }) => {
 
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
@@ -10,6 +12,10 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [sortAttribute, setSortAttribute] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [sortDirection, setSortDirection] = useState(1); // 1 for ascending, -1 for descending
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
+
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -26,18 +32,21 @@ const EmployeeTable = ({ employees, onDelete }) => {
       !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
     const matchesLevel =
       !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
-    const matchesSearch =
-      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      const matchesSearch =
+      (employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.lastName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       employee.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.level.toLowerCase().includes(searchQuery.toLowerCase());
+    
 
     return matchesPosition && matchesLevel && matchesSearch;
   });
 
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
-      const aNames = a.name.split(" ");
-      const bNames = b.name.split(" ");
+      const aNames = [a.firstName, a.middleName, a.lastName];
+      const bNames = [b.firstName, b.middleName, b.lastName];
   
       let aValue, bValue;
   
@@ -45,11 +54,11 @@ const EmployeeTable = ({ employees, onDelete }) => {
         aValue = aNames[0];
         bValue = bNames[0];
       } else if (sortAttribute === "middleName") {
-        aValue = aNames.length === 3 ? aNames[1] : "";
-        bValue = bNames.length === 3 ? bNames[1] : "";
+        aValue = aNames[1];
+        bValue = bNames[1];
       } else if (sortAttribute === "lastName") {
-        aValue = aNames.length === 3 ? aNames[2] : aNames[1];
-        bValue = bNames.length === 3 ? bNames[2] : bNames[1];
+        aValue = aNames[2];
+        bValue = bNames[2];
       }
   
       return sortDirection * aValue.localeCompare(bValue);
@@ -62,6 +71,11 @@ const EmployeeTable = ({ employees, onDelete }) => {
     return 0;
   });
   
+  
+  const handleDelete = (employee) => {
+    setEmployeeToDelete(employee);
+    setShowConfirmDialog(true);
+  }
 
 
   return (
@@ -85,13 +99,33 @@ const EmployeeTable = ({ employees, onDelete }) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <input
+          type="text"
+          placeholder="Enter employee name"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <Link to={`/search/${searchInput}`}>
+          <button type="button" >Find Employee</button>
+        </Link>
       </div>
+
       <div className="sort-buttons">
-        <button onClick={() => handleSort("firstName")}>First Name</button>
-        <button onClick={() => handleSort("lastName")}>Last Name</button>
-        <button onClick={() => handleSort("middleName")}>Middle Name</button>
-        <button onClick={() => handleSort("position")}>Position</button>
-        <button onClick={() => handleSort("level")}>Level</button>
+        <button onClick={() => handleSort("firstName")}>
+          First Name {sortAttribute === "firstName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          </button>
+        <button onClick={() => handleSort("middleName")}>
+          Middle Name {sortAttribute === "middleName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          </button>
+        <button onClick={() => handleSort("lastName")}>
+           Last Name {sortAttribute === "lastName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+           </button>
+        <button onClick={() => handleSort("position")}>
+          Position {sortAttribute === "position" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          </button>
+        <button onClick={() => handleSort("level")}>
+           Level {sortAttribute === "level" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          </button>
       </div>
       <table>
         <thead>
@@ -105,7 +139,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
         <tbody>
           {sortedEmployees.map((employee) => (
             <tr key={employee._id}>
-              <td>{employee.name}</td>
+              <td>{employee.firstName} {employee.middleName} {employee.lastName}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
               <td>
@@ -114,7 +148,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
                     Update
                   </button>
                 </Link>
-                <button type="button" onClick={() => onDelete(employee._id)}>
+                <button type="button" className="delete-button" onClick={() => handleDelete(employee._id)}>
                   Delete
                 </button>
               </td>
@@ -122,6 +156,19 @@ const EmployeeTable = ({ employees, onDelete }) => {
           ))}
         </tbody>
       </table>
+      {showConfirmDialog && (
+        <ConfirmationModal
+          onCancel={() => {
+            setEmployeeToDelete(null);
+            setShowConfirmDialog(false);
+          }}
+          onConfirm={() => {
+            onDelete(employeeToDelete);
+            setEmployeeToDelete(null);
+            setShowConfirmDialog(false);
+          }}
+          />
+      )}
     </div>
   );
 };

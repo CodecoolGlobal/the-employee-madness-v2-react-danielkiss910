@@ -1,3 +1,8 @@
 .EmployeeTable {
   padding: 0.5rem;
 }
+
+.delete-button {
+  background-color:darkred;
+  color:white;
+}

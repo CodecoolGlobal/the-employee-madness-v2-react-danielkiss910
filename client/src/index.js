@@ -1,6 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Routes, } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
 import Layout from "./Pages/Layout";
@@ -11,61 +11,31 @@ import EmployeeUpdater from "./Pages/EmployeeUpdater";
 import EquipmentList from "./Pages/EquipmentList";
 import EquipmentCreator from "./Pages/EquipmentCreator";
 import EquipmentUpdater from "./Pages/EquipmentUpdater";
+import EmployeeSearch from "./Pages/EmployeeSearch";
 
 import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/",
-        element: <EmployeeList />,
-      },
-      {
-        path: "/create",
-        element: <EmployeeCreator />,
-      },
-      {
-        path: "/update/:id",
-        element: <EmployeeUpdater />,
-      },
-      {
-        path: "/table-test",
-        element: <TableTest />,
-      },
-      {
-        path: "/form-test",
-        element: <FormTest />,
-      },
-      {
-        path: "/equipment",
-        element: <EquipmentList />,
-      },
-      {
-        path: "/createequipment",
-        element: <EquipmentCreator />
-      },
-      {
-        path: "/update-equipment/:id",
-        element: <EquipmentUpdater />
-      },
-    ],
-  },
-]);
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<EmployeeList />} />
+          <Route path="/error-page" element={<ErrorPage />} />
+          <Route path="/create" element={<EmployeeCreator />} />
+          <Route path="/update/:id" element={<EmployeeUpdater />} />
+          <Route path="/table-test" element={<TableTest />} />
+          <Route path="/form-test" element={<FormTest />} />
+          <Route path="/equipment" element={<EquipmentList />} />
+          <Route path="/createequipment" element={<EquipmentCreator />} />
+          <Route path="/update-equipment/:id" element={<EquipmentUpdater />} />
+          <Route path="/search/:employeeSearch" element={<EmployeeSearch />} />
+        </Route>
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

@@ -21,10 +21,33 @@ app.get("/api/employees/", async (req, res) => {
   return res.json(employees);
 });
 
+// Fetch an employee by ID
 app.get("/api/employees/:id", async (req, res) => {
   const employee = await EmployeeModel.findById(req.params.id);
   return res.json(employee);
 });
+
+// Fetch employees by search query
+app.get("/api/search/:employeeSearch", async (req, res) => {
+  const employeeSearch = req.params.employeeSearch;
+  console.log("Received server side search query:", employeeSearch);
+
+  try {
+    const employees = await EmployeeModel.find({
+      $or: [
+        { firstName: { $regex: new RegExp(employeeSearch, "i") } },
+        { middleName: { $regex: new RegExp(employeeSearch, "i") } },
+        { lastName: { $regex: new RegExp(employeeSearch, "i") } }
+      ]
+    }).sort({ created: "desc" });
+
+    return res.json(employees);
+  } catch (error) {
+    console.error("Error fetching search results", error);
+    return res.status(500).json({ error: "Error fetching search results" });
+  }
+});
+
 
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;

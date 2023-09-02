@@ -21,7 +21,11 @@ const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
 
   const employees = names.map((name) => {
-    const [firstName, middleName, lastName] = name.split(" ");
+    const nameParts = name.split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts[nameParts.length - 1];
+    const middleName = nameParts.length > 2 ? nameParts.slice(1, -1).join(" ") : "";
+    
     return {
       firstName,
       middleName,
