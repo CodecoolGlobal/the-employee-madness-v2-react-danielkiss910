@@ -139,7 +139,7 @@ const EmployeeTable = ({ employees, onDelete, }) => {
         <tbody>
           {sortedEmployees.map((employee) => (
             <tr key={employee._id}>
-              <td>{employee.firstName} {employee.middleName} {employee.lastName}</td>
+              <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
               <td>

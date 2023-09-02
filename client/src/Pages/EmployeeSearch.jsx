@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function EmployeeSearch () {
     const { employeeSearch } = useParams();
@@ -31,12 +31,15 @@ function EmployeeSearch () {
             <ul>
                 {searchResults.map((employee) => (
                     <li key={employee._id}>
-                        <p>{`${employee.firstName} ${employee.middleName} ${employee.lastName}`}</p>
+                        <p><strong>{`${employee.firstName} ${employee.middleName} ${employee.lastName}`}</strong></p>
                         <p>{`Level: ${employee.level}`}</p>
                         <p>{`Position: ${employee.position}`}</p>
                     </li>
                 ))}
             </ul>
+            <Link to="/">
+                <button type="button">Back</button>
+            </Link>
         </div>
     )
 }
