@@ -152,19 +152,19 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       <div className="sort-label">Sort Employees By:</div>
       <div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>
-          First Name {sortAttribute === "firstName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          First Name {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
           </button>
         <button onClick={() => handleSort("middleName")}>
-          Middle Name {sortAttribute === "middleName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          Middle Name {sortAttribute === "middleName" && (sortDirection === 1 ? "🡹" : "🡻")}
           </button>
         <button onClick={() => handleSort("lastName")}>
-           Last Name {sortAttribute === "lastName" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+           Last Name {sortAttribute === "lastName" && (sortDirection === 1 ? "🡹" : "🡻")}
            </button>
         <button onClick={() => handleSort("position")}>
-          Position {sortAttribute === "position" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+          Position {sortAttribute === "position" && (sortDirection === 1 ? "🡹" : "🡻")}
           </button>
         <button onClick={() => handleSort("level")}>
-           Level {sortAttribute === "level" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
+           Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
           </button>
       </div>
       <div>
@@ -178,7 +178,10 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
         <thead>
           <tr>
             <th>Present</th>
-            <th>Name</th>
+            <th onClick={() => handleSort("firstName")}>
+              Name{" "}
+              {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
+            </th>
             <th>Level</th>
             <th>Position</th>
             <th>Starting Date</th>
