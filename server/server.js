@@ -54,6 +54,19 @@ app.get(`/api/colours`, (req, res) => {
   res.json(colours);
 });
 
+app.get("/api/top-paid", async (req, res) => {
+  try {
+    const topPaidEmployees = await EmployeeModel.find()
+    .sort({ currentSalary: -1 }) // Sort in descending order of salary
+    .limit(3); // Limit to top 3 employees
+    
+    return res.json(topPaidEmployees);
+  } catch (error) {
+    console.error("Error fetching top paid employees", error);
+    return res.status(500).json({ error: "Error fetching top paid employees" });
+  }
+});
+
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 

@@ -149,9 +149,9 @@ const EmployeeTable = ({ employees, onDelete, }) => {
             <th>Level</th>
             <th>Position</th>
             <th>Starting Date</th>
-            <th>Current Salary (HUF)</th>
-            <th>Desired Salary (HUF)</th>
-            <th>Difference (HUF)</th>
+            <th>Current Salary (EUR)</th>
+            <th>Desired Salary (EUR)</th>
+            <th>Difference (EUR)</th>
             <th>Favourite Colour</th>
             <th />
           </tr>

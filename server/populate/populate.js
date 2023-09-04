@@ -7,7 +7,7 @@ const names = require("./names.json");
 const levels = require("./levels.json");
 const positions = require("./positions.json");
 const EmployeeModel = require("../db/employee.model");
-const colours = require("./server");
+const colours = require("../server");
 
 const mongoUrl = process.env.MONGO_URL;
 
@@ -31,8 +31,8 @@ const populateEmployees = async () => {
     const newestStartDate = new Date(); // Current date
     const randomStartDate = new Date(oldestStartDate.getTime() + Math.random() * (newestStartDate.getTime() - oldestStartDate.getTime()));
 
-    const randomCurrentSalary = Math.floor(Math.random() * (1000000 - 500000)) + 500000;
-    const randomDesiredSalary = Math.floor(Math.random() * (2000000 - 1000000)) + 1000000;
+    const randomCurrentSalary = Math.floor(Math.random() * (5000 - 4000)) + 4000;
+    const randomDesiredSalary = Math.floor(Math.random() * (10000 - 5000)) + 5000;
 
     // const colours = ["Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet"];
     const favouriteColour = pick(colours);
