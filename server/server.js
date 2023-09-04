@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
 const EquipmentModel = require("./db/equipment.model");
+const employeeModel = require("./db/employee.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
 
@@ -67,6 +68,16 @@ app.get("/api/top-paid", async (req, res) => {
   }
 });
 
+app.get("/api/missing", async (req, res) => {
+  try {
+    const missingEmployees = await EmployeeModel.find({ present: false });
+    return res.json(missingEmployees);
+  } catch (error) {
+    console.error("Error fetching missing employees", error);
+    return res.status(500).json({ error: "Error fetching missing employees" });
+  }
+});
+
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
@@ -75,6 +86,20 @@ app.post("/api/employees/", async (req, res, next) => {
     return res.json(saved);
   } catch (err) {
     return next(err);
+  }
+});
+
+app.patch("/api/update-attendance", async (req, res, next) => {
+  const { employeeIds } = req.body;
+  try {
+    await employeeModel.updateMany(
+      { _id: { $in: employeeIds } },
+      { $set: { present: true } }
+    );
+    return res.json({ message: "Attendance updated successfully" });
+  } catch (error) {
+    console.error("Error updating attendance", error);
+    return res.status(500).json({ error: "Error updating attendance" });
   }
 });
 

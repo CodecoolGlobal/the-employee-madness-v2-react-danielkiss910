@@ -13,6 +13,10 @@ const EmployeeSchema = new Schema({
   currentSalary: Number,
   favouriteColour: String,
   desiredSalary: Number,
+  present: {
+    type: Boolean,
+    default: false,
+  },
   created: {
     type: Date,
     default: Date.now,

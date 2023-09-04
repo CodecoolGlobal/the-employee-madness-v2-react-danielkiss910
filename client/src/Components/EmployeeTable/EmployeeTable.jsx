@@ -4,7 +4,7 @@ import "./EmployeeTable.css";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 
-const EmployeeTable = ({ employees, onDelete, }) => {
+const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
 
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
@@ -15,7 +15,26 @@ const EmployeeTable = ({ employees, onDelete, }) => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [searchInput, setSearchInput] = useState('');
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
 
+  const handleCheckboxChange = (employeeId) => {
+    if (selectedEmployees.includes(employeeId)) {
+      setSelectedEmployees(selectedEmployees.filter((id) => id !== employeeId));
+
+      onCheckboxChange(employeeId, selectedEmployees.includes(employeeId));
+    } else {
+      setSelectedEmployees([...selectedEmployees, employeeId]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedEmployees.length === sortedEmployees.length) {
+      setSelectedEmployees([]);
+    } else {
+      setSelectedEmployees(sortedEmployees.map((employee) => employee._id));
+    }
+  };
+  
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -103,6 +122,9 @@ const EmployeeTable = ({ employees, onDelete, }) => {
         <Link to="/top-paid">
           <button type="button">Top Paid Employees</button>
         </Link>
+        <Link to="/missing">
+          <button type="button">Missing Employees</button>
+        </Link>
         </div>
       </div>
 
@@ -145,9 +167,17 @@ const EmployeeTable = ({ employees, onDelete, }) => {
            Level {sortAttribute === "level" && <strong>{sortDirection === 1 ? "🡹" : "🡻"}</strong>}
           </button>
       </div>
+      <div>
+        <input 
+          type="checkbox"
+          checked={selectedEmployees.length === sortedEmployees.length}
+          onChange={handleSelectAll}
+        /> Select All
+      </div>
       <table>
         <thead>
           <tr>
+            <th>Present</th>
             <th>Name</th>
             <th>Level</th>
             <th>Position</th>
@@ -162,6 +192,13 @@ const EmployeeTable = ({ employees, onDelete, }) => {
         <tbody>
           {sortedEmployees.map((employee) => (
             <tr key={employee._id}>
+              <td>
+                <input
+                type="checkbox"
+                checked={selectedEmployees.includes(employee._id)}
+                onChange={() => handleCheckboxChange(employee._id)}
+                />
+              </td>
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>

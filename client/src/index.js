@@ -17,6 +17,7 @@ import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
 import TopPaidPage from "./Pages/TopPaidPage";
+import MissingEmployees from "./Pages/MissingEmployees";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/update-equipment/:id" element={<EquipmentUpdater />} />
           <Route path="/search/:employeeSearch" element={<EmployeeSearch />} />
           <Route path="/top-paid" element={<TopPaidPage />} />
+          <Route path="/missing" element={<MissingEmployees />} />
         </Route>
       </Routes>
     </Router>
