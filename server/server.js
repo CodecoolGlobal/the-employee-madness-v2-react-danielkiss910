@@ -105,12 +105,24 @@ app.patch("/api/update-attendance", async (req, res, next) => {
 
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
-    const employee = await EmployeeModel.findOneAndUpdate(
-      { _id: req.params.id },
-      { $set: { ...req.body } },
-      { new: true }
-    );
-    return res.json(employee);
+    const { equipmentId, ...employeeData } = req.body;
+
+    // Check if equipmentId is provided and assign the equipment to the employee
+    if (equipmentId) {
+      await EmployeeModel.updateOne(
+        { _id: req.params.id },
+        { $set: { ...employeeData, assignedEquipment: equipmentId } }
+      );
+    } else {
+      //If equipmentId is not provided, update other employee data
+      await EmployeeModel.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { ...employeeData, assignedEquipment: null } }
+      );
+    }
+    const updatedEmployee = await EmployeeModel.findById(req.params.id);
+    return res.json(updatedEmployee);
+
   } catch (err) {
     return next(err);
   }
@@ -130,8 +142,13 @@ app.delete("/api/employees/:id", async (req, res, next) => {
 
 // Fetch all equipment
 app.get("/api/equipment", async (req, res) => {
-  const equipment = await EquipmentModel.find().sort({ created: "desc" });
-  return res.json(equipment);
+  try {
+    const equipment = await EquipmentModel.find().sort({ created: "desc" });
+    return res.json(equipment);
+    } catch (error) {
+    console.error("Error fetching equipment", error);
+    return res.status(500).json({ error: "Error fetching equipment" });
+  }
 });
 
 // Fetch a single equipment by ID

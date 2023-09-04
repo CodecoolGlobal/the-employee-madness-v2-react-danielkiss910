@@ -1,8 +1,22 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
 import Loading from "../Components/Loading";
+
+const fetchEquipment = () => {
+  return fetch(`/api/equipment`)
+  .then((res) => res.json());
+};
+
+const fetchEmployee = (id) => {
+  return fetch(`/api/employees/${id}`).then((res) => res.json());
+};
+
+const fetchColours = () => {
+  return fetch(`/api/colours`)
+    .then((res) => res.json())
+    .then((data) => data.colours);
+};
 
 const updateEmployee = (employee) => {
   return fetch(`/api/employees/${employee._id}`, {
@@ -14,16 +28,6 @@ const updateEmployee = (employee) => {
   }).then((res) => res.json());
 };
 
-const fetchEmployee = (id) => {
-  return fetch(`/api/employees/${id}`).then((res) => res.json());
-};
-
-const fetchColours = () => {
-  return fetch(`/api/colours`)
-  .then((res) => res.json())
-  .then((data) => data.colours);
-}
-
 const EmployeeUpdater = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -32,13 +36,19 @@ const EmployeeUpdater = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [employeeLoading, setEmployeeLoading] = useState(true);
   const [colours, setColours] = useState([]);
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
 
   useEffect(() => {
     setEmployeeLoading(true);
-    Promise.all([fetchEmployee(id), fetchColours()])
-      .then(([employee, colours]) => {
+    Promise.all([fetchEmployee(id), fetchColours(), fetchEquipment()])
+      .then(([employee, colours, equipment]) => {
         setEmployee(employee);
         setColours(colours);
+        setEquipmentList(equipment);
+        if (employee) {
+          setSelectedEquipmentId(employee.equipment);
+        }
         setEmployeeLoading(false);
       });
   }, [id]);
@@ -63,6 +73,8 @@ const EmployeeUpdater = () => {
       disabled={updateLoading}
       onCancel={() => navigate("/")}
       colours={colours}
+      equipmentList={equipmentList}
+      selectedEquipmentId={selectedEquipmentId}
     />
   );
 };

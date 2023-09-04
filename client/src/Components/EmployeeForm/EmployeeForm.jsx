@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, }) => {
+const EmployeeForm = ({ onSave, disabled, employee, onCancel, equipmentList }) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -11,6 +11,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, }) => {
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [colours, setColours] = useState([]);
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
 
   useEffect(() => {
     fetch("/api/colours")
@@ -25,33 +26,29 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (employee) {
-      return onSave({
-        ...employee,
-        firstName,
-        middleName,
-        lastName,
-        level,
-        position,
-        startingDate,
-        currentSalary,
-        desiredSalary,
-        favouriteColour,
-      });
-    }
-
-    return onSave({
+    const updatedEmployee = {
       firstName,
-        middleName,
-        lastName,
-        level,
-        position,
-        startingDate,
-        currentSalary,
-        desiredSalary,
-        favouriteColour,
-    });
+      middleName,
+      lastName,
+      level,
+      position,
+      startingDate,
+      currentSalary,
+      desiredSalary,
+      favouriteColour,
+      equipment: selectedEquipmentId
+    };
+
+    if (employee) {
+      onSave({
+        ...employee,
+        ...updatedEmployee,
+      });
+    } else {
+      onSave(updatedEmployee);
+    }
   };
+
 
   return (
     <form className="EmployeeForm" onSubmit={onSubmit}>
@@ -148,6 +145,21 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, }) => {
           onChange={(e) => setFavouriteColour(e.target.value)}
           accept={colours.join("Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet")}
         />
+      </div>
+      
+      <div className="control">
+        <label htmlFor="equipment">Assign Equipment:</label>
+        <select
+          name="equipment"
+          value={selectedEquipmentId}
+          onChange={(e) => setSelectedEquipmentId(e.target.value)}
+        >
+          {equipmentList.map(equipment => (
+            <option key={equipment._id} value={equipment._id}>
+              {equipment.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="buttons">

@@ -17,6 +17,10 @@ const EmployeeSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  assignedEquipment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Equipment",
+  },
   created: {
     type: Date,
     default: Date.now,
