@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const TopPaidPage = () => {
     const [topPaidEmployees, setTopPaidEmployees] = useState([]);
@@ -24,6 +25,9 @@ const TopPaidPage = () => {
                     </li>
                 ))}
             </ul>
+            <Link to="/">
+            <button type="button">Back</button>
+            </Link>
         </div>
     );
 };

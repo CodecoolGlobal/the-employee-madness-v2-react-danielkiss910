@@ -100,6 +100,9 @@ const EmployeeTable = ({ employees, onDelete, }) => {
             <span className="search-icon">&#x1F50D;</span>
           </button>
         )}
+        <Link to="/top-paid">
+          <button type="button">Top Paid Employees</button>
+        </Link>
         </div>
       </div>
 
