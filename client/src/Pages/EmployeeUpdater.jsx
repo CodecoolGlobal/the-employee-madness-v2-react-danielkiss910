@@ -18,6 +18,12 @@ const fetchEmployee = (id) => {
   return fetch(`/api/employees/${id}`).then((res) => res.json());
 };
 
+const fetchColours = () => {
+  return fetch(`/api/colours`)
+  .then((res) => res.json())
+  .then((data) => data.colours);
+}
+
 const EmployeeUpdater = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,12 +31,14 @@ const EmployeeUpdater = () => {
   const [employee, setEmployee] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [employeeLoading, setEmployeeLoading] = useState(true);
+  const [colours, setColours] = useState([]);
 
   useEffect(() => {
     setEmployeeLoading(true);
-    fetchEmployee(id)
-      .then((employee) => {
+    Promise.all([fetchEmployee(id), fetchColours()])
+      .then(([employee, colours]) => {
         setEmployee(employee);
+        setColours(colours);
         setEmployeeLoading(false);
       });
   }, [id]);
@@ -54,6 +62,7 @@ const EmployeeUpdater = () => {
       onSave={handleUpdateEmployee}
       disabled={updateLoading}
       onCancel={() => navigate("/")}
+      colours={colours}
     />
   );
 };

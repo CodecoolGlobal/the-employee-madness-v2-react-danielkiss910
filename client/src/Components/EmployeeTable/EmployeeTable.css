@@ -51,3 +51,89 @@
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
 }
+
+.color-Black {
+  background-color: Black;
+  color: white;
+}
+
+.color-Grey {
+  background-color: Grey;
+}
+
+.color-Red {
+  background-color: Red;
+}
+
+.color-Blue {
+  background-color: Blue;
+  color: white;
+}
+
+.color-Orange {
+  background-color: Orange;
+}
+
+.color-White {
+  background-color: White;
+}
+
+.color-Brown {
+  background-color: Brown;
+}
+
+.color-Pink {
+  background-color: Pink;
+}
+
+.color-Yellow {
+  background-color: Yellow;
+}
+
+.color-Green {
+  background-color: Green;
+}
+
+.color-Purple {
+  background-color: Purple;
+}
+
+.color-Maroon {
+  background-color: Maroon;
+}
+
+.color-Turquoise {
+  background-color: Turquoise;
+}
+
+.color-Cyan {
+  background-color: Cyan;
+}
+
+.color-Gold {
+  background-color: Gold;
+}
+
+.color-Teal {
+  background-color: Teal;
+}
+
+.color-Lime {
+  background-color: Lime;
+}
+
+.color-Salmon {
+  background-color: Salmon;
+}
+
+.color-Olive {
+  background-color: Olive;
+}
+
+.color-Aqua {
+  background-color: Aqua;
+}
+
+.color-Violet {
+  background-color: Violet;
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
 
@@ -15,6 +15,14 @@ const createEmployee = (employee) => {
 const EmployeeCreator = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [colours, setColours] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/colours")
+    .then((res) => res.json())
+    .then((data) => setColours(data))
+    .catch((err) => console.error("Error fetching colours", err));
+  }, []);
 
   const handleCreateEmployee = (employee) => {
     setLoading(true);
@@ -30,6 +38,7 @@ const EmployeeCreator = () => {
     <EmployeeForm
       onCancel={() => navigate("/")}
       disabled={loading}
+      colours={colours}
       onSave={handleCreateEmployee}
     />
   );

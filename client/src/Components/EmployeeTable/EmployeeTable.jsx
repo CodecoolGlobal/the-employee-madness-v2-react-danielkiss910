@@ -148,6 +148,11 @@ const EmployeeTable = ({ employees, onDelete, }) => {
             <th>Name</th>
             <th>Level</th>
             <th>Position</th>
+            <th>Starting Date</th>
+            <th>Current Salary (HUF)</th>
+            <th>Desired Salary (HUF)</th>
+            <th>Difference (HUF)</th>
+            <th>Favourite Colour</th>
             <th />
           </tr>
         </thead>
@@ -157,6 +162,12 @@ const EmployeeTable = ({ employees, onDelete, }) => {
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
+              <td>{new Date(employee.startingDate).toLocaleDateString("en-GB")}</td>
+              {console.log(employee.startingDate)}
+              <td>{parseInt(employee.currentSalary).toLocaleString()}</td>
+              <td>{parseInt(employee.desiredSalary).toLocaleString()}</td>
+              <td>{parseInt(employee.desiredSalary - employee.currentSalary).toLocaleString()}</td>
+              <td className={`color-${employee.favouriteColour}`}>{employee.favouriteColour}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button">
