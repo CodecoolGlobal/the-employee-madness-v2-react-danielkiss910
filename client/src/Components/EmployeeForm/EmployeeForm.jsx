@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, colours }) => {
-  const [firstName, setFirstName] = useState(employee?.firstNameame ?? "");
+const EmployeeForm = ({ onSave, disabled, employee, onCancel, }) => {
+  const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
   const [level, setLevel] = useState(employee?.level ?? "");
@@ -10,6 +10,17 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, colours }) => {
   const [currentSalary, setCurrentSalary] = useState(employee?.currentSalary ?? "");
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
+  const [colours, setColours] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/colours")
+    .then(res => res.json())
+    .then(data => {setColours(data);
+  })
+    .catch(err => {
+      console.error("Error fetching colours", err);
+    });
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
