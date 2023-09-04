@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./EmployeeTable.css";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import Pagination from "../Pagination/Pagination";
 
 
 const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
@@ -16,6 +17,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleCheckboxChange = (employeeId) => {
     if (selectedEmployees.includes(employeeId)) {
@@ -94,7 +96,19 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
   const handleDelete = (employee) => {
     setEmployeeToDelete(employee);
     setShowConfirmDialog(true);
-  }
+  };
+
+  const employeesPerPage = 10;
+  const startIndex = (currentPage - 1) * employeesPerPage;
+  const employeesToDisplay = sortedEmployees.slice(
+    startIndex,
+    startIndex + employeesPerPage
+  );
+  const totalPages = Math.ceil(sortedEmployees.length / employeesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
 
   return (
@@ -193,7 +207,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedEmployees.map((employee) => (
+          {employeesToDisplay.map((employee) => (
             <tr key={employee._id}>
               <td>
                 <input
@@ -225,6 +239,11 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
       {showConfirmDialog && (
         <ConfirmationModal
           onCancel={() => {
