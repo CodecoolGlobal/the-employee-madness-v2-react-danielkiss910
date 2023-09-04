@@ -14,6 +14,7 @@ if (!MONGO_URL) {
 const app = express();
 app.use(express.json());
 
+
 // Employees
 
 app.get("/api/employees/", async (req, res) => {
@@ -48,6 +49,10 @@ app.get("/api/search/:employeeSearch", async (req, res) => {
   }
 });
 
+const colours = ["Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet"];
+app.get(`/api/colours`, (req, res) => {
+  res.json(colours);
+});
 
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
@@ -147,3 +152,5 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
+
+module.exports = colours;
