@@ -225,7 +225,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
               <td>{parseInt(employee.currentSalary).toLocaleString()}</td>
               <td>{parseInt(employee.desiredSalary).toLocaleString()}</td>
               <td>{parseInt(employee.desiredSalary - employee.currentSalary).toLocaleString()}</td>
-              <td className={`color-${employee.favouriteColour}`}>{employee.favouriteColour}</td>
+              <td className={`color-${employee.favouriteColour.name}`}>{employee.favouriteColour.name}</td>
               <td>{employee.favoriteBrand.name}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>

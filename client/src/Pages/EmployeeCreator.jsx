@@ -16,12 +16,20 @@ const EmployeeCreator = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [colours, setColours] = useState([]);
+  const [favoriteBrands, setfavoriteBrands] = useState([]);
 
   useEffect(() => {
     fetch("/api/colours")
     .then((res) => res.json())
     .then((data) => setColours(data))
     .catch((err) => console.error("Error fetching colours", err));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/favoriteBrands")
+    .then((res) => res.json())
+    .then((data) => setfavoriteBrands(data))
+    .catch((err) => console.error("Error fetching favourite brands", err));
   }, []);
 
   const handleCreateEmployee = (employee) => {
@@ -38,7 +46,8 @@ const EmployeeCreator = () => {
     <EmployeeForm
       onCancel={() => navigate("/")}
       disabled={loading}
-      colours={colours}
+      favouriteColours={colours}
+      favoriteBrands={favoriteBrands}
       onSave={handleCreateEmployee}
     />
   );

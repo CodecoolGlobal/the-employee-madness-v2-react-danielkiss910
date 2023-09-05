@@ -15,7 +15,6 @@ const fetchEmployee = (id) => {
 const fetchColours = () => {
   return fetch(`/api/colours`)
     .then((res) => res.json())
-    .then((data) => data.colours);
 };
 
 const fetchFavoriteBrands = () => {
@@ -40,7 +39,7 @@ const EmployeeUpdater = () => {
   const [employee, setEmployee] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [employeeLoading, setEmployeeLoading] = useState(true);
-  const [colours, setColours] = useState([]);
+  const [favouriteColours, setFavouriteColours] = useState([]);
   const [equipmentList, setEquipmentList] = useState([]);
   const [favoriteBrands, setfavoriteBrands] = useState([]);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
@@ -53,9 +52,9 @@ const EmployeeUpdater = () => {
       fetchEquipment(),
       fetchFavoriteBrands(),
     ])
-      .then(([employee, colours, equipment, favoriteBrands]) => {
+      .then(([employee, favouriteColours, equipment, favoriteBrands]) => {
         setEmployee(employee);
-        setColours(colours);
+        setFavouriteColours(favouriteColours);
         setfavoriteBrands(favoriteBrands);
         setEquipmentList(equipment);
         if (employee) {
@@ -84,7 +83,7 @@ const EmployeeUpdater = () => {
       onSave={handleUpdateEmployee}
       disabled={updateLoading}
       onCancel={() => navigate("/")}
-      colours={colours}
+      favouriteColours={favouriteColours}
       equipmentList={equipmentList}
       favoriteBrands={favoriteBrands}
       selectedEquipmentId={selectedEquipmentId}

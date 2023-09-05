@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, equipmentList }) => {
+const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, favouriteColours, equipmentList }) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -10,19 +10,9 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, eq
   const [currentSalary, setCurrentSalary] = useState(employee?.currentSalary ?? "");
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
-  const [colours, setColours] = useState([]);
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
 
-  useEffect(() => {
-    fetch("/api/colours")
-    .then(res => res.json())
-    .then(data => {setColours(data);
-  })
-    .catch(err => {
-      console.error("Error fetching colours", err);
-    });
-  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -139,14 +129,18 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, eq
       
       <div className="control">
         <label htmlFor="favouriteColour">Favourite Colour:</label>
-        <input
-          type="color"
-          id="favouriteColour"
+        <select
           name="favouriteColour"
           value={favouriteColour}
           onChange={(e) => setFavouriteColour(e.target.value)}
-          accept={colours.join("Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet")}
-        />
+        >
+          <option value="">Select Favourite Colour</option>
+          {favouriteColours?.map(colour => (
+            <option key={colour._id} value={colour._id}>
+              {colour.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="control">
@@ -165,7 +159,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, eq
         </select>
       </div>
       
-      <div className="control">
+      {/* <div className="control">
         <label htmlFor="equipment">Assign Equipment:</label>
         <select
           name="equipment"
@@ -178,7 +172,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, eq
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
