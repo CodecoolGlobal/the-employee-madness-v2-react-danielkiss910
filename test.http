@@ -1,26 +1,124 @@
+### Employees ###
+
+# Fetch all employees
 GET http://localhost:8080/api/employees/
 
 ###
+# Create a new employee
 POST http://localhost:8080/api/employees/
 Content-Type: application/json
 
 {
-  "name": "Valaki",
-  "level": "Godlike",
-  "position": "Joker"
-}
+  "_id":"64f726d96c707f044e42fe8h",
+  "firstName":"Buster",
+  "middleName":"",
+  "lastName":"Keaton",
+  "level":"Medior",
+  "position":"Superhero",
+  "startingDate":"2007-05-16T17:22:11.631Z",
+  "currentSalary":4140,
+  "desiredSalary":9612,
+  "present":false,
+  "favoriteBrand":{"_id":"64f726d86c707f044e42fe0a","name":"Razer","__v":0},
+  "favouriteColour":{"_id":"64f726d86c707f044e42fe0d","name":"Black","__v":0},
+  "created":"2023-09-05T13:02:17.045Z","__v":0
+  }
 
 ###
-DELETE http://localhost:8080/api/employees/63fc6e4bca1cb463caa21779
-
-###
-PATCH http://localhost:8080/api/employees/63fc6e4bca1cb463caa21779
-Content-Type:  application/json
+# Update an employee by ID
+PATCH http://localhost:8080/api/employees/64f726d96c707f044e42fe8d
+Content-Type: application/json
 
 {
-  "name": "asd"
+  "firstName": "Updated Name"
 }
 
 ###
-GET http://localhost:8080/api/search/John
+# Fetch an employee by ID
+GET http://localhost:8080/api/employees/64f726d96c707f044e42fe8d
 
+###
+# Delete an employee by ID
+DELETE http://localhost:8080/api/employees/64f726d96c707f044e42fe8d
+
+
+### Equipment ###
+
+###
+# Fetch all equipment
+GET http://localhost:8080/api/equipment/
+
+###
+# Create new equipment
+POST http://localhost:8080/api/equipment/
+Content-Type: application/json
+
+{
+  "name": "Equipment Name",
+  "type": "Tool",
+  "amount": 10
+}
+
+###
+# Update equipment by ID
+PATCH http://localhost:8080/api/equipment/63fc6e4bca1cb463caa21779
+Content-Type: application/json
+
+{
+  "name": "Updated Equipment Name"
+}
+
+###
+# Fetch equipment by ID
+GET http://localhost:8080/api/equipment/63fc6e4bca1cb463caa21779
+
+###
+# Delete equipment by ID
+DELETE http://localhost:8080/api/equipment/63fc6e4bca1cb463caa21779
+
+
+### Tools ###
+
+# Fetch all tools
+GET http://localhost:8080/api/tools/
+
+###
+# Create new tool
+POST http://localhost:8080/api/tools/
+Content-Type: application/json
+
+{
+  "_id":"64f726d86c707f044e42fe23",
+  "name":"Notebook",
+  "weight":0.5,"__v":0
+  }
+
+###
+# Update tool by ID
+PATCH http://localhost:8080/api/tool/64f7398c010fb8677875d2b2
+Content-Type: application/json
+
+{"_id":"64f726d86c707f044e42fe26",
+"name":"Updated Book",
+"weight":1,"__v":0
+}
+
+###
+# Fetch tool by ID
+GET http://localhost:8080/api/tool/64f7398c010fb8677875d2b2
+
+###
+# Delete tool by ID
+DELETE http://localhost:8080/api/tools/64f7398c010fb8677875d2b2
+
+
+### Favourite Brands ###
+
+# Fetch all favorite brands
+GET http://localhost:8080/api/favoritebrands/
+
+
+### Colours ###
+
+# Fetch all colors
+GET http://localhost:8080/api/colours/
