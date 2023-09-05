@@ -1,0 +1,123 @@
+[
+    {
+      "name": "Laptop",
+      "type": "Electronics",
+      "amount": 20,
+      "created": "2023-01-01T10:30:00Z"
+    },
+    {
+      "name": "Office Chair",
+      "type": "Furniture",
+      "amount": 50,
+      "created": "2023-01-02T12:00:00Z"
+    },
+    {
+      "name": "Whiteboard",
+      "type": "Office Supplies",
+      "amount": 10,
+      "created": "2023-01-03T14:15:00Z"
+    },
+    {
+      "name": "Desk",
+      "type": "Furniture",
+      "amount": 30,
+      "created": "2023-01-04T09:20:00Z"
+    },
+    {
+      "name": "Projector",
+      "type": "Electronics",
+      "amount": 5,
+      "created": "2023-01-05T11:10:00Z"
+    },
+    {
+      "name": "Pencil",
+      "type": "Office Supplies",
+      "amount": 150,
+      "created": "2023-01-06T15:45:00Z"
+    },
+    {
+      "name": "Notebook",
+      "type": "Office Supplies",
+      "amount": 80,
+      "created": "2023-01-07T10:30:00Z"
+    },
+    {
+      "name": "Monitor",
+      "type": "Electronics",
+      "amount": 40,
+      "created": "2023-01-08T12:00:00Z"
+    },
+    {
+      "name": "Keyboard",
+      "type": "Electronics",
+      "amount": 55,
+      "created": "2023-01-09T14:15:00Z"
+    },
+    {
+      "name": "Mouse",
+      "type": "Electronics",
+      "amount": 60,
+      "created": "2023-01-10T09:20:00Z"
+    },
+    {
+      "name": "Stapler",
+      "type": "Office Supplies",
+      "amount": 25,
+      "created": "2023-01-11T11:10:00Z"
+    },
+    {
+      "name": "Scissors",
+      "type": "Office Supplies",
+      "amount": 45,
+      "created": "2023-01-12T15:45:00Z"
+    },
+    {
+      "name": "Desk Lamp",
+      "type": "Electronics",
+      "amount": 30,
+      "created": "2023-01-13T10:30:00Z"
+    },
+    {
+      "name": "Printer",
+      "type": "Electronics",
+      "amount": 8,
+      "created": "2023-01-14T12:00:00Z"
+    },
+    {
+      "name": "Paper Sheets",
+      "type": "Office Supplies",
+      "amount": 200,
+      "created": "2023-01-15T14:15:00Z"
+    },
+    {
+      "name": "Shredder",
+      "type": "Electronics",
+      "amount": 5,
+      "created": "2023-01-16T09:20:00Z"
+    },
+    {
+      "name": "Phone",
+      "type": "Electronics",
+      "amount": 15,
+      "created": "2023-01-17T11:10:00Z"
+    },
+    {
+      "name": "Desk Organizer",
+      "type": "Office Supplies",
+      "amount": 40,
+      "created": "2023-01-18T15:45:00Z"
+    },
+    {
+      "name": "Pen",
+      "type": "Office Supplies",
+      "amount": 120,
+      "created": "2023-01-19T10:30:00Z"
+    },
+    {
+      "name": "Marker",
+      "type": "Office Supplies",
+      "amount": 60,
+      "created": "2023-01-20T12:00:00Z"
+    }
+  ]
+  

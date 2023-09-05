@@ -27,8 +27,10 @@ app.use(express.json());
 app.get("/api/employees/", async (req, res) => {
   try {
     const employees = await EmployeeModel.find()
-      .populate("favoriteBrand") // Replace IDs with actual brand names
-      .populate("favouriteColour") 
+      .populate("favoriteBrand") // Replace IDs with actual brand names, etc
+      .populate("favouriteColour")
+      .populate("favoriteTools")
+      .populate("assignedEquipment") 
       .sort({ created: "desc" }); // Sort in descending order of creation date
 
     return res.json(employees);
@@ -41,8 +43,15 @@ app.get("/api/employees/", async (req, res) => {
 
 // Fetch employee by ID
 app.get("/api/employees/:id", async (req, res) => {
-  const employee = await EmployeeModel.findById(req.params.id);
-  return res.json(employee);
+  try {
+    const employee = await EmployeeModel.findById(req.params.id)
+    .populate("favoriteTools")
+    .populate("assignedEquipment");
+    return res.json(employee);
+  } catch (error) {
+    console.error("Error fetching employee by ID", error);
+    return res.status(500).json({ error: "Error fetching employee by ID" });
+  }
 });
 
 // Fetch employees by search query
@@ -119,8 +128,7 @@ app.patch("/api/update-attendance", async (req, res, next) => {
 
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
-    const { equipmentId, ...employeeData } = req.body;
-
+    const { equipmentId, favoriteTools, ...employeeData } = req.body;
     // Check if equipmentId is provided and assign the equipment to the employee
     if (equipmentId) {
       await EmployeeModel.updateOne(
@@ -132,6 +140,18 @@ app.patch("/api/employees/:id", async (req, res, next) => {
       await EmployeeModel.findOneAndUpdate(
         { _id: req.params.id },
         { $set: { ...employeeData, assignedEquipment: null } }
+      );
+    }
+    // Check same for favorite tools
+    if (favoriteTools) {
+      await EmployeeModel.updateOne(
+        { _id: req.params.id },
+        { $set: { ...employeeData, favoriteTools } }
+      );
+    } else {
+      await EmployeeModel.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { ...employeeData } }
       );
     }
     const updatedEmployee = await EmployeeModel.findById(req.params.id);

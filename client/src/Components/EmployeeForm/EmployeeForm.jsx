@@ -11,7 +11,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
-  const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState(employee?.equipment ?? "");
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
 
@@ -193,20 +193,21 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
         setKittenWeight("");
       }}>Add Kitten</button>
       
-      {/* <div className="control">
+      <div className="control">
         <label htmlFor="equipment">Assign Equipment:</label>
         <select
           name="equipment"
           value={selectedEquipmentId}
           onChange={(e) => setSelectedEquipmentId(e.target.value)}
         >
-          {equipmentList.map(equipment => (
+          <option value="">Select Equipment</option>
+          {equipmentList?.map(equipment => (
             <option key={equipment._id} value={equipment._id}>
               {equipment.name}
             </option>
           ))}
         </select>
-      </div> */}
+      </div>
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
