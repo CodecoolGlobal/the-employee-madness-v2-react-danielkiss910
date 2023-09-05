@@ -1,0 +1,6 @@
+[
+    { "name": "Notebook", "weight": 0.5 },
+    { "name": "Pencil", "weight": 0.06 },
+    { "name": "Pen", "weight": 0.12 },
+    { "name": "Book", "weight": 1 }
+]

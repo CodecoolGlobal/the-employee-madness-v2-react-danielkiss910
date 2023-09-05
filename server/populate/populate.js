@@ -8,12 +8,14 @@ const levels = require("./levels.json");
 const positions = require("./positions.json");
 const favouriteBrands = require("./favoriteBrands.json");
 const colours = require("./colours.json");
+const tools = require("./tools.json");
 
 // import each Schema
 const EmployeeModel = require("../db/employee.model");
 const EquipmentModel = require("../db/equipment.model");
 const FavoriteBrandModel = require("../db/favoriteBrand.model");
 const ColourModel = require("../db/colours.model");
+const ToolsModel = require("../db/tools.model");
 
 
 const mongoUrl = process.env.MONGO_URL;
@@ -30,12 +32,15 @@ const populateEmployees = async () => {
   await EquipmentModel.deleteMany({});
   await FavoriteBrandModel.deleteMany({});
   await ColourModel.deleteMany({});
+  await ToolsModel.deleteMany({});
   
   await FavoriteBrandModel.insertMany(favouriteBrands);
   await ColourModel.insertMany(colours);
+  await ToolsModel.insertMany(tools);
 
   const favoriteBrandsData = await FavoriteBrandModel.find();
   const coloursData = await ColourModel.find();
+  // const toolsData = await ToolsModel.find();
 
   const employees = names.map((name) => {
       const nameParts = name.split(" ");

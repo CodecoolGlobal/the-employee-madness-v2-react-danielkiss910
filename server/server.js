@@ -6,6 +6,7 @@ const EquipmentModel = require("./db/equipment.model");
 const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const ColourModel = require("./db/colours.model")
 const employeeModel = require("./db/employee.model");
+const ToolsModel = require("./db/tools.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
 
@@ -19,8 +20,10 @@ app.use(express.json());
 
 
 
-// Employees
+// ----- EMPLOYEES ----- //
 
+
+// Fetch all employees
 app.get("/api/employees/", async (req, res) => {
   try {
     const employees = await EmployeeModel.find()
@@ -36,7 +39,7 @@ app.get("/api/employees/", async (req, res) => {
 });
 
 
-// Fetch an employee by ID
+// Fetch employee by ID
 app.get("/api/employees/:id", async (req, res) => {
   const employee = await EmployeeModel.findById(req.params.id);
   return res.json(employee);
@@ -63,6 +66,7 @@ app.get("/api/search/:employeeSearch", async (req, res) => {
   }
 });
 
+// Fetch top paid employees
 app.get("/api/top-paid", async (req, res) => {
   try {
     const topPaidEmployees = await EmployeeModel.find()
@@ -76,6 +80,7 @@ app.get("/api/top-paid", async (req, res) => {
   }
 });
 
+// Fetch missing employees
 app.get("/api/missing", async (req, res) => {
   try {
     const missingEmployees = await EmployeeModel.find({ present: false });
@@ -86,24 +91,6 @@ app.get("/api/missing", async (req, res) => {
   }
 });
 
-app.get("/api/favoritebrands", async (req, res) => {
-  try {
-    const favoriteBrands = await FavoriteBrandModel.find();
-    res.json(favoriteBrands);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching favorite brands" })
-  }
-});
-
-app.get("/api/colours", async (req, res) => {
-  try {
-    const savedColours = await ColourModel.find();
-    return res.json(savedColours);
-  } catch (error) {
-    console.error("Error saving colours", error);
-    return res.status(500).json({ error: "Error saving colours" });
-  }
-});
 
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
@@ -165,7 +152,10 @@ app.delete("/api/employees/:id", async (req, res, next) => {
   }
 });
 
-// Equipment
+
+
+// ----- EQUIPMENT ----- //
+
 
 // Fetch all equipment
 app.get("/api/equipment", async (req, res) => {
@@ -178,7 +168,7 @@ app.get("/api/equipment", async (req, res) => {
   }
 });
 
-// Fetch a single equipment by ID
+// Fetch single equipment by ID
 app.get("/api/equipment/:id", async (req, res) => {
   const equipment = await EquipmentModel.findById(req.params.id);
   return res.json(equipment);
@@ -220,6 +210,84 @@ app.delete("/api/equipment/:id", async (req, res, next) => {
     return next(err);
   }
 });
+
+
+// ----- FAVOURITE BRANDS ----- //
+
+app.get("/api/favoritebrands", async (req, res) => {
+  try {
+    const favoriteBrands = await FavoriteBrandModel.find();
+    res.json(favoriteBrands);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching favorite brands" })
+  }
+});
+
+
+// ----- COLOURS ----- //
+
+app.get("/api/colours", async (req, res) => {
+  try {
+    const savedColours = await ColourModel.find();
+    return res.json(savedColours);
+  } catch (error) {
+    console.error("Error saving colours", error);
+    return res.status(500).json({ error: "Error saving colours" });
+  }
+});
+
+
+// ----- TOOLS -----//
+
+
+// Fetch tools
+app.get("/api/tools", async (req, res) => {
+  try {
+    const tools = await ToolsModel.find();
+    return res.json(tools);
+  } catch (error) {
+    console.error("Error fetching tools", error);
+    return res.status(500).json({ error: "Error fetching tools" });
+  }
+});
+
+// Create new tools
+app.post("/api/tools", async (req, res, next) => {
+  const tool = req.body;
+
+  try {
+    const saved = await ToolsModel.create(tool);
+    return res.json(saved);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Update tool by ID
+app.patch("/api/tool/:id", async (req, res, next) => {
+  try {
+    const tool = await ToolsModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { ...req.body } },
+      { new: true }
+    );
+    return res.json(tool);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Delete tool by ID
+app.delete("api/tools/:id", async (req, res, next) => {
+  try {
+    const tool = await ToolsModel.findById(req.params.id);
+    const deleted = await tool.delete();
+    return res.json(deleted);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 
 const main = async () => {
   await mongoose.connect(MONGO_URL);
