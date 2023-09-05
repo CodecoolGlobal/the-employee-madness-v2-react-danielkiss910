@@ -5,8 +5,8 @@ const EmployeeModel = require("./db/employee.model");
 const EquipmentModel = require("./db/equipment.model");
 const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const ColourModel = require("./db/colours.model")
-const employeeModel = require("./db/employee.model");
 const ToolsModel = require("./db/tools.model");
+
 
 const { MONGO_URL, PORT = 8080 } = process.env;
 
@@ -106,7 +106,7 @@ app.post("/api/employees/", async (req, res, next) => {
 app.patch("/api/update-attendance", async (req, res, next) => {
   const { employeeIds } = req.body;
   try {
-    await employeeModel.updateMany(
+    await EmployeeModel.updateMany(
       { _id: { $in: employeeIds } },
       { $set: { present: true } }
     );
@@ -285,6 +285,46 @@ app.delete("api/tools/:id", async (req, res, next) => {
     return res.json(deleted);
   } catch (error) {
     return next(error);
+  }
+});
+
+
+// ----- KITTENS ----- //
+
+
+// Fetch kittens by employee ID
+app.get("/api/kittens/:employeeId", async (req, res) => {
+  try {
+    const employee = await EmployeeModel.findById(req.params.employeeId);
+    // Check if employee exists
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    // Return kittens associated with employee
+    return res.json(employee.kittens)
+  } catch (error) {
+    console.error("Error fetching kittens for employee", error);
+    return res.status(500).json({ error: "Error fetching kittens for employee" });
+  }
+});
+
+
+// Add new kitten to employee
+app.post("/api/kittens/:employeeId", async (req, res,) => {
+  try {
+    const employee = await EmployeeModel.findById(req.params.employeeId);
+    // Check if employee exists
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    // Add kitten to kitten array of employee
+    employee.kittens.push(req.body);
+    await employee.save();
+
+    return res.json(employee);
+  } catch (error) {
+    console.error("Error adding kitten to employee", error);
+    return res.status(500).json({ error: "Error adding kitten to employee" });
   }
 });
 

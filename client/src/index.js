@@ -19,6 +19,8 @@ import FormTest from "./Pages/FormTest";
 import TopPaidPage from "./Pages/TopPaidPage";
 import MissingEmployees from "./Pages/MissingEmployees";
 import ToolsPage from "./Pages/ToolsList";
+import KittensList from "./Pages/KittensList";
+import EmployeeKittens from "./Pages/EmployeeKittens";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -38,6 +40,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/top-paid" element={<TopPaidPage />} />
           <Route path="/missing" element={<MissingEmployees />} />
           <Route path="/tools" element={<ToolsPage />} />
+          <Route path="/kittens" element={<KittensList />} />
+          <Route path="/kittens/:employeeId" element={<EmployeeKittens />} />
         </Route>
       </Routes>
     </Router>

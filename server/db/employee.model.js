@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+// Nest kittens schema within employee schema
+const KittensSchema = new Schema({
+  name: String,
+  weight: Number,
+});
+
 const EmployeeSchema = new Schema({
   firstName: String,
   middleName: String,
@@ -28,6 +34,7 @@ const EmployeeSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Colours",
   },
+  kittens: [KittensSchema],
   created: {
     type: Date,
     default: Date.now,

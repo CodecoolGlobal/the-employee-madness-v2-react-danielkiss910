@@ -12,6 +12,8 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
+  const [kittenName, setKittenName] = useState("");
+  const [kittenWeight, setKittenWeight] = useState("");
 
 
   const onSubmit = (e) => {
@@ -28,7 +30,8 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
       desiredSalary,
       favouriteColour,
       favoriteBrand,
-      equipment: selectedEquipmentId
+      equipment: selectedEquipmentId,
+      kittens: employee?.kittens ?? [] // Send kittens if they exist or an empty array
     };
 
     if (employee) {
@@ -158,6 +161,37 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
           ))}
         </select>
       </div>
+
+      <div className="control">
+        <label htmlFor="kittenName">Kitten Name:</label>
+        <input 
+          value={kittenName}
+          onChange={(e) => setKittenName(e.target.value)}
+          name="kittenName"
+          id="kittenName"
+          />
+      </div>
+      
+      <div className="control">
+        <label htmlFor="kittenWeight">Kitten Weight:</label>
+        <input 
+          value={kittenWeight}
+          onChange={(e) => setKittenWeight(e.target.value)}
+          name="kittenWeight"
+          id="kittenWeight"
+          />
+      </div>
+
+      <button type="button" onClick={() => {
+        const kitten = { name: kittenName, weight: kittenWeight };
+        if (employee) {
+          employee.kittens = [...(employee.kittens || []), kitten];
+        } else {
+          onSave({ kittens: [kitten] });
+        }
+        setKittenName("");
+        setKittenWeight("");
+      }}>Add Kitten</button>
       
       {/* <div className="control">
         <label htmlFor="equipment">Assign Equipment:</label>

@@ -204,6 +204,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
             <th>Difference (EUR)</th>
             <th>Favourite Colour</th>
             <th>Favourite Brand</th>
+            <th>Kittens</th>
             <th />
           </tr>
         </thead>
@@ -227,6 +228,12 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
               <td>{parseInt(employee.desiredSalary - employee.currentSalary).toLocaleString()}</td>
               <td className={`color-${employee.favouriteColour.name}`}>{employee.favouriteColour.name}</td>
               <td>{employee.favoriteBrand.name}</td>
+              <td>
+                <Link to={`/kittens/${employee._id}`}>
+                  <button type="button">
+                    View Kittens
+                  </button>
+                </Link></td>
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button">
