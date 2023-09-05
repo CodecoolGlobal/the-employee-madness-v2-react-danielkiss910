@@ -18,6 +18,11 @@ const fetchColours = () => {
     .then((data) => data.colours);
 };
 
+const fetchFavoriteBrands = () => {
+  return fetch(`/api/favoritebrands`)
+  .then((res) => res.json());
+};
+
 const updateEmployee = (employee) => {
   return fetch(`/api/employees/${employee._id}`, {
     method: "PATCH",
@@ -37,14 +42,21 @@ const EmployeeUpdater = () => {
   const [employeeLoading, setEmployeeLoading] = useState(true);
   const [colours, setColours] = useState([]);
   const [equipmentList, setEquipmentList] = useState([]);
+  const [favoriteBrands, setfavoriteBrands] = useState([]);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
 
   useEffect(() => {
     setEmployeeLoading(true);
-    Promise.all([fetchEmployee(id), fetchColours(), fetchEquipment()])
-      .then(([employee, colours, equipment]) => {
+    Promise.all([
+      fetchEmployee(id), 
+      fetchColours(), 
+      fetchEquipment(),
+      fetchFavoriteBrands(),
+    ])
+      .then(([employee, colours, equipment, favoriteBrands]) => {
         setEmployee(employee);
         setColours(colours);
+        setfavoriteBrands(favoriteBrands);
         setEquipmentList(equipment);
         if (employee) {
           setSelectedEquipmentId(employee.equipment);
@@ -74,6 +86,7 @@ const EmployeeUpdater = () => {
       onCancel={() => navigate("/")}
       colours={colours}
       equipmentList={equipmentList}
+      favoriteBrands={favoriteBrands}
       selectedEquipmentId={selectedEquipmentId}
     />
   );

@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
 const EquipmentModel = require("./db/equipment.model");
+const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const employeeModel = require("./db/employee.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -19,9 +20,18 @@ app.use(express.json());
 // Employees
 
 app.get("/api/employees/", async (req, res) => {
-  const employees = await EmployeeModel.find().sort({ created: "desc" });
-  return res.json(employees);
+  try {
+    const employees = await EmployeeModel.find()
+      .populate("favoriteBrand") // Populate the favoriteBrand field
+      .sort({ created: "desc" });
+
+    return res.json(employees);
+  } catch (error) {
+    console.error("Error fetching employees", error);
+    return res.status(500).json({ error: "Error fetching employees" });
+  }
 });
+
 
 // Fetch an employee by ID
 app.get("/api/employees/:id", async (req, res) => {
@@ -75,6 +85,15 @@ app.get("/api/missing", async (req, res) => {
   } catch (error) {
     console.error("Error fetching missing employees", error);
     return res.status(500).json({ error: "Error fetching missing employees" });
+  }
+});
+
+app.get("/api/favoritebrands", async (req, res) => {
+  try {
+    const favoriteBrands = await FavoriteBrandModel.find();
+    res.json(favoriteBrands);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching favorite brands" })
   }
 });
 

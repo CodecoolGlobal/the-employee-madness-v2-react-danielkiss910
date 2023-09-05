@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, equipmentList }) => {
+const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, equipmentList }) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -11,6 +11,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, equipmentList }) =
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [colours, setColours] = useState([]);
+  const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, equipmentList }) =
       currentSalary,
       desiredSalary,
       favouriteColour,
+      favoriteBrand,
       equipment: selectedEquipmentId
     };
 
@@ -145,6 +147,22 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, equipmentList }) =
           onChange={(e) => setFavouriteColour(e.target.value)}
           accept={colours.join("Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet")}
         />
+      </div>
+
+      <div className="control">
+        <label htmlFor="favoriteBrand">Favourite Brand:</label>
+        <select
+          name="favoriteBrand"
+          value={favoriteBrand}
+          onChange={(e) => setfavoriteBrand(e.target.value)}
+        >
+          <option value="">Select Favorite Brand</option>
+          {favoriteBrands.map(brand => (
+            <option key={brand._id} value={brand._id}>
+              {brand.name}
+            </option>
+          ))}
+        </select>
       </div>
       
       <div className="control">
