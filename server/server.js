@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
 const EquipmentModel = require("./db/equipment.model");
 const FavoriteBrandModel = require("./db/favoriteBrand.model")
+const ColourModel = require("./db/colours.model")
 const employeeModel = require("./db/employee.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -17,13 +18,15 @@ const app = express();
 app.use(express.json());
 
 
+
 // Employees
 
 app.get("/api/employees/", async (req, res) => {
   try {
     const employees = await EmployeeModel.find()
-      .populate("favoriteBrand") // Populate the favoriteBrand field
-      .sort({ created: "desc" });
+      .populate("favoriteBrand") // Replace IDs with actual brand names
+      .populate("favouriteColour") 
+      .sort({ created: "desc" }); // Sort in descending order of creation date
 
     return res.json(employees);
   } catch (error) {
@@ -60,11 +63,6 @@ app.get("/api/search/:employeeSearch", async (req, res) => {
   }
 });
 
-const colours = ["Black", "Grey", "Red", "Blue", "Orange", "White", "Brown", "Pink", "Yellow", "Green", "Purple", "Maroon", "Turquoise", "Cyan", "Gold", "Teal", "Lime", "Salmon", "Olive", "Aqua", "Violet"];
-app.get(`/api/colours`, (req, res) => {
-  res.json(colours);
-});
-
 app.get("/api/top-paid", async (req, res) => {
   try {
     const topPaidEmployees = await EmployeeModel.find()
@@ -94,6 +92,16 @@ app.get("/api/favoritebrands", async (req, res) => {
     res.json(favoriteBrands);
   } catch (error) {
     res.status(500).json({ error: "Error fetching favorite brands" })
+  }
+});
+
+app.get("/api/colours", async (req, res) => {
+  try {
+    const savedColours = await ColourModel.find();
+    return res.json(savedColours);
+  } catch (error) {
+    console.error("Error saving colours", error);
+    return res.status(500).json({ error: "Error saving colours" });
   }
 });
 
@@ -226,5 +234,3 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
-
-module.exports = colours;

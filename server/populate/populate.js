@@ -1,16 +1,20 @@
-/*
-Loading the .env file and creates environment variables from it
-*/
+// Loading the .env file and creates environment variables from it
 require("dotenv").config();
 const mongoose = require("mongoose");
+
+// import JSON files
 const names = require("./names.json");
 const levels = require("./levels.json");
 const positions = require("./positions.json");
-const EmployeeModel = require("../db/employee.model");
-const EquipmentModel = require("../db/equipment.model")
-const FavoriteBrandModel = require("../db/favoriteBrand.model")
-const colours = require("../server");
 const favouriteBrands = require("./favoriteBrands.json");
+const colours = require("./colours.json");
+
+// import each Schema
+const EmployeeModel = require("../db/employee.model");
+const EquipmentModel = require("../db/equipment.model");
+const FavoriteBrandModel = require("../db/favoriteBrand.model");
+const ColourModel = require("../db/colours.model");
+
 
 const mongoUrl = process.env.MONGO_URL;
 
@@ -25,10 +29,13 @@ const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
   await EquipmentModel.deleteMany({});
   await FavoriteBrandModel.deleteMany({});
+  await ColourModel.deleteMany({});
   
   await FavoriteBrandModel.insertMany(favouriteBrands);
+  await ColourModel.insertMany(colours);
 
   const favoriteBrandsData = await FavoriteBrandModel.find();
+  const coloursData = await ColourModel.find();
 
   const employees = names.map((name) => {
       const nameParts = name.split(" ");
@@ -43,9 +50,9 @@ const populateEmployees = async () => {
       const randomCurrentSalary = Math.floor(Math.random() * (5000 - 4000)) + 4000;
       const randomDesiredSalary = Math.floor(Math.random() * (10000 - 5000)) + 5000;
 
-      const favouriteColour = pick(colours);
-
       const favoriteBrand = pick(favoriteBrandsData)._id;
+      const favouriteColour = pick(coloursData)._id;
+
 
 
       return {

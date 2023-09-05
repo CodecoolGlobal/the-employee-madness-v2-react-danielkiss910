@@ -12,7 +12,6 @@ const EmployeeSchema = new Schema({
   startingDate: Date,
   currentSalary: Number,
   desiredSalary: Number,
-  favouriteColour: String,
   present: {
     type: Boolean,
     default: false,
@@ -24,6 +23,10 @@ const EmployeeSchema = new Schema({
   favoriteBrand: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "FavoriteBrand",
+  },
+  favouriteColour: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Colours",
   },
   created: {
     type: Date,
