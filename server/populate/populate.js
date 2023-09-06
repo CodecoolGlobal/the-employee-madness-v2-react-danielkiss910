@@ -53,6 +53,7 @@ const populateTools = async () => {
 const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
 
+  const equipmentData = await EquipmentModel.find();
   const favoriteBrandsData = await FavoriteBrandModel.find();
   const coloursData = await ColourModel.find();
   const toolsData = await ToolsModel.find();
@@ -70,6 +71,7 @@ const populateEmployees = async () => {
       const randomCurrentSalary = Math.floor(Math.random() * (5000 - 4000)) + 4000;
       const randomDesiredSalary = Math.floor(Math.random() * (10000 - 5000)) + 5000;
 
+      const assignedEquipment = pick(equipmentData)._id;
       const favoriteBrand = pick(favoriteBrandsData)._id;
       const favouriteColour = pick(coloursData)._id;
       const favoriteTools = [pick(toolsData)._id];
@@ -83,6 +85,7 @@ const populateEmployees = async () => {
         startingDate: randomStartDate,
         currentSalary: randomCurrentSalary,
         desiredSalary: randomDesiredSalary,
+        assignedEquipment,
         favouriteColour,
         favoriteBrand,
         favoriteTools,

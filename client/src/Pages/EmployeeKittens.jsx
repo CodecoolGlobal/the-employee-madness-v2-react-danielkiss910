@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const EmployeeKittens = () => {
     const { employeeId } = useParams();
@@ -47,6 +47,9 @@ const EmployeeKittens = () => {
                     <li key={kitten.id}>{kitten.name} - {kitten.weight} kg.</li>
                 ))}
             </ul>
+            <Link to="/">
+                <button>Back</button>
+            </Link>
         </div>
     );
 };

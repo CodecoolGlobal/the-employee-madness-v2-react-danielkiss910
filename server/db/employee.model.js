@@ -34,6 +34,10 @@ const EmployeeSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Colours",
   },
+  favoriteTools: [{
+    type: Schema.Types.ObjectId,
+    ref: "Tools"
+  }],
   kittens: [KittensSchema],
   created: {
     type: Date,
