@@ -42,7 +42,7 @@ const EmployeeUpdater = () => {
   const [favouriteColours, setFavouriteColours] = useState([]);
   const [equipmentList, setEquipmentList] = useState([]);
   const [favoriteBrands, setfavoriteBrands] = useState([]);
-  const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState([]);
 
   useEffect(() => {
     setEmployeeLoading(true);
@@ -84,9 +84,10 @@ const EmployeeUpdater = () => {
       disabled={updateLoading}
       onCancel={() => navigate("/")}
       favouriteColours={favouriteColours}
-      equipmentList={equipmentList}
+      assignedEquipment={equipmentList}
       favoriteBrands={favoriteBrands}
       selectedEquipmentId={selectedEquipmentId}
+      allowAddKittens={true}
     />
   );
 };

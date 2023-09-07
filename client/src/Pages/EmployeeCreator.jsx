@@ -57,6 +57,7 @@ const EmployeeCreator = () => {
       favouriteColours={colours}
       favoriteBrands={favoriteBrands}
       assignedEquipment={equipment}
+      allowAddKittens={false}
       onSave={handleCreateEmployee}
     />
   );
