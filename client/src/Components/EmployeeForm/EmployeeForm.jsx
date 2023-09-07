@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, favouriteColours, assignedEquipment }) => {
+const EmployeeForm = ({
+  onSave, 
+  disabled, 
+  employee, 
+  onCancel, 
+  favoriteBrands, 
+  favouriteColours, 
+  assignedEquipment, 
+  allowAddKittens,
+}) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -162,7 +171,10 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
         </select>
       </div>
 
-      <div className="control">
+      {
+        allowAddKittens && (
+          <>
+          <div className="control">
         <label htmlFor="kittenName">Kitten Name:</label>
         <input 
           value={kittenName}
@@ -171,7 +183,6 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
           id="kittenName"
           />
       </div>
-      
       <div className="control">
         <label htmlFor="kittenWeight">Kitten Weight:</label>
         <input 
@@ -181,7 +192,6 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
           id="kittenWeight"
           />
       </div>
-
       <button type="button" onClick={() => {
         const kitten = { name: kittenName, weight: kittenWeight };
         if (employee) {
@@ -192,6 +202,9 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
         setKittenName("");
         setKittenWeight("");
       }}>Add Kitten</button>
+      </>
+      )
+    }       
       
       <div className="control">
         <label htmlFor="equipment">Assign Equipment:</label>
