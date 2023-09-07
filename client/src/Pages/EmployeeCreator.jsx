@@ -17,6 +17,7 @@ const EmployeeCreator = () => {
   const [loading, setLoading] = useState(false);
   const [colours, setColours] = useState([]);
   const [favoriteBrands, setfavoriteBrands] = useState([]);
+  const [equipment, setEquipment] = useState([]);
 
   useEffect(() => {
     fetch("/api/colours")
@@ -30,6 +31,13 @@ const EmployeeCreator = () => {
     .then((res) => res.json())
     .then((data) => setfavoriteBrands(data))
     .catch((err) => console.error("Error fetching favourite brands", err));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/equipment")
+    .then((res) => res.json())
+    .then((data) => setEquipment(data))
+    .catch((err) => console.error("Error fetching equipment", err));
   }, []);
 
   const handleCreateEmployee = (employee) => {
@@ -48,6 +56,7 @@ const EmployeeCreator = () => {
       disabled={loading}
       favouriteColours={colours}
       favoriteBrands={favoriteBrands}
+      assignedEquipment={equipment}
       onSave={handleCreateEmployee}
     />
   );

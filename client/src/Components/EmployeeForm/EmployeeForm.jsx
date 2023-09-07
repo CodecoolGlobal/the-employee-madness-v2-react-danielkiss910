@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, favouriteColours, equipmentList }) => {
+const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, favouriteColours, assignedEquipment }) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -11,7 +11,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
-  const [selectedEquipmentId, setSelectedEquipmentId] = useState(employee?.equipment ?? "");
+  const [equipment, setEquipment] = useState(employee?.equipment ?? "");
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
 
@@ -30,7 +30,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
       desiredSalary,
       favouriteColour,
       favoriteBrand,
-      equipment: selectedEquipmentId,
+      equipment,
       kittens: employee?.kittens ?? [] // Send kittens if they exist or an empty array
     };
 
@@ -197,11 +197,11 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel, favoriteBrands, fa
         <label htmlFor="equipment">Assign Equipment:</label>
         <select
           name="equipment"
-          value={selectedEquipmentId}
-          onChange={(e) => setSelectedEquipmentId(e.target.value)}
+          value={equipment}
+          onChange={(e) => setEquipment(e.target.value)}
         >
           <option value="">Select Equipment</option>
-          {equipmentList?.map(equipment => (
+          {assignedEquipment?.map(equipment => (
             <option key={equipment._id} value={equipment._id}>
               {equipment.name}
             </option>
