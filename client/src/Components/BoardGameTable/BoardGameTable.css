@@ -16,3 +16,8 @@
 .search-section button:focus {
     outline: none;
 }
+
+.search-section form {
+    display: flex;
+    align-items: center; /* to vertically align the items in the middle */
+}

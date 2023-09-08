@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-
+import Footer from "../../Components/Footer/Footer";
 import "./Layout.css";
 
 const Layout = () => (
@@ -25,7 +25,10 @@ const Layout = () => (
         </li>
       </ul>
     </nav>
+    <div className="content">
     <Outlet />
+    </div>
+    <Footer />
   </div>
 );
 
