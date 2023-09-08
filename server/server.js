@@ -31,7 +31,8 @@ app.get("/api/employees/", async (req, res) => {
       .populate("favoriteBrand") // Replace IDs with actual brand names, etc
       .populate("favouriteColour")
       .populate("favoriteTools")
-      .populate("assignedEquipment") 
+      .populate("assignedEquipment")
+      .populate("favoriteBoardGame")
       .sort({ created: "desc" }); // Sort in descending order of creation date
 
     return res.json(employees);
@@ -102,6 +103,7 @@ app.get("/api/missing", async (req, res) => {
 });
 
 
+// Create new employee
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
@@ -113,6 +115,7 @@ app.post("/api/employees/", async (req, res, next) => {
   }
 });
 
+// Update multiple present employees
 app.patch("/api/update-attendance", async (req, res, next) => {
   const { employeeIds } = req.body;
   try {
@@ -127,6 +130,8 @@ app.patch("/api/update-attendance", async (req, res, next) => {
   }
 });
 
+
+// Update single employee by ID
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
     const { equipmentId, favoriteTools, ...employeeData } = req.body;
@@ -163,6 +168,7 @@ app.patch("/api/employees/:id", async (req, res, next) => {
   }
 });
 
+// Delete single employee by ID
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findById(req.params.id);

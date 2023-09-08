@@ -18,6 +18,7 @@ const EmployeeCreator = () => {
   const [colours, setColours] = useState([]);
   const [favoriteBrands, setfavoriteBrands] = useState([]);
   const [equipment, setEquipment] = useState([]);
+  const [boardGames, setBoardGames] = useState([]);
 
   useEffect(() => {
     fetch("/api/colours")
@@ -40,6 +41,13 @@ const EmployeeCreator = () => {
     .catch((err) => console.error("Error fetching equipment", err));
   }, []);
 
+  useEffect(() => {
+    fetch("/api/games")
+    .then((res) => res.json())
+    .then((data) => setBoardGames(data))
+    .catch((err) => console.error("Error fetching board games", err));
+  }, []);
+
   const handleCreateEmployee = (employee) => {
     setLoading(true);
 
@@ -57,6 +65,7 @@ const EmployeeCreator = () => {
       favouriteColours={colours}
       favoriteBrands={favoriteBrands}
       assignedEquipment={equipment}
+      boardGames={boardGames}
       allowAddKittens={false}
       onSave={handleCreateEmployee}
     />

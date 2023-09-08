@@ -24,7 +24,7 @@ const EmployeeSchema = new Schema({
   },
   assignedEquipment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Equipment",
+    ref: "Equipment", // Make sure these exactly match what is defined in each Schema
   },
   favoriteBrand: {
       type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +38,10 @@ const EmployeeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Tools"
   }],
+  favoriteBoardGame: {
+    type: Schema.Types.ObjectId,
+    ref: "BoardGames"
+  },
   kittens: [KittensSchema],
   created: {
     type: Date,

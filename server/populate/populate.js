@@ -65,7 +65,7 @@ const populateEmployees = async () => {
   const favoriteBrandsData = await FavoriteBrandModel.find();
   const coloursData = await ColourModel.find();
   const toolsData = await ToolsModel.find();
-  // const boardGameData = await BoardGameModel.find();
+  const boardGamesData = await BoardGameModel.find();
 
   const employees = names.map((name) => {
       const nameParts = name.split(" ");
@@ -83,7 +83,8 @@ const populateEmployees = async () => {
       const assignedEquipment = pick(equipmentData)._id;
       const favoriteBrand = pick(favoriteBrandsData)._id;
       const favouriteColour = pick(coloursData)._id;
-      const favoriteTools = [pick(toolsData)._id];
+      const favoriteTool = pick(toolsData)._id;
+      const favoriteBoardGame = pick(boardGamesData)._id;
 
       return {
         firstName,
@@ -97,7 +98,8 @@ const populateEmployees = async () => {
         assignedEquipment,
         favouriteColour,
         favoriteBrand,
-        favoriteTools,
+        favoriteTool,
+        favoriteBoardGame,
       };
   });
 
@@ -112,8 +114,8 @@ const main = async () => {
   await populateFavouriteBrands();
   await populateColours();
   await populateTools();
-  await populateEmployees();
   await populateBoardGames();
+  await populateEmployees(); // Make sure to populate Employees last
 
   await mongoose.disconnect();
 };

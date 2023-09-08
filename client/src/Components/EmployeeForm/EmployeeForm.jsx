@@ -9,6 +9,7 @@ const EmployeeForm = ({
   favouriteColours, 
   assignedEquipment, 
   allowAddKittens,
+  boardGames,
 }) => {
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
@@ -23,6 +24,7 @@ const EmployeeForm = ({
   const [equipment, setEquipment] = useState(employee?.equipment ?? "");
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
+  const [favouriteBoardGame, setFavouriteBoardGame] = useState(employee?.favouriteBoardGame ?? "");
 
 
   const onSubmit = (e) => {
@@ -171,6 +173,38 @@ const EmployeeForm = ({
         </select>
       </div>
 
+      <div className="control">
+        <label htmlFor="equipment">Assign Equipment:</label>
+        <select
+          name="equipment"
+          value={equipment}
+          onChange={(e) => setEquipment(e.target.value)}
+        >
+          <option value="">Select Equipment</option>
+          {assignedEquipment?.map(equipment => (
+            <option key={equipment._id} value={equipment._id}>
+              {equipment.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="control">
+        <label htmlFor="boardGames">Favourite Board Game:</label>
+        <select
+          name="boardGames"
+          value={favouriteBoardGame}
+          onChange={(e) => setFavouriteBoardGame(e.target.value)}
+        >
+          <option value="">Select Game</option>
+          {boardGames?.map(game => (
+            <option key={game._id} value={game._id}>
+              {game.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {
         allowAddKittens && (
           <>
@@ -205,22 +239,6 @@ const EmployeeForm = ({
       </>
       )
     }       
-      
-      <div className="control">
-        <label htmlFor="equipment">Assign Equipment:</label>
-        <select
-          name="equipment"
-          value={equipment}
-          onChange={(e) => setEquipment(e.target.value)}
-        >
-          <option value="">Select Equipment</option>
-          {assignedEquipment?.map(equipment => (
-            <option key={equipment._id} value={equipment._id}>
-              {equipment.name}
-            </option>
-          ))}
-        </select>
-      </div>
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
