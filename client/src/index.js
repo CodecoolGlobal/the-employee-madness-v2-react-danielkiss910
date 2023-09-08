@@ -21,6 +21,7 @@ import MissingEmployees from "./Pages/MissingEmployees";
 import ToolsPage from "./Pages/ToolsList";
 import KittensList from "./Pages/KittensList";
 import EmployeeKittens from "./Pages/EmployeeKittens";
+import BoardGameCreator from "./Pages/Layout/BoardGameCreator";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -42,6 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/kittens" element={<KittensList />} />
           <Route path="/kittens/:employeeId" element={<EmployeeKittens />} />
+          <Route path="/games" element={<BoardGameCreator />} />
         </Route>
       </Routes>
     </Router>

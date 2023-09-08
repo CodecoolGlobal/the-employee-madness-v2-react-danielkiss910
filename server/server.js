@@ -6,6 +6,7 @@ const EquipmentModel = require("./db/equipment.model");
 const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const ColourModel = require("./db/colours.model")
 const ToolsModel = require("./db/tools.model");
+const BoardGameModel = require("./db/boardGame.model");
 
 
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -253,6 +254,32 @@ app.get("/api/colours", async (req, res) => {
   } catch (error) {
     console.error("Error saving colours", error);
     return res.status(500).json({ error: "Error saving colours" });
+  }
+});
+
+
+// ----- BOARD GAMES ----- //
+
+// Fetch games
+app.get("/api/games", async (req, res) => {
+  try {
+    const savedGames = await BoardGameModel.find();
+    return res.json(savedGames);
+  } catch (error) {
+    console.error("Error saving games", error);
+    return res.status(500).json({ error: "Error saving games" });
+  }
+});
+
+// Create new game
+app.post("/api/games", async (req, res, next) => {
+  const game = req.body;
+
+  try {
+    const saved = await BoardGameModel.create(game);
+    return res.json(saved);
+  } catch (error) {
+    return next(error);
   }
 });
 

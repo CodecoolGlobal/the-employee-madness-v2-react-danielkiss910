@@ -9,6 +9,7 @@ const favouriteBrands = require("./favoriteBrands.json");
 const colours = require("./colours.json");
 const tools = require("./tools.json");
 const equipments = require("./equipment.json");
+const boardGames = require("./boardGames.json");
 
 // Import each Schema
 const EmployeeModel = require("../db/employee.model");
@@ -16,6 +17,7 @@ const EquipmentModel = require("../db/equipment.model");
 const FavoriteBrandModel = require("../db/favoriteBrand.model");
 const ColourModel = require("../db/colours.model");
 const ToolsModel = require("../db/tools.model");
+const BoardGameModel = require("../db/boardGame.model");
 
 const mongoUrl = process.env.MONGO_URL;
 
@@ -50,6 +52,12 @@ const populateTools = async () => {
   console.log("Tools created");
 };
 
+const populateBoardGames = async () => {
+  await BoardGameModel.deleteMany({});
+  await BoardGameModel.insertMany(boardGames);
+  console.log("Board games created");
+};
+
 const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
 
@@ -57,6 +65,7 @@ const populateEmployees = async () => {
   const favoriteBrandsData = await FavoriteBrandModel.find();
   const coloursData = await ColourModel.find();
   const toolsData = await ToolsModel.find();
+  // const boardGameData = await BoardGameModel.find();
 
   const employees = names.map((name) => {
       const nameParts = name.split(" ");
@@ -104,6 +113,7 @@ const main = async () => {
   await populateColours();
   await populateTools();
   await populateEmployees();
+  await populateBoardGames();
 
   await mongoose.disconnect();
 };

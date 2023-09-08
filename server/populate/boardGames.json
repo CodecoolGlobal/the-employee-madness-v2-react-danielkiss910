@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Monopoly",
+        "maxPlayers": 8
+    },
+    {
+        "name": "Chess",
+        "maxPlayers": 2
+    },
+    {
+        "name": "Go",
+        "maxPlayers": 2
+    }    
+]
