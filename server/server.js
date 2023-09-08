@@ -353,8 +353,8 @@ const main = async () => {
   await mongoose.connect(MONGO_URL);
 
   app.listen(PORT, () => {
-    console.log("App is listening on 8080");
-    console.log("Try /api/employees route right now");
+    console.log("Server successfully started");
+    console.log("App is listening on port:", PORT);
   });
 };
 

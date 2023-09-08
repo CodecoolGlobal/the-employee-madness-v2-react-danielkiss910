@@ -35,7 +35,8 @@ const updateEquipment = async (id, updatedEquipment) => {
 const EquipmentUpdater = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    
+    const [loading, setLoading] = useState(false);
     const [equipment, setEquipment] = useState(null);
 
     useEffect(() => {
@@ -62,7 +63,7 @@ const EquipmentUpdater = () => {
     };
 
     if (loading) {
-        return <p>Loading...</p>
+        return <Loading />;
     }
 
     return (
