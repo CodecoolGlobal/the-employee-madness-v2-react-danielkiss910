@@ -15,14 +15,12 @@ const Layout = () => (
         <li className="grow">
           <Link to="/tools">Tools</Link>
         </li>
+        <li className="grow">
+          <Link to="/games">Board games</Link>
+        </li>
         <li>
           <Link to="/create">
             <button type="button">Create Employee</button>
-          </Link>
-        </li>
-        <li>
-          <Link to="/createequipment">
-            <button type="button">Create Equipment</button>
           </Link>
         </li>
       </ul>

@@ -116,26 +116,10 @@ const EquipmentTable = () => {
 
   return (
     <div className="EquipmentTable">
-      <div className="filters">
-        <input
-          type="text"
-          placeholder="Filter by Name"
-          value={nameFilter}
-          onChange={e => setNameFilter(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Filter by Type"
-          value={typeFilter}
-          onChange={e => setTypeFilter(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Filter by Amount"
-          value={amountFilter}
-          onChange={e => setAmountFilter(e.target.value)}
-        />
-      </div>
+      <div className="Equipment-creator-button">
+        <Link to="/createequipment">
+          <button>Create new equipment</button>
+        </Link>
       <button
         type="button"
         onClick={() => handleSort("name")}
@@ -169,6 +153,27 @@ const EquipmentTable = () => {
           <span>&darr;</span>
         ) : null}
       </button>
+      </div>
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Filter by Name"
+          value={nameFilter}
+          onChange={e => setNameFilter(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Filter by Type"
+          value={typeFilter}
+          onChange={e => setTypeFilter(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Filter by Amount"
+          value={amountFilter}
+          onChange={e => setAmountFilter(e.target.value)}
+        />
+      </div>
       <table>
         <thead>
           <tr>

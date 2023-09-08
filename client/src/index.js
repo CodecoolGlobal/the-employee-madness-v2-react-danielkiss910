@@ -21,7 +21,7 @@ import MissingEmployees from "./Pages/MissingEmployees";
 import ToolsPage from "./Pages/ToolsList";
 import KittensList from "./Pages/KittensList";
 import EmployeeKittens from "./Pages/EmployeeKittens";
-import BoardGameCreator from "./Pages/Layout/BoardGameCreator";
+import BoardGameCreator from "./Pages/BoardGameCreator";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
