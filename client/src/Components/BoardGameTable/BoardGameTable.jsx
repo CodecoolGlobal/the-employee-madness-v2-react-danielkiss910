@@ -30,7 +30,8 @@ const BoardGameTable = () => {
         fetchGames(maxPlayersQueryParam);
     }, [maxPlayersQueryParam]);
 
-    const handleSearchClick = () => {
+    const handleSearchClick = (e) => {
+        e.preventDefault(); // Prevent default form submission
         fetchGames(maxPlayersInput);
     };
 
@@ -39,15 +40,17 @@ const BoardGameTable = () => {
         <div className="board-game-page">
             <h2>Board Games</h2>
             <div className="search-section">
-                <label>
-                    Max Players:
-                    <input 
-                        type="number"
-                        value={maxPlayersInput}
-                        onChange={(e) => setMaxPlayersInput(e.target.value)}
-                    />
-                </label>
-                <button onClick={handleSearchClick}>&#x1F50D;</button>
+                <form onSubmit={handleSearchClick}>
+                    <label>
+                        Max Players:
+                        <input
+                            type="number"
+                            value={maxPlayersInput}
+                            onChange={(e) => setMaxPlayersInput(e.target.value)}
+                        />
+                    </label>
+                    <button type={"submit"}>&#x1F50D;</button>
+                </form>
             </div>
             <table>
                 <thead>
@@ -57,7 +60,11 @@ const BoardGameTable = () => {
                 <tbody>
                     {boardGames.map(game => (
                         <tr key={game._id}>
-                            <td>{game.name}</td>
+                            <td>
+                                <Link to={`/games-list/${game._id}`}>
+                                    {game.name}
+                                </Link>
+                            </td>
                             <td>{game.maxPlayers}</td>
                         </tr>
                     ))}

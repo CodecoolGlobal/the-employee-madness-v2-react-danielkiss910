@@ -54,12 +54,12 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
     const matchesLevel =
       !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
-    
-    const matchesNameSearch = 
+
+    const matchesNameSearch =
       employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.lastName.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesFilterSearch =
       employee.firstName.toLowerCase().includes(filterQuery.toLowerCase()) ||
       employee.middleName.toLowerCase().includes(filterQuery.toLowerCase()) ||
@@ -120,15 +120,21 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
 
   return (
     <div className="EmployeeTable">
+
       <div className="search-container">
         <div className="search-label">Find Employee:</div>
-        <div className="search-input">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // Prevents the default form submission behaviour
+            setSearchQuery(searchInput);
+          }}
+          className="search-input"
+        >
           <input
             type="text"
             placeholder="Enter employee name"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
+            onChange={(e) => setSearchInput(e.target.value)} />
           <button type="button" className="search-button" onClick={() => setSearchQuery(searchInput)}>
             <span className="search-icon">&#x1F50D;</span>
           </button>
@@ -138,33 +144,24 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
           <Link to="/missing">
             <button type="button">Missing Employees</button>
           </Link>
-        </div>
-      </div>
-
-
-      <div className="filters">
+        </form>
+      </div><div className="filters">
         <input
           type="text"
           placeholder="Filter by Position"
           value={positionFilter}
-          onChange={(e) => setPositionFilter(e.target.value)}
-        />
+          onChange={(e) => setPositionFilter(e.target.value)} />
         <input
           type="text"
           placeholder="Filter by Level"
           value={levelFilter}
-          onChange={(e) => setLevelFilter(e.target.value)}
-        />
+          onChange={(e) => setLevelFilter(e.target.value)} />
         <input
           type="text"
           placeholder="Search..."
           value={filterQuery}
-          onChange={(e) => setFilterQuery(e.target.value)}
-        />
-      </div>
-
-      <div className="sort-label">Sort Employees By:</div>
-      <div className="sort-buttons">
+          onChange={(e) => setFilterQuery(e.target.value)} />
+      </div><div className="sort-label">Sort Employees By:</div><div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>
           First Name {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
@@ -180,15 +177,12 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
         <button onClick={() => handleSort("level")}>
           Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
-      </div>
-      <div>
+      </div><div>
         <input
           type="checkbox"
           checked={selectedEmployees.length === sortedEmployees.length}
-          onChange={handleSelectAll}
-        /> Select All
-      </div>
-      <table>
+          onChange={handleSelectAll} /> Select All
+      </div><table>
         <thead>
           <tr>
             <th>Present</th>
@@ -217,8 +211,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
                 <input
                   type="checkbox"
                   checked={selectedEmployees.includes(employee._id)}
-                  onChange={() => handleCheckboxChange(employee._id)}
-                />
+                  onChange={() => handleCheckboxChange(employee._id)} />
               </td>
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
               <td>{employee.level}</td>
@@ -251,26 +244,26 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
             </tr>
           ))}
         </tbody>
-      </table>
-      <Pagination
+      </table><Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
-      {showConfirmDialog && (
-        <ConfirmationModal
-          onCancel={() => {
-            setEmployeeToDelete(null);
-            setShowConfirmDialog(false);
-          }}
-          onConfirm={() => {
-            onDelete(employeeToDelete);
-            setEmployeeToDelete(null);
-            setShowConfirmDialog(false);
-          }}
-        />
-      )}
-    </div>
+        onPageChange={handlePageChange} />
+      {
+        showConfirmDialog && (
+          <ConfirmationModal
+            onCancel={() => {
+              setEmployeeToDelete(null);
+              setShowConfirmDialog(false);
+            }}
+            onConfirm={() => {
+              onDelete(employeeToDelete);
+              setEmployeeToDelete(null);
+              setShowConfirmDialog(false);
+            }}
+          />
+        )
+      }
+    </div >
   );
 };
 

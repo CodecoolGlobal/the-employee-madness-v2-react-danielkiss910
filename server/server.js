@@ -284,6 +284,23 @@ app.get("/api/games", async (req, res) => {
   }
 });
 
+// Fetch single game based on ID
+app.get("/api/games/:id", async (req, res) => {
+  try {
+    const gameId = req.params.id; // Extract ID from URL
+    const game = await BoardGameModel.findById(gameId); // Get single game by its ID
+
+    if (!game) {
+      return res.status(404).json({ error: "Game not found" }); // If no game with given ID
+    }
+
+    return res.json(game); // Return the found game
+  } catch (error) {
+    console.error("Error fetching the game", error);
+    return res.status(500).json({ error: "Error fetching the game" });
+  }
+});
+
 // Create new game
 app.post("/api/games", async (req, res, next) => {
   const game = req.body;
