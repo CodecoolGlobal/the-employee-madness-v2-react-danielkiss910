@@ -18,6 +18,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
   const [searchInput, setSearchInput] = useState('');
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterQuery, setFilterQuery] = useState("");
 
   const handleCheckboxChange = (employeeId) => {
     if (selectedEmployees.includes(employeeId)) {
@@ -36,7 +37,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       setSelectedEmployees(sortedEmployees.map((employee) => employee._id));
     }
   };
-  
+
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -53,24 +54,30 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
     const matchesLevel =
       !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
-      const matchesSearch =
-      (employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.lastName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      employee.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.level.toLowerCase().includes(searchQuery.toLowerCase());
     
+    const matchesNameSearch = 
+      employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.lastName.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesFilterSearch =
+      employee.firstName.toLowerCase().includes(filterQuery.toLowerCase()) ||
+      employee.middleName.toLowerCase().includes(filterQuery.toLowerCase()) ||
+      employee.lastName.toLowerCase().includes(filterQuery.toLowerCase()) ||
+      employee.position.toLowerCase().includes(filterQuery.toLowerCase()) ||
+      employee.level.toLowerCase().includes(filterQuery.toLowerCase());
 
-    return matchesPosition && matchesLevel && matchesSearch;
+
+    return matchesPosition && matchesLevel && matchesNameSearch && matchesFilterSearch;
   });
 
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
       const aNames = [a.firstName, a.middleName, a.lastName];
       const bNames = [b.firstName, b.middleName, b.lastName];
-  
+
       let aValue, bValue;
-  
+
       if (sortAttribute === "firstName") {
         aValue = aNames[0];
         bValue = bNames[0];
@@ -81,18 +88,18 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
         aValue = aNames[2];
         bValue = bNames[2];
       }
-  
+
       return sortDirection * aValue.localeCompare(bValue);
     }
-  
+
     if (sortAttribute === "position" || sortAttribute === "level") {
       return sortDirection * a[sortAttribute].localeCompare(b[sortAttribute]);
     }
-  
+
     return 0;
   });
-  
-  
+
+
   const handleDelete = (employee) => {
     setEmployeeToDelete(employee);
     setShowConfirmDialog(true);
@@ -116,31 +123,24 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       <div className="search-container">
         <div className="search-label">Find Employee:</div>
         <div className="search-input">
-        <input
-          type="text"
-          placeholder="Enter employee name"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        {searchInput.trim() !== "" ? (
-        <Link to={`/search/${searchInput}`}>
-          <button type="button" className="search-button">
+          <input
+            type="text"
+            placeholder="Enter employee name"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <button type="button" className="search-button" onClick={() => setSearchQuery(searchInput)}>
             <span className="search-icon">&#x1F50D;</span>
           </button>
-        </Link>
-        ) : (
-          <button type="button" className="search-button" disabled>
-            <span className="search-icon">&#x1F50D;</span>
-          </button>
-        )}
-        <Link to="/top-paid">
-          <button type="button">Top Paid Employees</button>
-        </Link>
-        <Link to="/missing">
-          <button type="button">Missing Employees</button>
-        </Link>
+          <Link to="/top-paid">
+            <button type="button">Top Paid Employees</button>
+          </Link>
+          <Link to="/missing">
+            <button type="button">Missing Employees</button>
+          </Link>
         </div>
       </div>
+
 
       <div className="filters">
         <input
@@ -158,8 +158,8 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
         <input
           type="text"
           placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={filterQuery}
+          onChange={(e) => setFilterQuery(e.target.value)}
         />
       </div>
 
@@ -167,22 +167,22 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
       <div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>
           First Name {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
-          </button>
+        </button>
         <button onClick={() => handleSort("middleName")}>
           Middle Name {sortAttribute === "middleName" && (sortDirection === 1 ? "🡹" : "🡻")}
-          </button>
+        </button>
         <button onClick={() => handleSort("lastName")}>
-           Last Name {sortAttribute === "lastName" && (sortDirection === 1 ? "🡹" : "🡻")}
-           </button>
+          Last Name {sortAttribute === "lastName" && (sortDirection === 1 ? "🡹" : "🡻")}
+        </button>
         <button onClick={() => handleSort("position")}>
           Position {sortAttribute === "position" && (sortDirection === 1 ? "🡹" : "🡻")}
-          </button>
+        </button>
         <button onClick={() => handleSort("level")}>
-           Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
-          </button>
+          Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
+        </button>
       </div>
       <div>
-        <input 
+        <input
           type="checkbox"
           checked={selectedEmployees.length === sortedEmployees.length}
           onChange={handleSelectAll}
@@ -215,9 +215,9 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
             <tr key={employee._id}>
               <td>
                 <input
-                type="checkbox"
-                checked={selectedEmployees.includes(employee._id)}
-                onChange={() => handleCheckboxChange(employee._id)}
+                  type="checkbox"
+                  checked={selectedEmployees.includes(employee._id)}
+                  onChange={() => handleCheckboxChange(employee._id)}
                 />
               </td>
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
@@ -268,7 +268,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
             setEmployeeToDelete(null);
             setShowConfirmDialog(false);
           }}
-          />
+        />
       )}
     </div>
   );

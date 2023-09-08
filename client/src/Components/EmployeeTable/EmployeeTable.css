@@ -3,8 +3,8 @@
 }
 
 .delete-button {
-  background-color:darkred;
-  color:white;
+  background-color: darkred;
+  color: white;
 }
 
 .EmployeeTable .filters,
@@ -22,6 +22,7 @@
 .EmployeeTable .search-container {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .EmployeeTable .search-label {
@@ -33,12 +34,14 @@
 .EmployeeTable .search-input {
   display: flex;
   align-items: center;
+  flex-grow: 1; /* Allow this container to grow if there's available space */
 }
 
 .EmployeeTable .search-input input {
-  margin-right: 10px;
+  flex-grow: 1; /* Allow input to take up available space */
   padding: 5px;
   border: 1px solid #ccc;
+  margin-right: 10px; /* Space between input and icon */
 }
 
 .EmployeeTable .search-button {
@@ -48,7 +51,7 @@
 }
 
 .EmployeeTable .search-icon {
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
 }
 

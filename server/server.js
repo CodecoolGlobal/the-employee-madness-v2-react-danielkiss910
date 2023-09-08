@@ -269,8 +269,15 @@ app.get("/api/colours", async (req, res) => {
 // Fetch games
 app.get("/api/games", async (req, res) => {
   try {
-    const savedGames = await BoardGameModel.find();
-    return res.json(savedGames);
+    const maxPlayers = req.query.maxPlayers;
+    let query = {};
+
+    if (maxPlayers) {
+      query.maxPlayers = { $lte: Number(maxPlayers) } // $lte = less than or equal - MongoDB operator
+    }
+
+    const games = await BoardGameModel.find(query); // query as parameter
+    return res.json(games);
   } catch (error) {
     console.error("Error saving games", error);
     return res.status(500).json({ error: "Error saving games" });
