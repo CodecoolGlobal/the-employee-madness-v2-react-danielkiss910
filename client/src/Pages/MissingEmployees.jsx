@@ -36,7 +36,7 @@ const MissingEmployees = () => {
 
     const handleMarkPresent = async () => {
         try {
-            const response = await fetch("/api/update-attendance", {
+            const response = await fetch("/api/missing", {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

@@ -61,12 +61,12 @@ const EmployeeAddressPage = () => {
                 <h2>{employee.firstName} {employee.middleName} {employee.lastName}</h2>
                 <p>This employee has no address registered.</p>
                 <button onClick={handleEditClick}>Add Address</button>
+                <Link to="/">
+                    <button>Back</button>
+                </Link>
             </div>
         )
     }
-
-    // Create an Edit button in the page, if the user clicks on it, 
-    // show a form where each address field can be edited. The form also has a Save button.
 
 
     return (

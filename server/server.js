@@ -117,7 +117,7 @@ app.post("/api/employees/", async (req, res, next) => {
 });
 
 // Update multiple present employees
-app.patch("/api/update-attendance", async (req, res, next) => {
+app.patch("/api/missing", async (req, res, next) => {
   const { employeeIds } = req.body;
   try {
     await EmployeeModel.updateMany(
@@ -166,6 +166,29 @@ app.patch("/api/employees/:id", async (req, res, next) => {
 
   } catch (err) {
     return next(err);
+  }
+});
+
+// Update employee present status by ID
+app.patch('/api/employees/:id/present', async (req, res) => {
+  const { id } = req.params;
+  const { present } = req.body;
+
+  try {
+    const employee = await EmployeeModel.findById(id);
+    
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    employee.present = present;
+
+    await employee.save();
+
+    res.status(200).json({ message: 'Updated successfully', employee });
+  } catch (error) {
+    console.error('Error updating employee:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 

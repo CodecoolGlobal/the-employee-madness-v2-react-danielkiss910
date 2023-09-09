@@ -5,7 +5,7 @@ import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import Pagination from "../Pagination/Pagination";
 
 
-const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
+const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
 
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
@@ -16,28 +16,47 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [searchInput, setSearchInput] = useState('');
-  const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterQuery, setFilterQuery] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+ 
 
-  const handleCheckboxChange = (employeeId) => {
-    if (selectedEmployees.includes(employeeId)) {
-      setSelectedEmployees(selectedEmployees.filter((id) => id !== employeeId));
-
-      onCheckboxChange(employeeId, selectedEmployees.includes(employeeId));
-    } else {
-      setSelectedEmployees([...selectedEmployees, employeeId]);
+  const handleCheckboxChange = async (id) => {
+    const isCurrentlySelected = employees.find(emp => emp._id === id);
+    const presentStatus = !isCurrentlySelected.present;
+  
+    try {
+      const response = await fetch(`/api/employees/${id}/present`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ present: presentStatus })
+      });
+  
+      if (response.ok) {
+        onEmployeeUpdate(id, presentStatus); // Update frontend only if backend update succeeds
+        setErrorMessage(null);
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.error || "Failed to update. Please try again.");
+      }
+    } catch (error) {
+      console.error("There was an error:", error);
+      setErrorMessage("Network error. Please try again.");
     }
   };
 
-  const handleSelectAll = () => {
-    if (selectedEmployees.length === sortedEmployees.length) {
-      setSelectedEmployees([]);
-    } else {
-      setSelectedEmployees(sortedEmployees.map((employee) => employee._id));
-    }
-  };
-
+  const onEmployeeUpdate = (id, presentStatus) => {
+    // Update the employees state with the new status for the given employee ID
+    setEmployees(prevEmployees => {
+      return prevEmployees.map(employee => {
+        if (employee._id === id) {
+          return { ...employee, present: presentStatus };
+        }
+        return employee;
+      });
+    });
+  }  
+  
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -177,12 +196,17 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
         <button onClick={() => handleSort("level")}>
           Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
-      </div><div>
+      </div>
+      {/* <div>
         <input
           type="checkbox"
           checked={selectedEmployees.length === sortedEmployees.length}
           onChange={handleSelectAll} /> Select All
-      </div><table>
+      </div> */}
+      {
+        errorMessage && <div className="error-message">{errorMessage}</div>
+      }
+      <table>
         <thead>
           <tr>
             <th>Present</th>
@@ -211,14 +235,14 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
               <td>
                 <input
                   type="checkbox"
-                  checked={selectedEmployees.includes(employee._id)}
+                  checked={employee.present}
                   onChange={() => handleCheckboxChange(employee._id)} />
               </td>
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
               <td><Link to={`/employees/${employee._id}/address`}>
                 {employee.address?.city || "No city registered for employee."}
-                </Link>
-                </td>
+              </Link>
+              </td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
               <td>{new Date(employee.startingDate).toLocaleDateString("en-GB")}</td>
@@ -241,7 +265,7 @@ const EmployeeTable = ({ employees, onDelete, onCheckboxChange }) => {
                     Update
                   </button>
                 </Link>
-                <button type="button" className="delete-button" onClick={() => handleDelete(employee._id)}>
+                <button type="button" className="delete-button" onClick={() => handleDelete(employee)}>
                   Delete
                 </button>
               </td>
