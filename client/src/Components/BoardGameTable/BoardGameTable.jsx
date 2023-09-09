@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./BoardGameTable.css";
 
 const BoardGameTable = () => {
@@ -7,6 +7,7 @@ const BoardGameTable = () => {
     const [maxPlayersInput, setMaxPlayersInput] = useState("");
 
     const location = useLocation();
+    const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const maxPlayersQueryParam = searchParams.get("maxPlayers");
 
@@ -34,6 +35,10 @@ const BoardGameTable = () => {
         e.preventDefault(); // Prevent default form submission
         fetchGames(maxPlayersInput);
     };
+
+    const handleNavigate = (gameId) => {
+        navigate(`/games-list/${gameId}`);
+    }
 
 
     return (
@@ -66,6 +71,9 @@ const BoardGameTable = () => {
                                 </Link>
                             </td>
                             <td>{game.maxPlayers}</td>
+                            <td>
+                                <button onClick={() => handleNavigate(game._id)}>Go to game</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

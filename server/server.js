@@ -64,8 +64,8 @@ app.get("/api/search/:employeeSearch", async (req, res) => {
   try {
     const employees = await EmployeeModel.find({
       $or: [
-        { firstName: { $regex: new RegExp(employeeSearch, "i") } },
-        { middleName: { $regex: new RegExp(employeeSearch, "i") } },
+        { firstName: { $regex: new RegExp(employeeSearch, "i") } },  // regExp = MongoDB Regular Expression
+        { middleName: { $regex: new RegExp(employeeSearch, "i") } }, // i = case insensitive
         { lastName: { $regex: new RegExp(employeeSearch, "i") } }
       ]
     }).sort({ created: "desc" });
@@ -320,11 +320,33 @@ app.post("/api/games", async (req, res, next) => {
 // Fetch tools
 app.get("/api/tools", async (req, res) => {
   try {
-    const tools = await ToolsModel.find();
+    const nameFilter = req.query.name;
+    let tools;
+
+    if (nameFilter) {
+      tools = await ToolsModel.find({ name: { $regex: new RegExp(nameFilter, "i") } });
+    } else {
+      tools = await ToolsModel.find();
+    }
     return res.json(tools);
   } catch (error) {
     console.error("Error fetching tools", error);
     return res.status(500).json({ error: "Error fetching tools" });
+  }
+});
+
+// Fetch single tool by ID
+app.get("/api/tools/:id", async (req, res) => {
+  try {
+    const toolId = req.params.id;
+    const tool = await ToolsModel.findById(toolId);
+    if (!tool) {
+      return res.status(404).json({ error: "Tool not found" });
+    } 
+    return res.json(tool)
+  } catch (error) {
+    console.error("Error fetching tool by ID", error);
+    return res.status(500).json({ error: "Error fetching tool by ID" });
   }
 });
 

@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const ToolsPage = () => {
     const [tools, setTools] = useState([]);
-    const [nameFilter, setNameFilter] = useState("");
     const [newToolName, setNewToolName] = useState("");
     const [newToolWeight, setNewToolWeight] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const nameFilter = searchParams.get("name") || "";
 
     useEffect(() => {
-        fetch("/api/tools")
+        let apiUrl = "/api/tools";
+        if (nameFilter) {
+            apiUrl += `?name=${nameFilter}`;            
+        }
+
+        fetch(apiUrl)
             .then(res => res.json())
             .then(data => {
                 setTools(data);
@@ -16,10 +22,12 @@ const ToolsPage = () => {
             .catch(err => {
                 console.error("Error fetching tools", err);
             });
-    }, []);
+    }, [nameFilter]);
 
-    const filteredTools = tools.filter((tool) =>
-        tool.name.toLowerCase().includes(nameFilter.toLowerCase()));
+    const handleFilterChange = (e) => {
+        const value = e.target.value;
+        setSearchParams({ name: value });
+    };
 
     const handleAddTool = () => {
         if (newToolName && newToolWeight) {
@@ -48,7 +56,7 @@ const ToolsPage = () => {
                     console.error("Error adding new tool", err);
                 });
         }
-    }
+    };
 
 
     return (
@@ -58,12 +66,12 @@ const ToolsPage = () => {
                 type="text"
                 placeholder="Filter by name"
                 value={nameFilter}
-                onChange={(e) => setNameFilter(e.target.value)}
+                onChange={handleFilterChange}
             />
             <ul>
-                {filteredTools.map(tool => (
+                {tools.map(tool => (
                     <li key={tool._id}>
-                        {tool.name}: {tool.weight} kg
+                        <Link to={`/tools/${tool._id}`}>{tool.name}</Link>: {tool.weight} kg
                     </li>
                 ))}
             </ul>
