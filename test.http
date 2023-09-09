@@ -122,3 +122,8 @@ GET http://localhost:8080/api/favoritebrands/
 
 # Fetch all colors
 GET http://localhost:8080/api/colours/
+
+### 
+
+# Fetch employee address by employee ID 
+GET http://localhost:8080/api/employees/64fc1f9c87d54211a0b4d192

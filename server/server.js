@@ -7,6 +7,7 @@ const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const ColourModel = require("./db/colours.model")
 const ToolsModel = require("./db/tools.model");
 const BoardGameModel = require("./db/boardGame.model");
+const employeeModel = require("./db/employee.model");
 
 
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -165,6 +166,34 @@ app.patch("/api/employees/:id", async (req, res, next) => {
 
   } catch (err) {
     return next(err);
+  }
+});
+
+// Update employee address by ID
+app.patch("/api/employees/:id/address", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { country, city, street, zipCode } = req.body;
+
+    const updatedEmployee = await employeeModel.findByIdAndUpdate(
+      id, {
+        address: {
+          country,
+          city,
+          street,
+          zipCode
+        }
+      },
+      { new: true } // returns the updated document
+    );
+    // Check if employee exists
+    if (!updatedEmployee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    res.json(updatedEmployee);
+  } catch (error) {
+    console.error("Error updating employee address", error);
+    res.status(500).json({ error: "Error updating employee address" });
   }
 });
 

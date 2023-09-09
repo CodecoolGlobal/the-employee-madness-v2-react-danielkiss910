@@ -13,6 +13,12 @@ const EmployeeSchema = new Schema({
   firstName: String,
   middleName: String,
   lastName: String,
+  address: {
+    country: String,
+    city: String,
+    street: String,
+    zipCode: Number,
+  },
   level: String,
   position: String,
   startingDate: Date,

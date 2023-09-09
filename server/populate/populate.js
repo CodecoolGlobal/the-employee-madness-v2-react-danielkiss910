@@ -31,7 +31,7 @@ const pick = (from) => from[Math.floor(Math.random() * from.length)];
 const populateEquipments = async () => {
   await EquipmentModel.deleteMany({});
   await EquipmentModel.insertMany(equipments);
-  console.log("Equipments created");
+  console.log("Equipment created");
 };
 
 const populateFavouriteBrands = async () => {
