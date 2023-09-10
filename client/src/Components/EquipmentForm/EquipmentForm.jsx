@@ -1,13 +1,18 @@
 import { useState } from "react";
 
+// A form for managing equipment details (create/update)
 const EquipmentForm = ({ onSave, disabled, equipment, onCancel }) => {
+
+  // Initial form field values
   const [name, setName] = useState(equipment?.name ?? "");
   const [type, setType] = useState(equipment?.type ?? "");
   const [amount, setAmount] = useState(equipment?.amount ?? "");
 
+  // Handle form submission
   const onSubmit = (e) => {
     e.preventDefault();
 
+    // Update or create new equipment based on provided data
     if (equipment) {
       return onSave({
         ...equipment,
@@ -24,6 +29,7 @@ const EquipmentForm = ({ onSave, disabled, equipment, onCancel }) => {
     });
   };
 
+  
   return (
     <form className="EquipmentForm" onSubmit={onSubmit}>
       <div className="control">

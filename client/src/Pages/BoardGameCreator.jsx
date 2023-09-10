@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const BoardGameForm = () => {
+    // State initialization for board games and new game fields
     const [boardGames, setBoardGames] = useState([]);
     const [newGameName, setNewGameName] = useState("");
     const [newMaxPlayers, setNewMaxPlayers] = useState("");
 
+    // Fetch the existing board games on initial component load
     useEffect(() => {
         fetch("/api/games")
             .then(res => res.json())
@@ -17,6 +19,7 @@ const BoardGameForm = () => {
             });
     }, []);
 
+    // Handler for adding a new game
     const handleAddGame = () => {
         if (newGameName && newMaxPlayers) {
             const newGame = {
@@ -24,6 +27,7 @@ const BoardGameForm = () => {
                 maxPlayers: parseInt(newMaxPlayers, 10),
             };
 
+            // Post the new game to the API
             fetch("/api/games", {
                 method: "POST",
                 headers: {
@@ -43,6 +47,8 @@ const BoardGameForm = () => {
         }
     }
 
+
+    // Component render
     return (
         <div className="board-game-page">
             <h2>Board Games</h2>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const KittensList = () => {
+    // Set component local states
     const [kittens, setKittens] = useState([]);
 
     useEffect(() => {

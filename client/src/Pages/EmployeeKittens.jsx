@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const EmployeeKittens = () => {
+    // Getting the employee ID from the URL
     const { employeeId } = useParams();
 
+    // Define component state
     const [kittens, setKittens] = useState([]);
     const [employeeName, setEmployeeName] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch kittens for given employee
+        // Fetch kittens associated with a particular employee
         const fetchKittens = async () => {
             try {
                 const response = await fetch(`/api/kittens/${employeeId}`);
@@ -25,8 +27,8 @@ const EmployeeKittens = () => {
                 setLoading(false);
             }
         };
-        
-        // Fetch employee name
+
+        // Fetch the name of the employee
         const fetchEmployeeName = async () => {
             try {
                 const response = await fetch(`/api/employees/${employeeId}`);
@@ -47,27 +49,31 @@ const EmployeeKittens = () => {
         fetchEmployeeName();
 
     }, [employeeId]);
-        
 
-        if (loading) {
+    // Display a loading message while fetching data
+    if (loading) {
         return <div>Loading...<Link to="/"><button>Back</button></Link></div>
     }
 
+    // Display any encountered errors
     if (error) {
         return <div>Error: {error}<Link to="/"><button>Back</button></Link></div>
     }
 
+    // If no kittens are associated with the employee
     if (!kittens.length) {
         return (
-        <div>
-            <h3>No kittens associated with this employee.</h3>
-            <Link to="/">
-                <button>Back</button>
-            </Link>
-        </div>
+            <div>
+                <h3>No kittens associated with this employee.</h3>
+                <Link to="/">
+                    <button>Back</button>
+                </Link>
+            </div>
         )
     }
 
+
+    // Display the kittens associated with the employee
     return (
         <div>
             <h5>Employee ID number: {employeeId}</h5>

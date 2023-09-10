@@ -2,6 +2,10 @@ import { Outlet, Link } from "react-router-dom";
 import Footer from "../../Components/Footer/Footer";
 import "./Layout.css";
 
+/**
+ * The Layout component serves as a parent container for other components.
+ * It provides a consistent layout structure including navigation and footer.
+ */
 const Layout = () => (
   <div className="Layout">
     <nav>

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EquipmentForm from "../Components/EquipmentForm";
 import Loading from "../Components/Loading";
 
+// Fetches equipment data by its ID
 const fetchEquipmentById = async (id) => {
     try {
         const response = await fetch (`/api/equipment/${id}`);
@@ -15,6 +16,7 @@ const fetchEquipmentById = async (id) => {
     }
 };
 
+// Sends an update request for a specific piece of equipment
 const updateEquipment = async (id, updatedEquipment) => {
     try {
         const response = await fetch(`/api/equipment/${id}`, {
@@ -33,12 +35,17 @@ const updateEquipment = async (id, updatedEquipment) => {
 };
 
 const EquipmentUpdater = () => {
+    // Extract equipment ID from the URL parameters
     const { id } = useParams();
+
+    // Obtain the navigate function from react-router
     const navigate = useNavigate();
     
+    // State to hold the current equipment and loading status
     const [loading, setLoading] = useState(false);
     const [equipment, setEquipment] = useState(null);
 
+    // Fetch the equipment details on component mount or if the ID changes
     useEffect(() => {
         fetchEquipmentById(id)
         .then((data) => {
@@ -52,20 +59,25 @@ const EquipmentUpdater = () => {
         });
     }, [id]);
 
+    // Handler for when equipment details are updated in the form
     const handleUpdateEquipment = (updatedEquipment) => {
         setLoading(true);
 
         updateEquipment(id, updatedEquipment)
         .then(() => {
             setLoading(false);
+            // Redirect to the equipment list page after successful update
             navigate("/equipment");
         });
     };
 
+    // Show a loading component while data is being fetched or sent
     if (loading) {
         return <Loading />;
     }
 
+
+    // Render the equipment form filled with the fetched data
     return (
         <EquipmentForm
             equipment={equipment}

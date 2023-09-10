@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./EmployeeForm.css";
 
+// Component for employee input form
 const EmployeeForm = ({
   onSave, 
   disabled, 
@@ -12,6 +13,7 @@ const EmployeeForm = ({
   allowAddKittens,
   boardGames,
 }) => {
+  // State initialization for employee details
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
@@ -31,8 +33,10 @@ const EmployeeForm = ({
   const [city, setCity] = useState(employee?.address?.city || "");
   const [street, setStreet] = useState(employee?.address?.street || "");
   const [zipCode, setZipCode] = useState(employee?.address?.zipCode || "");
+  // State for confirmation message display
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
+  // Effect to handle auto-hiding of confirmation message
   useEffect(() => {
     if (confirmationMessage) {
       const timer = setTimeout(() => {
@@ -43,11 +47,11 @@ const EmployeeForm = ({
     }
   }, [confirmationMessage]);
 
-
+  // Handler for form submission
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const updatedEmployee = {
+    const updatedEmployee = { // Gather employee details from state
       firstName,
       middleName,
       lastName,
@@ -69,6 +73,7 @@ const EmployeeForm = ({
       kittens
     };
 
+    // Check if updating existing employee or creating new one
     if (employee) {
       onSave({
         ...employee,
@@ -80,6 +85,7 @@ const EmployeeForm = ({
   };
 
 
+  // JSX rendering
   return (
     <form className="EmployeeForm" onSubmit={onSubmit}>
       <div className="control">

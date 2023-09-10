@@ -2,33 +2,40 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 const ToolsPage = () => {
+    // State for the list of tools
     const [tools, setTools] = useState([]);
+    // States for adding a new tool
     const [newToolName, setNewToolName] = useState("");
     const [newToolWeight, setNewToolWeight] = useState("");
+    // useSearchParams hook is used to get and set the query parameters in the URL
     const [searchParams, setSearchParams] = useSearchParams();
+    // Getting the 'name' query parameter for filtering tools by name
     const nameFilter = searchParams.get("name") || "";
 
+    // useEffect hook to fetch tools list from the backend
     useEffect(() => {
         let apiUrl = "/api/tools";
         if (nameFilter) {
-            apiUrl += `?name=${nameFilter}`;            
+            apiUrl += `?name=${nameFilter}`; // If there's a name filter, append it to the API URL       
         }
 
         fetch(apiUrl)
             .then(res => res.json())
             .then(data => {
-                setTools(data);
+                setTools(data); // Update the tools state with fetched data
             })
             .catch(err => {
                 console.error("Error fetching tools", err);
             });
-    }, [nameFilter]);
+    }, [nameFilter]); // Dependency array with 'nameFilter' to refetch data if it changes
 
+    // Function to handle the change of the filter input
     const handleFilterChange = (e) => {
         const value = e.target.value;
-        setSearchParams({ name: value });
+        setSearchParams({ name: value }); // Setting the 'name' query parameter in the URL
     };
 
+    // Function to handle adding a new tool
     const handleAddTool = () => {
         if (newToolName && newToolWeight) {
             const newTool = {
@@ -36,7 +43,7 @@ const ToolsPage = () => {
                 weight: newToolWeight,
             };
 
-            // Call an API endpoint to add the new tool to the DB
+            // Make an API request to add the new tool to the backend
             fetch("/api/tools", {
                 method: "POST",
                 headers: {
@@ -46,7 +53,7 @@ const ToolsPage = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    // Update tools list with new tool
+                    // Add the new tool to the tools list in state
                     setTools([...tools, data]);
                     // Clear input fields
                     setNewToolName("");
@@ -59,6 +66,7 @@ const ToolsPage = () => {
     };
 
 
+    // Rendering the list of tools, filter input, and add new tool form
     return (
         <div className="tools-page">
             <h2>Tools</h2>

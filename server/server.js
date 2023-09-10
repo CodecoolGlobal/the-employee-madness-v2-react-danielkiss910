@@ -1,4 +1,7 @@
+// Load environment variables from .env file
 require("dotenv").config();
+
+// Import required libraries and modules
 const express = require("express");
 const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
@@ -10,14 +13,16 @@ const BoardGameModel = require("./db/boardGame.model");
 const employeeModel = require("./db/employee.model");
 const DivisionModel = require("./db/division.model");
 
-
+// Extract necessary environment variables
 const { MONGO_URL, PORT = 8080 } = process.env;
 
+// Ensure the MONGO_URL is provided; if not, exit the application
 if (!MONGO_URL) {
   console.error("Missing MONGO_URL environment variable");
   process.exit(1);
 }
 
+// Create an instance of express app
 const app = express();
 app.use(express.json());
 
@@ -557,15 +562,19 @@ app.delete("/api/divisions/:id", async (req, res) => {
 
 // ----- MAIN ----- // 
 
+// Main function to set up and run the server
 const main = async () => {
+  // Connect to MongoDB using the provided URL
   await mongoose.connect(MONGO_URL);
 
+  // Start the express server on the specified port
   app.listen(PORT, () => {
     console.log("Server successfully started");
     console.log("App is listening on port:", PORT);
   });
 };
 
+// Execute the main function to start the server. If there's any error, log it and exit the process
 main().catch((err) => {
   console.error(err);
   process.exit(1);

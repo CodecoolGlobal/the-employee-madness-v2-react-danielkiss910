@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const MissingEmployees = () => {
+    // // States to hold the list of missing employees, IDs of selected employees, determine if the "select all" checkbox is checked
     const [missingEmployees, setMissingEmployees] = useState([]);
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectAllChecked, setSelectAllChecked] = useState(false);
 
+    // Fetch the list of missing employees when the component mounts
     useEffect(() => {
         fetch("/api/missing")
         .then((res) => res.json())
@@ -17,6 +19,7 @@ const MissingEmployees = () => {
         });
     }, []);
 
+    // Handle changes to individual employee checkboxes
     const handleCheckboxChange = (employeeId) => {
         if (selectedEmployees.includes(employeeId)) {
             setSelectedEmployees(selectedEmployees.filter((id) => id !== employeeId));
@@ -25,6 +28,7 @@ const MissingEmployees = () => {
         }
     };
 
+    // Handle checking or unchecking the "select all" checkbox
     const handleSelectAll = () => {
         if (selectAllChecked) {
             setSelectedEmployees([]);
@@ -34,6 +38,7 @@ const MissingEmployees = () => {
         setSelectAllChecked(!selectAllChecked);
     };
 
+    // Handle marking the selected employees as present
     const handleMarkPresent = async () => {
         try {
             const response = await fetch("/api/missing", {
@@ -58,6 +63,8 @@ const MissingEmployees = () => {
         }
     };
 
+
+    // Render the list of missing employees and associated controls
     return (
         <div>
             <h2>Missing Employees</h2>

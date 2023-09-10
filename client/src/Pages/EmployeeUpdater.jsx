@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
 import Loading from "../Components/Loading";
 
+// Fetch functions for different resources
 const fetchEquipment = () => {
   return fetch(`/api/equipment`)
   .then((res) => res.json());
@@ -32,6 +33,7 @@ const fetchDivisions = () => {
   .then((res) => res.json());
 }
 
+// Function to send a PATCH request to update an employee
 const updateEmployee = (employee) => {
   return fetch(`/api/employees/${employee._id}`, {
     method: "PATCH",
@@ -43,9 +45,11 @@ const updateEmployee = (employee) => {
 };
 
 const EmployeeUpdater = () => {
-  const { id } = useParams();
+  // React Router Hooks
+  const { id } = useParams(); // Get Employee ID from URL parameters
   const navigate = useNavigate();
 
+  // State Initialization for various components and data
   const [employee, setEmployee] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [employeeLoading, setEmployeeLoading] = useState(true);
@@ -56,7 +60,7 @@ const EmployeeUpdater = () => {
   const [boardGames, setBoardGames] = useState([]);
   const [divisions, setDivisions] = useState([]);
 
-
+  // Fetch all necessary data when the component mounts
   useEffect(() => {
     setEmployeeLoading(true);
     Promise.all([
@@ -81,19 +85,23 @@ const EmployeeUpdater = () => {
       });
   }, [id, divisions]);
 
+  // Handler for the update action
   const handleUpdateEmployee = (employee) => {
     setUpdateLoading(true);
     updateEmployee(employee)
       .then(() => {
         setUpdateLoading(false);
-        navigate("/");
+        navigate("/"); // Navigate to the root after update
       });
   };
 
+  // Show loading screen if employee data is being fetched
   if (employeeLoading) {
     return <Loading />;
   }
 
+
+  // Component JSX
   return (
     <EmployeeForm
       employee={employee}

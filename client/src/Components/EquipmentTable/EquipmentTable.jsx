@@ -5,6 +5,7 @@ import "./EquipmentTable.css";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 const EquipmentTable = () => {
+  // State management for equipment, filters, sorting and confirmation modal
   const [equipment, setEquipment] = useState([]);
   const [filteredEquipment, setFilteredEquipment] = useState([]);
   const [nameFilter, setNameFilter] = useState("");
@@ -15,20 +16,21 @@ const EquipmentTable = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteEquipmentId, setDeleteEquipmentId] = useState(null);
 
+  // Handle showing and hiding of confirmation modal
   const handleOpenConfirmDialog = (id) => {
     setDeleteEquipmentId(id);
     setShowConfirmDialog(true);
   };
-
   const handleCloseConfirmDialog = () => {
     setDeleteEquipmentId(null);
     setShowConfirmDialog(false);
   };
-
+  
+  
+  // Handle deletion and confirmation of equipment
   const handleDelete = (id) => {
     handleOpenConfirmDialog(id);
   };
-
   const handleConfirmDelete = async () => {
     if (deleteEquipmentId) {
       try {
@@ -43,6 +45,7 @@ const EquipmentTable = () => {
     }
   };
 
+  // Fetch equipment data from the API
   const fetchEquipment = useCallback(async () => {
     try {
       const response = await axios.get("/api/equipment");
@@ -53,10 +56,12 @@ const EquipmentTable = () => {
     }
   }, []);
 
+  // Initial fetch of equipment on component mount
   useEffect(() => {
     fetchEquipment();
   }, [fetchEquipment]);
 
+  // Filter and sort equipment based on user input
   useEffect(() => {
     const applyFilters = () => {
       let filteredItems = equipment;
@@ -105,6 +110,7 @@ const EquipmentTable = () => {
     applyFilters();
   }, [nameFilter, typeFilter, amountFilter, equipment, sortField, sortOrder]);
 
+  // Handle sorting functionality
   const handleSort = field => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -114,6 +120,8 @@ const EquipmentTable = () => {
     }
   };
 
+
+  // Render component
   return (
     <div className="EquipmentTable">
       <div className="Equipment-creator-button">

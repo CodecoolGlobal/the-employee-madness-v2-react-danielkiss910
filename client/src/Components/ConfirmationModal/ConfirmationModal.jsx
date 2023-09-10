@@ -1,6 +1,7 @@
 import React from 'react';
 import "./ConfirmationModal.css";
 
+// A modal for getting confirmation from users
 function ConfirmationModal({ onCancel, onConfirm }) {
   return (
     <div className="confirmation-modal">

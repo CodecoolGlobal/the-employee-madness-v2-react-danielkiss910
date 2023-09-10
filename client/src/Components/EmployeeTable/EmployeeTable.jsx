@@ -5,8 +5,9 @@ import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import Pagination from "../Pagination/Pagination";
 
 
-const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
+const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params from other components
 
+  // // Local state for various functionalities
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,19 +20,19 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterQuery, setFilterQuery] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
- 
 
+  // Handle changes to the present status of an employee
   const handleCheckboxChange = async (id) => {
     const isCurrentlySelected = employees.find(emp => emp._id === id);
     const presentStatus = !isCurrentlySelected.present;
-  
+
     try {
       const response = await fetch(`/api/employees/${id}/present`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ present: presentStatus })
       });
-  
+
       if (response.ok) {
         onEmployeeUpdate(id, presentStatus); // Update frontend only if backend update succeeds
         setErrorMessage(null);
@@ -45,8 +46,8 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
     }
   };
 
+  // Update the local employee list when an employee's present status changes
   const onEmployeeUpdate = (id, presentStatus) => {
-    // Update the employees state with the new status for the given employee ID
     setEmployees(prevEmployees => {
       return prevEmployees.map(employee => {
         if (employee._id === id) {
@@ -55,9 +56,9 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
         return employee;
       });
     });
-  }  
-  
+  }
 
+  // Handle the sort functionality for the table columns
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -68,6 +69,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
     setSortDirection(sortOrder === "asc" ? 1 : -1); // For lists to work in both ascending and descending order
   };
 
+  // Filtering logic to narrow down the displayed employees based on the applied filters
   const filteredEmployees = employees.filter((employee) => {
     const matchesPosition =
       !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
@@ -86,10 +88,10 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
       employee.position.toLowerCase().includes(filterQuery.toLowerCase()) ||
       employee.level.toLowerCase().includes(filterQuery.toLowerCase());
 
-
     return matchesPosition && matchesLevel && matchesNameSearch && matchesFilterSearch;
   });
 
+  // Sorting logic to order the displayed employees based on the selected attribute and order
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
       const aNames = [a.firstName, a.middleName, a.lastName];
@@ -118,12 +120,13 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
     return 0;
   });
 
-
+  // Handle deletion process of an employee by showing a confirmation modal
   const handleDelete = (employee) => {
     setEmployeeToDelete(employee);
     setShowConfirmDialog(true);
   };
 
+  // Pagination logic for determining which employees to display on the current page
   const employeesPerPage = 10;
   const startIndex = (currentPage - 1) * employeesPerPage;
   const employeesToDisplay = sortedEmployees.slice(
@@ -132,23 +135,25 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
   );
   const totalPages = Math.ceil(sortedEmployees.length / employeesPerPage);
 
+  // Handle the page change event when navigating the employee list
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
 
+  // Render the component
   return (
     <div className="EmployeeTable">
 
       <div className="search-container">
+
         <div className="search-label">Find Employee:</div>
         <form
           onSubmit={(e) => {
             e.preventDefault(); // Prevents the default form submission behaviour
             setSearchQuery(searchInput);
           }}
-          className="search-input"
-        >
+          className="search-input">
           <input
             type="text"
             placeholder="Enter employee name"
@@ -157,55 +162,66 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
           <button type="button" className="search-button" onClick={() => setSearchQuery(searchInput)}>
             <span className="search-icon">&#x1F50D;</span>
           </button>
+
           <Link to="/top-paid">
             <button type="button">Top Paid Employees</button>
           </Link>
+
           <Link to="/missing">
             <button type="button">Missing Employees</button>
           </Link>
         </form>
-      </div><div className="filters">
+      </div>
+
+      <div className="filters">
+
         <input
           type="text"
           placeholder="Filter by Position"
           value={positionFilter}
           onChange={(e) => setPositionFilter(e.target.value)} />
+
         <input
           type="text"
           placeholder="Filter by Level"
           value={levelFilter}
           onChange={(e) => setLevelFilter(e.target.value)} />
+
         <input
           type="text"
           placeholder="Search..."
           value={filterQuery}
           onChange={(e) => setFilterQuery(e.target.value)} />
-      </div><div className="sort-label">Sort Employees By:</div><div className="sort-buttons">
+      </div>
+
+      <div className="sort-label">Sort Employees By:</div>
+
+      <div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>
           First Name {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
+
         <button onClick={() => handleSort("middleName")}>
           Middle Name {sortAttribute === "middleName" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
+
         <button onClick={() => handleSort("lastName")}>
           Last Name {sortAttribute === "lastName" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
+
         <button onClick={() => handleSort("position")}>
           Position {sortAttribute === "position" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
+
         <button onClick={() => handleSort("level")}>
           Level {sortAttribute === "level" && (sortDirection === 1 ? "🡹" : "🡻")}
         </button>
       </div>
-      {/* <div>
-        <input
-          type="checkbox"
-          checked={selectedEmployees.length === sortedEmployees.length}
-          onChange={handleSelectAll} /> Select All
-      </div> */}
+
       {
         errorMessage && <div className="error-message">{errorMessage}</div>
       }
+
       <table>
         <thead>
           <tr>
@@ -253,18 +269,22 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
               <td>{employee.favoriteBrand?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.maxPlayers || "N/A"}</td>
+
               <td>
                 <Link to={`/kittens/${employee._id}`}>
                   <button type="button">
                     View Kittens
                   </button>
-                </Link></td>
+                </Link>
+              </td>
+
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button">
                     Update
                   </button>
                 </Link>
+
                 <button type="button" className="delete-button" onClick={() => handleDelete(employee)}>
                   Delete
                 </button>
@@ -272,10 +292,13 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
             </tr>
           ))}
         </tbody>
-      </table><Pagination
+      </table>
+
+      <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange} />
+        onPageChange={handlePageChange}
+      />
       {
         showConfirmDialog && (
           <ConfirmationModal

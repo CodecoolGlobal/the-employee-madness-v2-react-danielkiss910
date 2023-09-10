@@ -3,14 +3,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./BoardGameTable.css";
 
 const BoardGameTable = () => {
+    // State initialization
     const [boardGames, setBoardGames] = useState([]);
     const [maxPlayersInput, setMaxPlayersInput] = useState("");
 
+    // React Router Hooks to Access Current Location and Navigation Functionality
     const location = useLocation();
     const navigate = useNavigate();
+
+    // Fetching Query Params from the URL
     const searchParams = new URLSearchParams(location.search);
     const maxPlayersQueryParam = searchParams.get("maxPlayers");
 
+    // Function to Fetch Board Games from API
     const fetchGames = (maxPlayersQueryParam) => {
         let apiUrl = "/api/games";
         if (maxPlayersQueryParam) {
@@ -27,20 +32,24 @@ const BoardGameTable = () => {
             });
     }
 
+    // useEffect to Fetch Board Games on Initial Load and Query Param Changes
     useEffect(() => {
         fetchGames(maxPlayersQueryParam);
     }, [maxPlayersQueryParam]);
 
+    // Event Handler for Board Game Search
     const handleSearchClick = (e) => {
         e.preventDefault(); // Prevent default form submission
         fetchGames(maxPlayersInput);
     };
 
+    // Event Handler to Navigate to Individual Game Details Page
     const handleNavigate = (gameId) => {
         navigate(`/games-list/${gameId}`);
     }
 
 
+    // Component JSX
     return (
         <div className="board-game-page">
             <h2>Board Games</h2>
