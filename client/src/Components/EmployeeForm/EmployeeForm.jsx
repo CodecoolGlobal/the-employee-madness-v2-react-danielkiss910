@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "./EmployeeForm.css";
 
 const EmployeeForm = ({
   onSave, 
@@ -30,6 +31,17 @@ const EmployeeForm = ({
   const [city, setCity] = useState(employee?.address.city ?? "");
   const [street, setStreet] = useState(employee?.address.street ?? "");
   const [zipCode, setZipCode] = useState(employee?.address.zipCode ?? "");
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+
+  useEffect(() => {
+    if (confirmationMessage) {
+      const timer = setTimeout(() => {
+        setConfirmationMessage("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [confirmationMessage]);
 
 
   const onSubmit = (e) => {
@@ -284,10 +296,16 @@ const EmployeeForm = ({
         setKittens([...kittens, newKitten]);
         setKittenName("");
         setKittenWeight("");
+        setConfirmationMessage("Kitten added successfully!")
       }}>Add Kitten</button>
       </>
       )
     }       
+    {confirmationMessage && (
+      <div className="confirmation-message fade-out">
+        {confirmationMessage}
+      </div>
+    )}
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>

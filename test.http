@@ -132,3 +132,8 @@ GET http://localhost:8080/api/employees/64fc1f9c87d54211a0b4d192
 
 #
 PATCH http://localhost:8080/api/employees/64fc1f9c87d54211a0b4d192/present
+
+###
+
+#
+DELETE http://localhost:8080/api/employees/64fd65466ab565da007f4fae
