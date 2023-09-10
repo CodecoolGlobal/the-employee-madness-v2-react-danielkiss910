@@ -49,6 +49,8 @@ const EmployeeUpdater = () => {
   const [favoriteBrands, setfavoriteBrands] = useState([]);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState([]);
   const [boardGames, setBoardGames] = useState([]);
+  const [address, setAddress] = useState([]);
+
 
   useEffect(() => {
     setEmployeeLoading(true);
@@ -59,12 +61,13 @@ const EmployeeUpdater = () => {
       fetchFavoriteBrands(),
       fetchFavoriteBoardGames(),
     ])
-      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames]) => {
+      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames, address]) => {
         setEmployee(employee);
         setFavouriteColours(favouriteColours);
         setfavoriteBrands(favoriteBrands);
         setEquipmentList(equipment);
         setBoardGames(boardGames);
+        setAddress(address);
         if (employee) {
           setSelectedEquipmentId(employee.equipment);
         }
@@ -96,6 +99,7 @@ const EmployeeUpdater = () => {
       favoriteBrands={favoriteBrands}
       selectedEquipmentId={selectedEquipmentId}
       boardGames={boardGames}
+      address={address}
       allowAddKittens={true}
     />
   );

@@ -224,8 +224,11 @@ app.patch("/api/employees/:id/address", async (req, res) => {
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).json({ success: false, message: "Employee not found." });
+    }    
     const deleted = await employee.delete();
-    return res.json(deleted);
+    return res.json({ deleted, success: true, message: "Employee deleted successfully." });
   } catch (err) {
     return next(err);
   }

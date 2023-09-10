@@ -8,6 +8,7 @@ const fetchEmployees = async () => {
 };
 
 const deleteEmployee = async (id) => {
+  console.log("Attempting to delete employee with ID:", id);
   const res = await fetch(`/api/employees/${id}`, { method: "DELETE" });
   return await res.json();
 };
@@ -22,6 +23,7 @@ const EmployeeList = () => {
     setLoading(true);
     try {
       const result = await deleteEmployee(id);
+      console.log(result);
       if (result.success) {
         setEmployees((employees) => {
           return employees.filter((employee) => employee._id !== id);

@@ -22,9 +22,14 @@ const EmployeeForm = ({
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
   const [equipment, setEquipment] = useState(employee?.equipment ?? "");
+  const [kittens, setKittens] = useState(employee?.kittens || []);
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
-  const [favouriteBoardGame, setFavouriteBoardGame] = useState(employee?.favouriteBoardGame ?? "");
+  const [favoriteBoardGame, setFavoriteBoardGame] = useState(employee?.favoriteBoardGame ?? "");
+  const [country, setCountry] = useState(employee?.address.country ?? "");
+  const [city, setCity] = useState(employee?.address.city ?? "");
+  const [street, setStreet] = useState(employee?.address.street ?? "");
+  const [zipCode, setZipCode] = useState(employee?.address.zipCode ?? "");
 
 
   const onSubmit = (e) => {
@@ -34,6 +39,12 @@ const EmployeeForm = ({
       firstName,
       middleName,
       lastName,
+      address: {
+        country,
+        city,
+        street,
+        zipCode
+      },
       level,
       position,
       startingDate,
@@ -41,8 +52,9 @@ const EmployeeForm = ({
       desiredSalary,
       favouriteColour,
       favoriteBrand,
+      favoriteBoardGame,
       equipment,
-      kittens: employee?.kittens ?? [] // Send kittens if they exist or an empty array
+      kittens
     };
 
     if (employee) {
@@ -85,6 +97,47 @@ const EmployeeForm = ({
           onChange={(e) => setLastName(e.target.value)}
           name="lastName"
           id="lastName"
+        />
+      </div>
+      
+      <div className="control">
+        <label htmlFor="country">Country:</label>
+        <input
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          name="country"
+          id="country"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="city">City:</label>
+        <input
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          name="city"
+          id="city"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="street">Street:</label>
+        <input
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+          name="street"
+          id="street"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="zipCode">Zip Code:</label>
+        <input
+          value={zipCode}
+          onChange={(e) => setZipCode(e.target.value)}
+          type="number"
+          name="zipCode"
+          id="zipCode"
         />
       </div>
 
@@ -193,8 +246,8 @@ const EmployeeForm = ({
         <label htmlFor="boardGames">Favourite Board Game:</label>
         <select
           name="boardGames"
-          value={favouriteBoardGame}
-          onChange={(e) => setFavouriteBoardGame(e.target.value)}
+          value={favoriteBoardGame}
+          onChange={(e) => setFavoriteBoardGame(e.target.value)}
         >
           <option value="">Select Game</option>
           {boardGames?.map(game => (
@@ -227,12 +280,8 @@ const EmployeeForm = ({
           />
       </div>
       <button type="button" onClick={() => {
-        const kitten = { name: kittenName, weight: kittenWeight };
-        if (employee) {
-          employee.kittens = [...(employee.kittens || []), kitten];
-        } else {
-          onSave({ kittens: [kitten] });
-        }
+        const newKitten = { name: kittenName, weight: kittenWeight };
+        setKittens([...kittens, newKitten]);
         setKittenName("");
         setKittenWeight("");
       }}>Add Kitten</button>

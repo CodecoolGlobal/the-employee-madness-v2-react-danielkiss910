@@ -232,6 +232,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
         <tbody>
           {employeesToDisplay.map((employee) => (
             <tr key={employee._id}>
+              {console.log(employee)}
               <td>
                 <input
                   type="checkbox"
@@ -249,10 +250,10 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
               <td>{parseInt(employee.currentSalary).toLocaleString()}</td>
               <td>{parseInt(employee.desiredSalary).toLocaleString()}</td>
               <td>{parseInt(employee.desiredSalary - employee.currentSalary).toLocaleString()}</td>
-              <td className={`color-${employee.favouriteColour.name}`}>{employee.favouriteColour.name}</td>
-              <td>{employee.favoriteBrand.name}</td>
-              <td>{employee.favoriteBoardGame.name}</td>
-              <td>{employee.favoriteBoardGame.maxPlayers}</td>
+              <td className={`color-${employee.favouriteColour?.name}`}>{employee.favouriteColour.name || "N/A"}</td>
+              <td>{employee.favoriteBrand?.name || "N/A"}</td>
+              <td>{employee.favoriteBoardGame?.name || "N/A"}</td>
+              <td>{employee.favoriteBoardGame?.maxPlayers || "N/A"}</td>
               <td>
                 <Link to={`/kittens/${employee._id}`}>
                   <button type="button">
@@ -284,7 +285,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
               setShowConfirmDialog(false);
             }}
             onConfirm={() => {
-              onDelete(employeeToDelete);
+              onDelete(employeeToDelete._id);
               setEmployeeToDelete(null);
               setShowConfirmDialog(false);
             }}
