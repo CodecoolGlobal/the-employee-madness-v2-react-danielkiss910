@@ -232,7 +232,6 @@ const EmployeeTable = ({ employees, setEmployees, onDelete}) => {
         <tbody>
           {employeesToDisplay.map((employee) => (
             <tr key={employee._id}>
-              {console.log(employee)}
               <td>
                 <input
                   type="checkbox"

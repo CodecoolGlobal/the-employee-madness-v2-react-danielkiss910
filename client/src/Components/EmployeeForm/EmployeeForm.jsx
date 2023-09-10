@@ -4,7 +4,7 @@ import "./EmployeeForm.css";
 const EmployeeForm = ({
   onSave, 
   disabled, 
-  employee, 
+  employee = {}, 
   onCancel, 
   favoriteBrands, 
   favouriteColours, 
@@ -27,10 +27,10 @@ const EmployeeForm = ({
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
   const [favoriteBoardGame, setFavoriteBoardGame] = useState(employee?.favoriteBoardGame ?? "");
-  const [country, setCountry] = useState(employee?.address.country ?? "");
-  const [city, setCity] = useState(employee?.address.city ?? "");
-  const [street, setStreet] = useState(employee?.address.street ?? "");
-  const [zipCode, setZipCode] = useState(employee?.address.zipCode ?? "");
+  const [country, setCountry] = useState(employee?.address?.country || "");
+  const [city, setCity] = useState(employee?.address?.city || "");
+  const [street, setStreet] = useState(employee?.address?.street || "");
+  const [zipCode, setZipCode] = useState(employee?.address?.zipCode || "");
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
   useEffect(() => {

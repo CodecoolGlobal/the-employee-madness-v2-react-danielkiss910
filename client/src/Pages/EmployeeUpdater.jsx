@@ -27,6 +27,11 @@ const fetchFavoriteBoardGames = () => {
   .then((res) => res.json());
 };
 
+const fetchDivisions = () => {
+  return fetch(`/api/divisions`)
+  .then((res) => res.json());
+}
+
 const updateEmployee = (employee) => {
   return fetch(`/api/employees/${employee._id}`, {
     method: "PATCH",
@@ -49,7 +54,7 @@ const EmployeeUpdater = () => {
   const [favoriteBrands, setfavoriteBrands] = useState([]);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState([]);
   const [boardGames, setBoardGames] = useState([]);
-  const [address, setAddress] = useState([]);
+  const [divisions, setDivisions] = useState([]);
 
 
   useEffect(() => {
@@ -60,20 +65,21 @@ const EmployeeUpdater = () => {
       fetchEquipment(),
       fetchFavoriteBrands(),
       fetchFavoriteBoardGames(),
+      fetchDivisions(),
     ])
-      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames, address]) => {
+      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames]) => {
         setEmployee(employee);
         setFavouriteColours(favouriteColours);
         setfavoriteBrands(favoriteBrands);
         setEquipmentList(equipment);
         setBoardGames(boardGames);
-        setAddress(address);
+        setDivisions(divisions);
         if (employee) {
           setSelectedEquipmentId(employee.equipment);
         }
         setEmployeeLoading(false);
       });
-  }, [id]);
+  }, [id, divisions]);
 
   const handleUpdateEmployee = (employee) => {
     setUpdateLoading(true);
@@ -99,8 +105,8 @@ const EmployeeUpdater = () => {
       favoriteBrands={favoriteBrands}
       selectedEquipmentId={selectedEquipmentId}
       boardGames={boardGames}
-      address={address}
       allowAddKittens={true}
+      divisions={divisions}
     />
   );
 };
