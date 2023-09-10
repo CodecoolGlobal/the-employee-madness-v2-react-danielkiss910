@@ -302,7 +302,7 @@ const EmployeeForm = ({
       )
     }       
     {confirmationMessage && (
-      <div className="confirmation-message fade-out">
+      <div className="confirmation-message">
         {confirmationMessage}
       </div>
     )}

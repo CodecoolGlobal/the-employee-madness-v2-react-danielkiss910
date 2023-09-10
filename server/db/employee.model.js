@@ -49,6 +49,10 @@ const EmployeeSchema = new Schema({
     ref: "BoardGames"
   },
   kittens: [KittensSchema],
+  division: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'DivisionModel'
+  },
   created: {
     type: Date,
     default: Date.now,

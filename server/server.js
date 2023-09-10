@@ -8,6 +8,7 @@ const ColourModel = require("./db/colours.model")
 const ToolsModel = require("./db/tools.model");
 const BoardGameModel = require("./db/boardGame.model");
 const employeeModel = require("./db/employee.model");
+const DivisionModel = require("./db/division.model");
 
 
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -34,6 +35,7 @@ app.get("/api/employees/", async (req, res) => {
       .populate("favoriteTools")
       .populate("assignedEquipment")
       .populate("favoriteBoardGame")
+      .populate("division")
       .sort({ created: "desc" }); // Sort in descending order of creation date
 
     return res.json(employees);
@@ -48,8 +50,12 @@ app.get("/api/employees/", async (req, res) => {
 app.get("/api/employees/:id", async (req, res) => {
   try {
     const employee = await EmployeeModel.findById(req.params.id)
-    .populate("favoriteTools")
-    .populate("assignedEquipment");
+      .populate("favoriteBrand")
+      .populate("favouriteColour")
+      .populate("favoriteTools")
+      .populate("assignedEquipment")
+      .populate("favoriteBoardGame")
+      .populate("division")
     return res.json(employee);
   } catch (error) {
     console.error("Error fetching employee by ID", error);
@@ -482,6 +488,74 @@ app.post("/api/kittens/:employeeId", async (req, res,) => {
   }
 });
 
+
+// ----- DIVISIONS ----- //
+
+// Fetch all divisions
+app.get("/api/divisions", async (req, res) => {
+  try {
+    const divisions = await DivisionModel.find().populate("boss"); 
+    return res.json(divisions);
+  } catch (error) {
+    console.error("Error fetching divisions", error);
+    return res.status(500).json({ error: "Error fetching divisions" });
+  }
+});
+
+// Fetch single division by ID
+app.get("/api/divisions/:id", async (req, res) => {
+  try {
+    const division = await DivisionModel.findById(req.params.id).populate("boss");
+    return res.json(division);
+  } catch (error) {
+    console.error("Error fetching division by ID", error);
+    res.status(500).json({ error: "Error fetching division by ID" });
+  }
+});
+
+// Create new division
+app.post("/api/divisions", async (req, res) => {
+  try {
+    const division = await DivisionModel.create(req.body);
+    return res.json(division);
+  } catch (error) {
+    console.error("Error creating division", error);
+    return res.status(500).json({ error: "Error creating division" });
+  }
+});
+
+// Update division by ID
+app.patch("/api/divisions/:id", async (req, res) => {
+  try {
+    const updatedDivision = await DivisionModel.findByIdAndUpdate(
+      req.params.id, 
+      req.body,
+      { new: true } // Return the updated division
+    );
+    return res.json(updatedDivision);
+  } catch (error) {
+    console.error("Error updating division by ID", error);
+    return res.status(500).json({ error: "Error updating division by ID" });
+  }
+});
+
+// Delete division by ID
+app.delete("/api/divisions/:id", async (req, res) => {
+  try {
+    const deletedDivision = await DivisionModel.findByIdAndRemove(req.params.id);
+    if (!deletedDivision) {
+      return res.status(404).json({ error: "Division not found" })
+    }
+    return res.json({ success: true, message: "Division deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting division by ID", error);
+    res.status(500).json({ error: "Error deleting division by ID" });
+  }
+});
+
+
+
+// ----- MAIN ----- // 
 
 const main = async () => {
   await mongoose.connect(MONGO_URL);

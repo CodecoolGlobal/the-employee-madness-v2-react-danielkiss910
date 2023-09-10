@@ -18,6 +18,7 @@ const FavoriteBrandModel = require("../db/favoriteBrand.model");
 const ColourModel = require("../db/colours.model");
 const ToolsModel = require("../db/tools.model");
 const BoardGameModel = require("../db/boardGame.model");
+const DivisionModel = require("../db/division.model");
 
 const mongoUrl = process.env.MONGO_URL;
 
@@ -28,11 +29,13 @@ if (!mongoUrl) {
 
 const pick = (from) => from[Math.floor(Math.random() * from.length)];
 
+
 const populateEquipments = async () => {
   await EquipmentModel.deleteMany({});
   await EquipmentModel.insertMany(equipments);
   console.log("Equipment created");
 };
+
 
 const populateFavouriteBrands = async () => {
   await FavoriteBrandModel.deleteMany({});
@@ -40,11 +43,13 @@ const populateFavouriteBrands = async () => {
   console.log("Favorite brands created");
 };
 
+
 const populateColours = async () => {
   await ColourModel.deleteMany({});
   await ColourModel.insertMany(colours);
   console.log("Colours created");
 };
+
 
 const populateTools = async () => {
   await ToolsModel.deleteMany({});
@@ -52,11 +57,13 @@ const populateTools = async () => {
   console.log("Tools created");
 };
 
+
 const populateBoardGames = async () => {
   await BoardGameModel.deleteMany({});
   await BoardGameModel.insertMany(boardGames);
   console.log("Board games created");
 };
+
 
 const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
@@ -107,6 +114,41 @@ const populateEmployees = async () => {
   console.log("Employees created");
 };
 
+// Choose random employee from DB (to assign as division boss)
+const getRandomEmployee = async () => {
+  const employees = await EmployeeModel.find();
+  const randomIndex = Math.floor(Math.random() * employees.length);
+  return employees[randomIndex]._id;
+}
+
+const populateDivisions = async () => {
+  await DivisionModel.deleteMany({});
+
+  const divisions = [
+    {
+      name: "Division 1",
+      boss: await getRandomEmployee(),
+      budget: 1000000,
+      location: {
+        city: "City 1",
+        country: "Country 1",
+      },
+    },
+    {
+      name: "Division 2",
+      boss:await getRandomEmployee(),
+      budget: 800000,
+      location: {
+        city: "City 2",
+        country: "Country 2",
+      },
+    },
+  ];
+
+  await DivisionModel.insertMany(divisions);
+  console.log("Divisions created");
+};
+
 const main = async () => {
   await mongoose.connect(mongoUrl);
 
@@ -115,7 +157,8 @@ const main = async () => {
   await populateColours();
   await populateTools();
   await populateBoardGames();
-  await populateEmployees(); // Make sure to populate Employees last
+  await populateEmployees(); // Make sure to populate Employees after the rest to get correct data
+  await populateDivisions(); // Populate divisions after employees to get "boss" data
 
   await mongoose.disconnect();
 };
