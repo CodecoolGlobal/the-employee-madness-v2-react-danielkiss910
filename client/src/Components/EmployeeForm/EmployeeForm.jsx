@@ -334,7 +334,7 @@ const EmployeeForm = ({
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
-          {employee ? "Update Employee" : "Create Employee"}
+          {employee._id ? "Update Employee" : "Create Employee"}
         </button>
 
         <button type="button" onClick={onCancel}>

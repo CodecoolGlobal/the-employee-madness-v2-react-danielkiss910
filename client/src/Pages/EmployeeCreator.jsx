@@ -23,6 +23,7 @@ const EmployeeCreator = () => {
   const [equipment, setEquipment] = useState([]);
   const [boardGames, setBoardGames] = useState([]);
   const [divisions, setDivisions] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   // Fetch data for the colours dropdown/select in the form
   useEffect(() => {
@@ -63,6 +64,14 @@ const EmployeeCreator = () => {
     .then((data) => setDivisions(data))
     .catch((err) => console.error("Error fetching divisions", err));
   }, []);
+  
+  // Fetch data for the locations dropdown/select in the form
+  useEffect(() => {
+    fetch("/api/locations")
+    .then((res) => res.json())
+    .then((data) => setLocations(data))
+    .catch((err) => console.error("Error fetching locations", err));
+  }, []);
 
   // Handle the creation of a new employee
   const handleCreateEmployee = (employee) => {
@@ -88,6 +97,7 @@ const EmployeeCreator = () => {
       allowAddKittens={false} // Only allow adding kittens to existing employees on updater form
       onSave={handleCreateEmployee}
       divisions={divisions}
+      locations={locations}
     />
   );
 };
