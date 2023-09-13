@@ -141,6 +141,18 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
     setCurrentPage(pageNumber);
   };
 
+  // Logic to render employee address on the table
+  const renderAddress = (address) => {
+    if (!address) return "Address incomplete";
+
+    const { country, city, street, zipCode } = address;
+
+    if (!country || !city || !street || !zipCode) return "Address incomplete";
+
+    return `${street}, ${city}, ${zipCode}, ${country}`;
+  };
+
+
 
   // Render the component
   return (
@@ -242,7 +254,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
             <th>Favourite Brand</th>
             <th>Favourite Board Game</th>
             <th>Max players</th>
-            <th>City<br></br>(Click to edit)</th>
+            <th>Registered Address<br></br>(Click to edit)</th>
             <th>Kittens</th>
             <th />
           </tr>
@@ -268,10 +280,11 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
               <td>{employee.favoriteBrand?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.maxPlayers || "N/A"}</td>
-              
-              <td><Link to={`/employees/${employee._id}/address`}>
-                {employee.address?.city || "No city registered for employee."}
-              </Link>
+
+              <td>
+                <Link to={`/employees/${employee._id}/address`}>
+                  {renderAddress(employee.address)}
+                </Link>
               </td>
 
               <td>

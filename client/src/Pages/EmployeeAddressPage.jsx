@@ -81,7 +81,7 @@ const EmployeeAddressPage = () => {
     return (
         <div>
             <h2>{employee.firstName} {employee.middleName} {employee.lastName}</h2>
-            <h3>Address</h3>
+            <h3>Address:</h3>
             {isEditing ? (
                 <div>
                     <input
@@ -91,6 +91,7 @@ const EmployeeAddressPage = () => {
                         onChange={handleInputChange}
                         placeholder="Country"
                     />
+                    <br />
                     <input
                         type="text"
                         name="city"
@@ -98,6 +99,7 @@ const EmployeeAddressPage = () => {
                         onChange={handleInputChange}
                         placeholder="City"
                     />
+                    <br />
                     <input
                         type="text"
                         name="street"
@@ -105,6 +107,7 @@ const EmployeeAddressPage = () => {
                         onChange={handleInputChange}
                         placeholder="Street"
                     />
+                    <br />
                     <input
                         type="number"
                         name="zipCode"
@@ -112,8 +115,12 @@ const EmployeeAddressPage = () => {
                         onChange={handleInputChange}
                         placeholder="Zip Code"
                     />
+                    <br />
                     <Link to="/">
                         <button onClick={handleAddressUpdate}>Save</button>
+                    </Link>
+                    <Link to="/">
+                        <button >Cancel</button>
                     </Link>
                 </div>
             ) : (
