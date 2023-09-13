@@ -12,6 +12,7 @@ const ToolsModel = require("./db/tools.model");
 const BoardGameModel = require("./db/boardGame.model");
 const employeeModel = require("./db/employee.model");
 const DivisionModel = require("./db/division.model");
+const LocationModel = require("./db/location.model");
 
 // Extract necessary environment variables
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -41,6 +42,7 @@ app.get("/api/employees/", async (req, res) => {
       .populate("assignedEquipment")
       .populate("favoriteBoardGame")
       .populate("division")
+      .populate("location")
       .sort({ created: "desc" }); // Sort in descending order of creation date
 
     return res.json(employees);
@@ -61,6 +63,7 @@ app.get("/api/employees/:id", async (req, res) => {
       .populate("assignedEquipment")
       .populate("favoriteBoardGame")
       .populate("division")
+      .populate("location")
     return res.json(employee);
   } catch (error) {
     console.error("Error fetching employee by ID", error);
@@ -328,6 +331,19 @@ app.get("/api/colours", async (req, res) => {
     return res.status(500).json({ error: "Error saving colours" });
   }
 });
+
+
+// ----- LOCATIONS ----- //
+
+app.get("/api/locations", async (req, res) => {
+  try {
+    const locations = await LocationModel.find();
+    return res.json(locations);
+  } catch (error) {
+    console.error("Error getting locations", error);
+    return res.status(500).json({ error: "Error getting locations" });
+  }
+})
 
 
 // ----- BOARD GAMES ----- //

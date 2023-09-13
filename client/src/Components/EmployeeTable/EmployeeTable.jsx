@@ -6,6 +6,7 @@ import Pagination from "../Pagination/Pagination";
 
 
 const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params from other components
+  // console.log(employees);
 
   // // Local state for various functionalities
   const [positionFilter, setPositionFilter] = useState("");
@@ -230,7 +231,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
               Name{" "}
               {sortAttribute === "firstName" && (sortDirection === 1 ? "🡹" : "🡻")}
             </th>
-            <th>City<br></br>(Click to edit)</th>
+            <th>Location</th>
             <th>Level</th>
             <th>Position</th>
             <th>Starting Date</th>
@@ -241,6 +242,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
             <th>Favourite Brand</th>
             <th>Favourite Board Game</th>
             <th>Max players</th>
+            <th>City<br></br>(Click to edit)</th>
             <th>Kittens</th>
             <th />
           </tr>
@@ -255,10 +257,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
                   onChange={() => handleCheckboxChange(employee._id)} />
               </td>
               <td><strong>{employee.firstName} {employee.middleName} {employee.lastName}</strong></td>
-              <td><Link to={`/employees/${employee._id}/address`}>
-                {employee.address?.city || "No city registered for employee."}
-              </Link>
-              </td>
+              <td>{employee.location?.city || "N/A"}, {employee.location?.country || "N/A"}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
               <td>{new Date(employee.startingDate).toLocaleDateString("en-GB")}</td>
@@ -269,6 +268,11 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
               <td>{employee.favoriteBrand?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.name || "N/A"}</td>
               <td>{employee.favoriteBoardGame?.maxPlayers || "N/A"}</td>
+              
+              <td><Link to={`/employees/${employee._id}/address`}>
+                {employee.address?.city || "No city registered for employee."}
+              </Link>
+              </td>
 
               <td>
                 <Link to={`/kittens/${employee._id}`}>

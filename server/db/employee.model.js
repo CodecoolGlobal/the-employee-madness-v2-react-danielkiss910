@@ -53,6 +53,10 @@ const EmployeeSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'DivisionModel'
   },
+  location: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Location"
+  },
   created: {
     type: Date,
     default: Date.now,

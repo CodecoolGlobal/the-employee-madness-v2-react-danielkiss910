@@ -31,7 +31,14 @@ const fetchFavoriteBoardGames = () => {
 const fetchDivisions = () => {
   return fetch(`/api/divisions`)
   .then((res) => res.json());
-}
+};
+
+const fetchLocations = () => {
+  return fetch(`/api/locations`)
+  .then((res) => res.json());
+};
+
+
 
 // Function to send a PATCH request to update an employee
 const updateEmployee = (employee) => {
@@ -59,6 +66,7 @@ const EmployeeUpdater = () => {
   const [selectedEquipmentId, setSelectedEquipmentId] = useState([]);
   const [boardGames, setBoardGames] = useState([]);
   const [divisions, setDivisions] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   // Fetch all necessary data when the component mounts
   useEffect(() => {
@@ -70,20 +78,22 @@ const EmployeeUpdater = () => {
       fetchFavoriteBrands(),
       fetchFavoriteBoardGames(),
       fetchDivisions(),
+      fetchLocations(),
     ])
-      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames]) => {
+      .then(([employee, favouriteColours, equipment, favoriteBrands, boardGames, divisions, locations]) => {
         setEmployee(employee);
         setFavouriteColours(favouriteColours);
         setfavoriteBrands(favoriteBrands);
         setEquipmentList(equipment);
         setBoardGames(boardGames);
         setDivisions(divisions);
+        setLocations(locations);
         if (employee) {
           setSelectedEquipmentId(employee.equipment);
         }
         setEmployeeLoading(false);
       });
-  }, [id, divisions]);
+  }, [id]);
 
   // Handler for the update action
   const handleUpdateEmployee = (employee) => {
@@ -115,6 +125,7 @@ const EmployeeUpdater = () => {
       boardGames={boardGames}
       allowAddKittens={true}
       divisions={divisions}
+      locations={locations}
     />
   );
 };

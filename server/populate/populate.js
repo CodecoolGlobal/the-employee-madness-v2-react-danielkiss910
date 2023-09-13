@@ -13,6 +13,7 @@ const colours = require("./colours.json");
 const tools = require("./tools.json");
 const equipments = require("./equipment.json");
 const boardGames = require("./boardGames.json");
+const locations = require("./locations.json");
 
 // Importing database models
 const EmployeeModel = require("../db/employee.model");
@@ -22,6 +23,7 @@ const ColourModel = require("../db/colours.model");
 const ToolsModel = require("../db/tools.model");
 const BoardGameModel = require("../db/boardGame.model");
 const DivisionModel = require("../db/division.model");
+const LocationModel = require("../db/location.model");
 
 // Grabbing the Mongo connection URL from the environment variables
 const mongoUrl = process.env.MONGO_URL;
@@ -66,6 +68,12 @@ const populateBoardGames = async () => {
   console.log("Board games created");
 };
 
+const populateLocations = async () => {
+  await LocationModel.deleteMany({});
+  await LocationModel.insertMany(locations);
+  console.log("Locations created");
+};
+
 // Populate the Employees collection with randomly generated data based on predefined lists
 const populateEmployees = async () => {
   await EmployeeModel.deleteMany({});
@@ -76,6 +84,7 @@ const populateEmployees = async () => {
   const coloursData = await ColourModel.find();
   const toolsData = await ToolsModel.find();
   const boardGamesData = await BoardGameModel.find();
+  const locationsData = await LocationModel.find();
 
   // Generate a list of employees using data from names.json and other random values
   const employees = names.map((name) => {
@@ -96,6 +105,7 @@ const populateEmployees = async () => {
       const favouriteColour = pick(coloursData)._id;
       const favoriteTool = pick(toolsData)._id;
       const favoriteBoardGame = pick(boardGamesData)._id;
+      const location = pick(locationsData)._id;
 
       return {
         firstName,
@@ -111,6 +121,7 @@ const populateEmployees = async () => {
         favoriteBrand,
         favoriteTool,
         favoriteBoardGame,
+        location,
       };
   });
 
@@ -165,6 +176,7 @@ const main = async () => {
   await populateColours();
   await populateTools();
   await populateBoardGames();
+  await populateLocations();
   await populateEmployees(); // Ensure employees are populated after above to get correct data
   await populateDivisions(); // Ensure divisions are populated after employees to get "boss" data
 

@@ -12,6 +12,7 @@ const EmployeeForm = ({
   assignedEquipment, 
   allowAddKittens,
   boardGames,
+  locations
 }) => {
   // State initialization for employee details
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
@@ -33,6 +34,7 @@ const EmployeeForm = ({
   const [city, setCity] = useState(employee?.address?.city || "");
   const [street, setStreet] = useState(employee?.address?.street || "");
   const [zipCode, setZipCode] = useState(employee?.address?.zipCode || "");
+  const [location, setLocation] = useState(employee?.location ?? "");
   // State for confirmation message display
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
@@ -70,7 +72,8 @@ const EmployeeForm = ({
       favoriteBrand,
       favoriteBoardGame,
       equipment,
-      kittens
+      kittens,
+      location
     };
 
     // Check if updating existing employee or creating new one
@@ -270,7 +273,23 @@ const EmployeeForm = ({
           <option value="">Select Game</option>
           {boardGames?.map(game => (
             <option key={game._id} value={game._id}>
-              {game.name}
+              {game.name}: {game.maxPlayers} players
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="control">
+        <label htmlFor="location">Location:</label>
+        <select
+          name="location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        >
+          <option value="">Select Location</option>
+          {locations?.map(location => (
+            <option key={location._id} value={location._id}>
+              {location.city}, {location.country}
             </option>
           ))}
         </select>
