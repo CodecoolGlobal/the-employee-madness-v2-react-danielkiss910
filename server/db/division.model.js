@@ -1,5 +1,3 @@
-// models/division.js
-
 const mongoose = require('mongoose');
 
 const divisionSchema = new mongoose.Schema({
@@ -9,7 +7,7 @@ const divisionSchema = new mongoose.Schema({
   },
   boss: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee', // This references the Employee model
+    ref: 'Employee', // To reference the Employee model
     required: true,
   },
   budget: {

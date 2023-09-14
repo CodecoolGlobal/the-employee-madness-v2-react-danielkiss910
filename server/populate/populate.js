@@ -165,6 +165,24 @@ const populateDivisions = async () => {
   console.log("Divisions created");
 };
 
+const addDivisionToEmployees = async () => {
+  const employees = await EmployeeModel.find();
+  const divisions = await DivisionModel.find();
+
+  await Promise.all(employees.map(employee => { // Promise.all to await all
+    employee.division = pick(divisions)._id;
+    return employee.save();
+  }));
+  console.log("Random divisions added to employees");
+
+  // Using for loop //
+  // for (let i = 0; i < employees.length; i++) {
+  //   employees[i].division = pick(divisions)._id;
+  //   await employees[i].save();
+  // }
+};
+
+
 // Main function to run all the populate functions in sequence
 const main = async () => {
   // Connect to the MongoDB database using the provided URL
@@ -177,8 +195,10 @@ const main = async () => {
   await populateTools();
   await populateBoardGames();
   await populateLocations();
-  await populateEmployees(); // Ensure employees are populated after above to get correct data
+  await populateEmployees(); // Populate employees without assigned divisions
   await populateDivisions(); // Ensure divisions are populated after employees to get "boss" data
+  await addDivisionToEmployees(); // Add random divisions to employees afterwards
+
 
   // Close the database connection
   await mongoose.disconnect();

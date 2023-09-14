@@ -515,7 +515,7 @@ app.post("/api/kittens/:employeeId", async (req, res,) => {
 // Fetch all divisions
 app.get("/api/divisions", async (req, res) => {
   try {
-    const divisions = await DivisionModel.find().populate("boss"); 
+    const divisions = await DivisionModel.find().populate({ path: "boss", select: ["firstName", "middleName", "lastName"] }); 
     return res.json(divisions);
   } catch (error) {
     console.error("Error fetching divisions", error);
@@ -526,15 +526,14 @@ app.get("/api/divisions", async (req, res) => {
 // Fetch single division by ID
 app.get("/api/divisions/:id", async (req, res) => {
   try {
-    const division = await DivisionModel.findById(req.params.id).populate("boss");
+    const division = await DivisionModel.findById(req.params.id).populate({ path: "boss", select: ["firstName", "middleName", "lastName"] });
     return res.json(division);
   } catch (error) {
     console.error("Error fetching division by ID", error);
     res.status(500).json({ error: "Error fetching division by ID" });
   }
-});
-
-// Create new division
+  
+  // Create new division
 app.post("/api/divisions", async (req, res) => {
   try {
     const division = await DivisionModel.create(req.body);
@@ -543,6 +542,7 @@ app.post("/api/divisions", async (req, res) => {
     console.error("Error creating division", error);
     return res.status(500).json({ error: "Error creating division" });
   }
+});
 });
 
 // Update division by ID
