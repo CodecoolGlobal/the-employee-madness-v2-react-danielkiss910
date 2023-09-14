@@ -10,7 +10,6 @@ const FavoriteBrandModel = require("./db/favoriteBrand.model")
 const ColourModel = require("./db/colours.model")
 const ToolsModel = require("./db/tools.model");
 const BoardGameModel = require("./db/boardGame.model");
-const employeeModel = require("./db/employee.model");
 const DivisionModel = require("./db/division.model");
 const LocationModel = require("./db/location.model");
 
@@ -212,7 +211,7 @@ app.patch("/api/employees/:id/address", async (req, res) => {
     const { id } = req.params;
     const { country, city, street, zipCode } = req.body;
 
-    const updatedEmployee = await employeeModel.findByIdAndUpdate(
+    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
       id, {
         address: {
           country,
@@ -532,6 +531,7 @@ app.get("/api/divisions/:id", async (req, res) => {
     console.error("Error fetching division by ID", error);
     res.status(500).json({ error: "Error fetching division by ID" });
   }
+});
   
   // Create new division
 app.post("/api/divisions", async (req, res) => {
@@ -542,7 +542,6 @@ app.post("/api/divisions", async (req, res) => {
     console.error("Error creating division", error);
     return res.status(500).json({ error: "Error creating division" });
   }
-});
 });
 
 // Update division by ID

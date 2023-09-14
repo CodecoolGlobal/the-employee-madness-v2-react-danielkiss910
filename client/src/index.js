@@ -30,6 +30,8 @@ import GameDetails from "./Pages/GameDetails";
 import ErrorPage from "./Pages/ErrorPage";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
+import DivisionCreator from "./Pages/DivisionCreator";
+import DivisionTable from "./Components/DivisionTable/DivisionTable";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -58,6 +60,9 @@ createRoot(document.getElementById("root")).render(
           <Route path="/games" element={<BoardGameCreator />} />
           <Route path="/games-list" element={<BoardGameTable />} />
           <Route path="/games-list/:id" element={< GameDetails />} />
+          {/* Divisions */}
+          <Route path="/divisions" element={< DivisionTable />} />
+          <Route path="/division-creator" element={< DivisionCreator />} />
           {/* Error & Test */}
           <Route path="/error-page" element={<ErrorPage />} />
           <Route path="/table-test" element={<TableTest />} />

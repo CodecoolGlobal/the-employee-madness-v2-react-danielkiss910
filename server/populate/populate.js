@@ -175,7 +175,7 @@ const addDivisionToEmployees = async () => {
   }));
   console.log("Random divisions added to employees");
 
-  // Using for loop //
+  // ----- Using for loop ----- //
   // for (let i = 0; i < employees.length; i++) {
   //   employees[i].division = pick(divisions)._id;
   //   await employees[i].save();

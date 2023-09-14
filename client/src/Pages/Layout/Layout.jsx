@@ -22,6 +22,9 @@ const Layout = () => (
         <li className="grow">
           <Link to="/games-list">Board games</Link>
         </li>
+        <li className="grow">
+          <Link to="/divisions">Divisions</Link>
+        </li>
         <li>
           <Link to="/create">
             <button type="button">Create Employee</button>

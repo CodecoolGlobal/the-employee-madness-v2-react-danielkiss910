@@ -60,7 +60,7 @@ const BoardGameForm = () => {
                     </li>
                 ))}
             </ul>
-            <br></br>
+            <br />
             <h3>Add new game:</h3>
             <input
                 type="text"
@@ -80,7 +80,7 @@ const BoardGameForm = () => {
                     Add game
             </button>
             <div>
-            <br></br>
+            <br />
                 <Link to="/">
                     <button>Back</button>
                 </Link>
