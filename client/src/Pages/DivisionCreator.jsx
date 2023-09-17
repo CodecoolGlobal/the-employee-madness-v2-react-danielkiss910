@@ -19,9 +19,7 @@ const DivisionCreator = () => {
             .catch(err => {
                 console.error("Error fetching divisions", err);
             });
-    }, []);
 
-    useEffect(() => {
         fetch("/api/employees")
             .then(res => res.json())
             .then(data => {

@@ -76,7 +76,7 @@ const DivisionTable = () => {
                                 <td>{division.boss.firstName} {division.boss.middleName} {division.boss.lastName}</td>
                                 <td>{division.budget}</td>
                                 <td>
-                                    <Link to={`/`}>
+                                    <Link to={`/division-updater/${division._id}`}>
                                         <button type="button">
                                             Update
                                         </button>
