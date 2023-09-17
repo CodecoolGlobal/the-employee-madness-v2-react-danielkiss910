@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "./EquipmentTable.css";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
@@ -31,10 +30,17 @@ const EquipmentTable = () => {
   const handleDelete = (id) => {
     handleOpenConfirmDialog(id);
   };
+  
   const handleConfirmDelete = async () => {
     if (deleteEquipmentId) {
       try {
-        await axios.delete(`/api/equipment/${deleteEquipmentId}`);
+        const response = await fetch(`/api/equipment/${deleteEquipmentId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
         const updatedEquipment = equipment.filter(item => item._id !== deleteEquipmentId);
         setEquipment(updatedEquipment);
@@ -48,9 +54,13 @@ const EquipmentTable = () => {
   // Fetch equipment data from the API
   const fetchEquipment = useCallback(async () => {
     try {
-      const response = await axios.get("/api/equipment");
-      setEquipment(response.data);
-      setFilteredEquipment(response.data);
+      const response = await fetch("/api/equipment");
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setEquipment(data);
+      setFilteredEquipment(data);
     } catch (error) {
       console.error("Error fetching equipment:", error);
     }

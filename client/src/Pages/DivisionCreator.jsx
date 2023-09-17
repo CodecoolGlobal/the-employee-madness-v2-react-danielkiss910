@@ -77,7 +77,7 @@ const DivisionCreator = () => {
                 <ul>
                     {divisions.map(division => (
                         <li key={division._id}>
-                            <p><strong>Name: {division.name}</strong></p>
+                            <p><strong>{division.name}</strong></p>
                             <p>Boss: {division.boss.firstName} {division.boss.middleName} {division.boss.lastName}</p>
                             <p>Budget: {division.budget}</p>
                             <p>Location: {division.location.city}, {division.location.country}</p>

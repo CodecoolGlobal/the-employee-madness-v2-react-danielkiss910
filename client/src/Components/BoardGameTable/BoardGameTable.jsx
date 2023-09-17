@@ -68,8 +68,10 @@ const BoardGameTable = () => {
             </div>
             <table>
                 <thead>
-                    <th>Name</th>
-                    <th>Max players</th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Max players</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {boardGames.map(game => (
