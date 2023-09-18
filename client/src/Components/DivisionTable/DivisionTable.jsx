@@ -6,17 +6,55 @@ const DivisionTable = () => {
     const [divisions, setDivisions] = useState([]);
     const [deleteDivisionId, setDeleteDivisionId] = useState(null);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    // To implement filtering by country
+    const [filterCountry, setFilterCountry] = useState("");
+    // To implement sorting by name, keep track of sort direction
+    const [sortDirection, setSortDirection] = useState("ascending");
+    // If new sorting criterion, add variable to track current sorting criterion
+    const [sortCriterion, setSortCriterion] = useState("name"); // ("name" or "budget")
+    // If multiple sorting options needed, best to use dropdown selectors and switch statement
 
     useEffect(() => {
         fetch("/api/divisions")
             .then(res => res.json())
             .then(data => {
-                setDivisions(data);
+                // Filter fetched data before sorting
+                let filteredData = data.filter(division => division.location.country.toLowerCase().includes(filterCountry.toLowerCase()));
+                // When divisions are fetched or sort direction changes, need to sort the divisions
+                let sortedData = [...filteredData] // If no filtering: let sortedData;
+                // 2nd if/else when 2 sorting options (name/budget)
+                if (sortCriterion === "name") {
+                    if (sortDirection === "ascending") {
+                        sortedData = filteredData.sort((a, b) => a.name.localeCompare(b.name));
+                    } else { // Use filteredData instead of data if filtering is implemented
+                        sortedData = filteredData.sort((a, b) => b.name.localeCompare(a.name));
+                    }
+                } else if (sortCriterion === "budget") {
+                    if (sortDirection === "ascending") {
+                        sortedData = filteredData.sort((a, b) => a.budget - b.budget);
+                    } else { // No need to localeCompare when only comparing numbers
+                        sortedData = filteredData.sort((a, b) => b.budget - a.budget);
+                    }
+                }
+                setDivisions(sortedData); // Change from `data` to `sortedData` if sorting option is implemented
             })
             .catch(error => {
                 console.error("Error fetching divisions", error);
             });
-    }, []);
+    }, [sortDirection, sortCriterion, filterCountry]); // Add sortDirection as dependency
+    // Add sortCriterion as dependency as well if 2nd sorting option
+    // Add filterCountry if filtering option added
+
+    // Function for sort button to use to toggle sort direction
+    const toggleSortDirection = () => {
+        setSortDirection(prevDirection => prevDirection === "ascending" ? "descending" : "ascending");
+    };
+
+    // Function to handle sorting option change
+    const handleSortChange = (criterion) => {
+        setSortCriterion(criterion);
+    };
+
 
     const handleDelete = (id) => {
         handleOpenConfirmDialog(id);
@@ -25,7 +63,7 @@ const DivisionTable = () => {
     const handleConfirmDelete = async () => {
         if (deleteDivisionId) {
             try {
-                const response = await fetch (`/api/divisions/${deleteDivisionId}`, {
+                const response = await fetch(`/api/divisions/${deleteDivisionId}`, {
                     method: "DELETE"
                 });
 
@@ -50,15 +88,43 @@ const DivisionTable = () => {
         setShowConfirmDialog(false);
     };
 
+
     return (
         <div className="division-table">
             <div>
+                <h2>Division Table</h2>
                 <Link to="/division-creator">
-                    <button>Create Division</button>
+                    <button>Create New Division</button>
                 </Link>
             </div>
             <div>
-                <h2>Division Table</h2>
+                <div>
+                    {/* Button to toggle asc/desc sorting */}
+                    {/* When only 1 sorting option: <button onClick={toggleSortDirection}> */}
+                    <button onClick={() => toggleSortDirection()}>
+                        Toggle Direction ({sortDirection})
+                    </button>
+                    {/* Buttons to toggle sorting by criterion */}
+                    <button onClick={() => handleSortChange("name")}>
+                        Sort by Name
+                    </button>
+                    <button onClick={() => handleSortChange("budget")}>
+                        Sort by Budget
+                    </button>
+                </div>
+                <br />
+                <div>
+                    {/* UI input field to filter by name */}
+                    <label>Filter by Country: </label>
+                    <input
+                        type="text"
+                        value={filterCountry}
+                        onChange={e => setFilterCountry(e.target.value)}
+                        placeholder="Enter country to filter"
+                    />
+                    <button onClick={() => setFilterCountry("")}>X</button>
+                </div>
+                <br />
                 <table>
                     <thead>
                         <tr>
@@ -95,7 +161,7 @@ const DivisionTable = () => {
                             <ConfirmationModal
                                 onCancel={handleCloseConfirmDialog}
                                 onConfirm={handleConfirmDelete}
-                                />
+                            />
                         )}
                     </tbody>
                 </table>
