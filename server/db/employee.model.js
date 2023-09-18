@@ -28,6 +28,16 @@ const EmployeeSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  pets: [{
+    name: {
+      type: String,
+      required: true
+    },
+    sortOfAnimal: {
+      type: String,
+      required: true
+    },
+  }],
   assignedEquipment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Equipment", // Make sure these exactly match what is defined in each Schema

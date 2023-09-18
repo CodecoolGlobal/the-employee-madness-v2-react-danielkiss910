@@ -12,6 +12,7 @@ const ToolsModel = require("./db/tools.model");
 const BoardGameModel = require("./db/boardGame.model");
 const DivisionModel = require("./db/division.model");
 const LocationModel = require("./db/location.model");
+const employeeModel = require("./db/employee.model");
 
 // Extract necessary environment variables
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -505,6 +506,47 @@ app.post("/api/kittens/:employeeId", async (req, res,) => {
   } catch (error) {
     console.error("Error adding kitten to employee", error);
     return res.status(500).json({ error: "Error adding kitten to employee" });
+  }
+});
+
+
+// ----- PETS ----- //
+
+app.post("/api/pets/:employeeId", async (req, res) => {
+  try {
+    const employee = await employeeModel.findById(req.params.employeeId);
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    
+    console.log(req.body);  // to ensure you are receiving correct data
+
+    // Use Mongoose's updateOne to add to the pets array
+    await employee.updateOne({ $push: { pets: req.body } });
+    
+    // No need for employee.save() here since updateOne will directly modify in the database
+
+    return res.json(employee);
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ error: error.message });
+    }
+    console.error("Error adding pet to employee", error);
+    return res.status(500).json({ error: "Error adding pet to employee" });
+  }
+});
+
+
+app.get("/api/pets/:employeeId", async (req, res) => {
+  try {
+    const employee = await employeeModel.findById(req.params.employeeId);
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    return res.json(employee.pets)
+  } catch (error) {
+    console.error("Error fetching pets for employee", error);
+    return res.status(500).json({ error: "Error fetching pets for employee" });
   }
 });
 
