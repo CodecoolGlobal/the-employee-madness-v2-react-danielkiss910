@@ -4,6 +4,7 @@ import EmployeeForm from "../Components/EmployeeForm";
 
 // A function to post a new employee's data to the server
 const createEmployee = (employee) => {
+  console.log(employee);
   return fetch("/api/employees", {
     method: "POST",
     headers: {
@@ -72,6 +73,7 @@ const EmployeeCreator = () => {
     .then((data) => setLocations(data))
     .catch((err) => console.error("Error fetching locations", err));
   }, []);
+
 
   // Handle the creation of a new employee
   const handleCreateEmployee = (employee) => {

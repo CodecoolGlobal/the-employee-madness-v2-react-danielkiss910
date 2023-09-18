@@ -3,13 +3,13 @@ import "./EmployeeForm.css";
 
 // Component for employee input form
 const EmployeeForm = ({
-  onSave, 
-  disabled, 
-  employee = {}, 
-  onCancel, 
-  favoriteBrands, 
-  favouriteColours, 
-  assignedEquipment, 
+  onSave,
+  disabled,
+  employee = {},
+  onCancel,
+  favoriteBrands,
+  favouriteColours,
+  assignedEquipment,
   allowAddKittens,
   boardGames,
   locations
@@ -18,23 +18,32 @@ const EmployeeForm = ({
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
+
   const [level, setLevel] = useState(employee?.level ?? "");
   const [position, setPosition] = useState(employee?.position ?? "");
   const [startingDate, setStartingDate] = useState(employee?.startingDate ?? "");
   const [currentSalary, setCurrentSalary] = useState(employee?.currentSalary ?? "");
   const [desiredSalary, setDesiredSalary] = useState(employee?.desiredSalary ?? "");
+
   const [favouriteColour, setFavouriteColour] = useState(employee?.favouriteColour ?? "");
   const [favoriteBrand, setfavoriteBrand] = useState(employee?.favoriteBrand ?? "");
+  const [favoriteBoardGame, setFavoriteBoardGame] = useState(employee?.favoriteBoardGame ?? "");
   const [equipment, setEquipment] = useState(employee?.equipment ?? "");
+
   const [kittens, setKittens] = useState(employee?.kittens || []);
   const [kittenName, setKittenName] = useState("");
   const [kittenWeight, setKittenWeight] = useState("");
-  const [favoriteBoardGame, setFavoriteBoardGame] = useState(employee?.favoriteBoardGame ?? "");
+  
   const [country, setCountry] = useState(employee?.address?.country || "");
   const [city, setCity] = useState(employee?.address?.city || "");
   const [street, setStreet] = useState(employee?.address?.street || "");
   const [zipCode, setZipCode] = useState(employee?.address?.zipCode || "");
+
   const [location, setLocation] = useState(employee?.location ?? "");
+
+  const [pets, setPets] = useState(employee?.pets || []);
+  const [petName, setPetName] = useState("");
+  const [sortOfAnimal, setSortofAnimal] = useState("");
   // State for confirmation message display
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
@@ -73,7 +82,8 @@ const EmployeeForm = ({
       favoriteBoardGame,
       equipment,
       kittens,
-      location
+      location,
+      pets
     };
 
     // Check if updating existing employee or creating new one
@@ -120,7 +130,7 @@ const EmployeeForm = ({
           id="lastName"
         />
       </div>
-      
+
       <div className="control">
         <label htmlFor="country">Country:</label>
         <input
@@ -181,7 +191,7 @@ const EmployeeForm = ({
           id="position"
         />
       </div>
-      
+
       <div className="control">
         <label htmlFor="startingDate">Starting Date:</label>
         <input
@@ -192,7 +202,7 @@ const EmployeeForm = ({
           onChange={(e) => setStartingDate(e.target.value)}
         />
       </div>
-      
+
       <div className="control">
         <label htmlFor="currentSalary">Current Salary:</label>
         <input
@@ -203,7 +213,7 @@ const EmployeeForm = ({
           onChange={(e) => setCurrentSalary(e.target.value)}
         />
       </div>
-      
+
       <div className="control">
         <label htmlFor="desiredSalary">Desired Salary:</label>
         <input
@@ -214,7 +224,44 @@ const EmployeeForm = ({
           onChange={(e) => setDesiredSalary(e.target.value)}
         />
       </div>
-      
+
+      <div className="control">
+        <label htmlFor="petName">Pet Name:</label>
+        <input
+          type="text"
+          id="petName"
+          name="petName"
+          value={petName}
+          onChange={(e) => setPetName(e.target.value)}
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="sortOfAnimal">Sort of Animal:</label>
+        <input
+          type="text"
+          id="sortOfAnimal"
+          name="sortOfAnimal"
+          value={sortOfAnimal}
+          onChange={(e) => setSortofAnimal(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <button type="button" onClick={() => {
+          const newPet = { name: petName, sortOfAnimal: sortOfAnimal };
+          setPets([...pets, newPet]);
+          setPetName("");
+          setSortofAnimal("");
+          setConfirmationMessage("Pet succesfully added")
+        }}>Add Pet</button>
+        {confirmationMessage && (
+          <div className="confirmation-message">
+            {confirmationMessage}
+          </div>
+        )}
+      </div>
+
       <div className="control">
         <label htmlFor="favouriteColour">Favourite Colour:</label>
         <select
@@ -298,39 +345,39 @@ const EmployeeForm = ({
       {
         allowAddKittens && (
           <>
-          <div className="control">
-        <label htmlFor="kittenName">Kitten Name:</label>
-        <input 
-          value={kittenName}
-          onChange={(e) => setKittenName(e.target.value)}
-          name="kittenName"
-          id="kittenName"
-          />
-      </div>
-      <div className="control">
-        <label htmlFor="kittenWeight">Kitten Weight:</label>
-        <input 
-          value={kittenWeight}
-          onChange={(e) => setKittenWeight(e.target.value)}
-          name="kittenWeight"
-          id="kittenWeight"
-          />
-      </div>
-      <button type="button" onClick={() => {
-        const newKitten = { name: kittenName, weight: kittenWeight };
-        setKittens([...kittens, newKitten]);
-        setKittenName("");
-        setKittenWeight("");
-        setConfirmationMessage("Kitten added successfully!")
-      }}>Add Kitten</button>
-      </>
-      )
-    }       
-    {confirmationMessage && (
-      <div className="confirmation-message">
-        {confirmationMessage}
-      </div>
-    )}
+            <div className="control">
+              <label htmlFor="kittenName">Kitten Name:</label>
+              <input
+                value={kittenName}
+                onChange={(e) => setKittenName(e.target.value)}
+                name="kittenName"
+                id="kittenName"
+              />
+            </div>
+            <div className="control">
+              <label htmlFor="kittenWeight">Kitten Weight:</label>
+              <input
+                value={kittenWeight}
+                onChange={(e) => setKittenWeight(e.target.value)}
+                name="kittenWeight"
+                id="kittenWeight"
+              />
+            </div>
+            <button type="button" onClick={() => {
+              const newKitten = { name: kittenName, weight: kittenWeight };
+              setKittens([...kittens, newKitten]);
+              setKittenName("");
+              setKittenWeight("");
+              setConfirmationMessage("Kitten added successfully!")
+            }}>Add Kitten</button>
+          </>
+        )
+      }
+      {confirmationMessage && (
+        <div className="confirmation-message">
+          {confirmationMessage}
+        </div>
+      )}
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>

@@ -255,6 +255,7 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
             <th>Favourite Board Game</th>
             <th>Max players</th>
             <th>Registered Address<br></br>(Click to edit)</th>
+            <th>Pets</th>
             <th>Kittens</th>
             <th />
           </tr>
@@ -285,6 +286,13 @@ const EmployeeTable = ({ employees, setEmployees, onDelete }) => { // Params fro
                 <Link to={`/employees/${employee._id}/address`}>
                   {renderAddress(employee.address)}
                 </Link>
+              </td>
+              <td>
+                {/* Show all pet names or "no pets" */}
+                {employee.pets && employee.pets.length > 0
+                ? employee.pets.map(pet => pet.name).join(", ")
+              : "No pets"
+              }
               </td>
 
               <td>
