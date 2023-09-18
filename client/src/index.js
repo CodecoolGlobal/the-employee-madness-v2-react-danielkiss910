@@ -34,7 +34,10 @@ import FormTest from "./Pages/FormTest";
 import DivisionCreator from "./Pages/DivisionCreator";
 import DivisionTable from "./Components/DivisionTable/DivisionTable";
 import DivisionUpdater from "./Pages/DivisionUpdater";
+// Pets
 import PetsPage from "./Pages/PetsPage";
+// Cars
+import CarsPage from "./Pages/CarsPage";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -73,6 +76,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="/form-test" element={<FormTest />} />
           {/* Pets */}
           <Route path="/pets" element={<PetsPage />} />
+          {/* Cars */}
+          <Route path="/cars" element={<CarsPage />} />
         </Route>
       </Routes>
     </Router>

@@ -13,6 +13,7 @@ const BoardGameModel = require("./db/boardGame.model");
 const DivisionModel = require("./db/division.model");
 const LocationModel = require("./db/location.model");
 const employeeModel = require("./db/employee.model");
+const CarModel = require("./db/car.model");
 
 // Extract necessary environment variables
 const { MONGO_URL, PORT = 8080 } = process.env;
@@ -547,6 +548,29 @@ app.get("/api/pets/:employeeId", async (req, res) => {
   } catch (error) {
     console.error("Error fetching pets for employee", error);
     return res.status(500).json({ error: "Error fetching pets for employee" });
+  }
+});
+
+
+// ----- CARS ----- //
+
+app.get("/api/cars", async (req, res) => {
+  try {
+    const cars = await CarModel.find();
+    return res.json(cars);
+  } catch (error) {
+    console.error("Error fetching cars", error);
+    return res.status(500).json({ error: "Error fetching cars" });
+  }
+});
+
+app.post("/api/cars", async (req, res) => {
+  try {
+    const car = await CarModel.create(req.body);
+    return res.json(car);  
+  } catch (error) {
+    console.error("Error adding new car");
+    return res.status(500).json({ error: "Error adding new car" });
   }
 });
 
