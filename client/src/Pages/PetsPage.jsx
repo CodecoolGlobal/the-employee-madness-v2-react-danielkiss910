@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PetsPage.css";
+import { Link } from "react-router-dom";
 
 const PetsPage = () => {
     const [pets, setPets] = useState([]);
@@ -54,7 +55,7 @@ const PetsPage = () => {
                         });
                     setPetName("");
                     setSortOfAnimal("");
-                })                
+                })
                 .catch(err => {
                     console.error("Error adding pet to employee", err);
                 });
@@ -99,6 +100,9 @@ const PetsPage = () => {
                                     </li>
                                 ))}
                             </ul>
+                            <Link to="/">
+                                <button>Back to Employees</button>
+                            </Link>
                         </div>
                     )}
                 </div>
