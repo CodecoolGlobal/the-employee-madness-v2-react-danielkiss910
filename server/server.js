@@ -53,6 +53,19 @@ app.get("/api/employees/", async (req, res) => {
   }
 });
 
+app.get("/api/employees/years-of-experience/:number", async (req, res) => {
+  const yearsOfExperience = req.params.number;
+  // console.log(yearsOfExperience);
+  try {
+    const employees = await EmployeeModel.find({
+      
+    })
+      return res.json(employees);
+  } catch (error) {
+    console.error("Error fetching filtered employees");
+    return res.status(500).json({ error: "Error fetching filtered employees" });
+  }
+});
 
 // Fetch employee by ID
 app.get("/api/employees/:id", async (req, res) => {
@@ -92,6 +105,8 @@ app.get("/api/search/:employeeSearch", async (req, res) => {
     return res.status(500).json({ error: "Error fetching search results" });
   }
 });
+
+
 
 // Fetch top paid employees
 app.get("/api/top-paid", async (req, res) => {
