@@ -47,6 +47,8 @@ const EmployeeForm = ({
   // State for confirmation message display
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
+  const [yearsOfExperience, setYearsOfExperience] = useState("");
+
   // Effect to handle auto-hiding of confirmation message
   useEffect(() => {
     if (confirmationMessage) {
@@ -83,7 +85,8 @@ const EmployeeForm = ({
       equipment,
       kittens,
       location,
-      pets
+      pets,
+      yearsOfExperience
     };
 
     // Check if updating existing employee or creating new one
@@ -189,6 +192,17 @@ const EmployeeForm = ({
           onChange={(e) => setPosition(e.target.value)}
           name="position"
           id="position"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="yearsOfExperience">Years of Experience:</label>
+        <input
+          value={yearsOfExperience}
+          onChange={(e) => setYearsOfExperience(e.target.value)}
+          type="number"
+          name="yearsOfExperience"
+          id="yearsOfExperience"
         />
       </div>
 

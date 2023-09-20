@@ -28,6 +28,7 @@ const EmployeeSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  yearsOfExperience: Number,
   pets: [{
     name: {
       type: String,

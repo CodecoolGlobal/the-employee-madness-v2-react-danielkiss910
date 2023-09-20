@@ -12,6 +12,7 @@ import EmployeeSearch from "./Pages/EmployeeSearch";
 import TopPaidPage from "./Pages/TopPaidPage";
 import MissingEmployees from "./Pages/MissingEmployees";
 import EmployeeAddressPage from "./Pages/EmployeeAddressPage";
+import EmployeeExperiencePage from "./Pages/EmployeeExperiencePage";
 // Equipment
 import EquipmentList from "./Pages/EquipmentList";
 import EquipmentCreator from "./Pages/EquipmentCreator";
@@ -52,6 +53,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/top-paid" element={<TopPaidPage />} />
           <Route path="/missing" element={<MissingEmployees />} />
           <Route path="/employees/:id/address" element={<EmployeeAddressPage />} />
+          <Route path="/employees/years-of-experience/:params" element={<EmployeeExperiencePage />} />
           {/* Equipment */}
           <Route path="/equipment" element={<EquipmentList />} />
           <Route path="/createequipment" element={<EquipmentCreator />} />
