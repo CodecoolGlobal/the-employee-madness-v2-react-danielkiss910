@@ -78,27 +78,29 @@ const EmployeeTable = ({ employees, onDelete }) => {
     <div className="EmployeeTable">
       {/* Filters section */}
       <div className="filters">
+        <h3>Filter Employees</h3>
         <input
           type="text"
-          placeholder="Filter by Position"
+          placeholder="...by Position"
           value={positionFilter}
           onChange={(e) => setPositionFilter(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Filter by Level"
+          placeholder="...by Level"
           value={levelFilter}
           onChange={(e) => setLevelFilter(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="...by All fields"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
       {/* Sort buttons */}
       <div className="sort-buttons">
+        <h3>Sort Employees by</h3>
         <button onClick={() => handleSort("firstName")}>First Name</button>
         <button onClick={() => handleSort("lastName")}>Last Name</button>
         <button onClick={() => handleSort("middleName")}>Middle Name</button>
