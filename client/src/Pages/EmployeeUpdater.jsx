@@ -1,51 +1,75 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
 import Loading from "../Components/Loading";
 
-const updateEmployee = (employee) => {
-  return fetch(`/api/employees/${employee._id}`, {
+const updateEmployee = async (employee) => {
+  const response = await fetch(`/api/employees/${employee._id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(employee),
-  }).then((res) => res.json());
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update employee");
+  }
+
+  return response.json();
 };
 
-const fetchEmployee = (id) => {
-  return fetch(`/api/employees/${id}`).then((res) => res.json());
+const fetchEmployee = async (id) => {
+  const response = await fetch(`/api/employees/${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch employee");
+  }
+  return response.json();
 };
 
 const EmployeeUpdater = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [employee, setEmployee] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [employeeLoading, setEmployeeLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setEmployeeLoading(true);
-    fetchEmployee(id)
-      .then((employee) => {
-        setEmployee(employee);
+    const loadEmployee = async () => {
+      try {
+        const employeeData = await fetchEmployee(id);
+        setEmployee(employeeData);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load employee");
+      } finally {
         setEmployeeLoading(false);
-      });
+      }
+    };
+
+    loadEmployee();
   }, [id]);
 
-  const handleUpdateEmployee = (employee) => {
+  const handleUpdateEmployee = async (employee) => {
     setUpdateLoading(true);
-    updateEmployee(employee)
-      .then(() => {
-        setUpdateLoading(false);
-        navigate("/");
-      });
+    try {
+      await updateEmployee(employee);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update employee");
+    } finally {
+      setUpdateLoading(false);
+    }
   };
 
   if (employeeLoading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
   }
 
   return (
