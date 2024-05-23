@@ -9,3 +9,17 @@
 .sort-buttons {
   padding: 0.5rem;
 }
+
+.missing-employees-link {
+  margin-top: 10px;
+}
+
+.missing-link {
+  font-weight: bold;
+  color: #007bff; /* Blue color */
+  text-decoration: none; /* Remove underline */
+}
+
+.missing-link:hover {
+  color: #0056b3; /* Darker blue color on hover */
+}
