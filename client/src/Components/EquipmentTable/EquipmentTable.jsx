@@ -9,10 +9,12 @@ const EquipmentTable = () => {
   const [type, setType] = useState("");
   const [amount, setAmount] = useState("");
 
+  // Fetch equipment data on component mount
   useEffect(() => {
     fetchEquipment();
   }, []);
 
+  // Fetch equipment from the server
   const fetchEquipment = async () => {
     try {
       const response = await axios.get("/api/equipment");
@@ -22,6 +24,7 @@ const EquipmentTable = () => {
     }
   };
 
+  // Handle adding new equipment
   const handleAddEquipment = async () => {
     const newEquipment = { name, type, amount };
 
@@ -36,6 +39,7 @@ const EquipmentTable = () => {
     }
   };
 
+  // Handle deleting equipment
   const handleDeleteEquipment = async (id) => {
     try {
       await axios.delete(`/api/equipment/${id}`);
@@ -49,10 +53,10 @@ const EquipmentTable = () => {
   return (
     <div className="EquipmentTable">
       <div className="filters">
-        {/* Add filter inputs */}
+        {/* Add filter inputs if needed */}
       </div>
       <div className="sort-buttons">
-        {/* Add sorting buttons */}
+        {/* Add sorting buttons if needed */}
       </div>
       <table>
         <thead>
@@ -60,6 +64,7 @@ const EquipmentTable = () => {
             <th>Name</th>
             <th>Type</th>
             <th>Amount</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -80,6 +85,42 @@ const EquipmentTable = () => {
           ))}
         </tbody>
       </table>
+      <div className="add-equipment-form">
+        <h3>Add New Equipment</h3>
+        <form onSubmit={handleAddEquipment}>
+          <div className="form-control">
+            <label htmlFor="name">Name:</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              name="name"
+              id="name"
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="type">Type:</label>
+            <input
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              name="type"
+              id="type"
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="amount">Amount:</label>
+            <input
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              name="amount"
+              id="amount"
+              required
+            />
+          </div>
+          <button type="submit">Add Equipment</button>
+        </form>
+      </div>
     </div>
   );
 };
