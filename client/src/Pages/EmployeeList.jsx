@@ -2,68 +2,64 @@ import { useEffect, useState } from "react";
 import Loading from "../Components/Loading";
 import EmployeeTable from "../Components/EmployeeTable";
 
-const fetchEmployees = () => {
-  return fetch("/api/employees").then((res) => res.json());
+const fetchEmployees = async () => {
+  const response = await fetch("/api/employees");
+  if (!response.ok) {
+    throw new Error("Failed to fetch employees");
+  }
+  return response.json();
 };
 
-const deleteEmployee = (id) => {
-  return fetch(`/api/employees/${id}`, { method: "DELETE" }).then((res) =>
-    res.json()
-  );
+const deleteEmployee = async (id) => {
+  const response = await fetch(`/api/employees/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    throw new Error("Failed to delete employee");
+  }
+  return response.json();
 };
 
 const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
-  const [employees, setEmployees] = useState(null);
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [employees, setEmployees] = useState([]);
+  const [error, setError] = useState(null);
 
-  const handleDelete = (id) => {
-    deleteEmployee(id);
-
-    setEmployees((employees) => {
-      return employees.filter((employee) => employee._id !== id);
-    });
+  const handleDelete = async (id) => {
+    try {
+      await deleteEmployee(id);
+      setEmployees((employees) => employees.filter((employee) => employee._id !== id));
+    } catch (error) {
+      console.error(error);
+      setError("Failed to delete employee");
+    }
   };
 
-  // const handleSearch = () => {
-  //   setLoading(true);
-  //   fetch(`/api/employees/${searchQuery}`)
-  //   .then((res) => res.json())
-  //   .then((matchingEmployees) => {
-  //     setLoading(false);
-  //     setEmployees(matchingEmployees);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     setLoading(false);
-  //   });
-  // };
-
   useEffect(() => {
-    fetchEmployees()
-      .then((employees) => {
-        setLoading(false);
+    const loadEmployees = async () => {
+      try {
+        const employees = await fetchEmployees();
         setEmployees(employees);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
+        setError("Failed to fetch employees");
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    loadEmployees();
   }, []);
 
   if (loading) {
     return <Loading />;
   }
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div>
-      {/* <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button> */}
-      <EmployeeTable employees={employees} onDelete={handleDelete} />;
+      <EmployeeTable employees={employees} onDelete={handleDelete} />
     </div>
   );
 };
