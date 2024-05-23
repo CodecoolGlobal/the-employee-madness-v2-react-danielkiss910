@@ -8,20 +8,21 @@ const EquipmentForm = ({ onSave, disabled, equipment, onCancel }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (equipment) {
-      return onSave({
-        ...equipment,
-        name,
-        type,
-        amount,
-      });
-    }
-
-    return onSave({
+    const equipmentData = {
       name,
       type,
       amount,
-    });
+    };
+
+    // If updating existing equipment, include its current properties
+    if (equipment) {
+      return onSave({
+        ...equipment,
+        ...equipmentData,
+      });
+    }
+
+    return onSave(equipmentData);
   };
 
   return (
