@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./EmployeeTable.css";
 
 const EmployeeTable = ({ employees, onDelete }) => {
-
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +28,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
       !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
     const matchesSearch =
       employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (employee.middleName && employee.middleName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       employee.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.level.toLowerCase().includes(searchQuery.toLowerCase());
@@ -38,33 +37,29 @@ const EmployeeTable = ({ employees, onDelete }) => {
   });
 
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    let aValue, bValue;
+
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
-      const aNames = a.name.split(" ");
-      const bNames = b.name.split(" ");
-  
-      let aValue, bValue;
-  
       if (sortAttribute === "firstName") {
-        aValue = aNames[0];
-        bValue = bNames[0];
+        aValue = a.firstName;
+        bValue = b.firstName;
       } else if (sortAttribute === "middleName") {
-        aValue = aNames.length === 3 ? aNames[1] : "";
-        bValue = bNames.length === 3 ? bNames[1] : "";
+        aValue = a.middleName || "";
+        bValue = b.middleName || "";
       } else if (sortAttribute === "lastName") {
-        aValue = aNames.length === 3 ? aNames[2] : aNames[1];
-        bValue = bNames.length === 3 ? bNames[2] : bNames[1];
+        aValue = a.lastName;
+        bValue = b.lastName;
       }
-  
       return sortDirection * aValue.localeCompare(bValue);
     }
-  
+
     if (sortAttribute === "position" || sortAttribute === "level") {
       return sortDirection * a[sortAttribute].localeCompare(b[sortAttribute]);
     }
-  
+
     return 0;
   });
-  
+
   const handleSelect = (id) => {
     if (selectedEmployees.includes(id)) {
       setSelectedEmployees(selectedEmployees.filter((employeeId) => employeeId !== id));
@@ -72,7 +67,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
       setSelectedEmployees([...selectedEmployees, id]);
     }
   };
-
 
   return (
     <div className="EmployeeTable">
@@ -121,9 +115,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
                   type="checkbox"
                   onChange={() => handleSelect(employee._id)}
                   checked={selectedEmployees.includes(employee._id)}
-                  />
+                />
               </td>
-              <td>{employee.name}</td>
+              <td>{`${employee.firstName} ${employee.middleName ? employee.middleName + ' ' : ''}${employee.lastName}`}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
               <td>

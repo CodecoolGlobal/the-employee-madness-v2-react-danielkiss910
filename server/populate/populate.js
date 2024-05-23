@@ -1,52 +1,56 @@
-// .env fájl beolvasása és környezeti változók létrehozása
+// .env file reading and creating environment variables
 require("dotenv").config();
 const mongoose = require("mongoose");
-const names = require("./names.json"); // Az alkalmazott nevek
-const levels = require("./levels.json"); // Az alkalmazott szintek
-const positions = require("./positions.json"); // Az alkalmazott pozíciók
-const EmployeeModel = require("../db/employee.model"); // Az alkalmazottak adatmodellje
+const names = require("./names.json"); // Employee names
+const levels = require("./levels.json"); // Employee levels
+const positions = require("./positions.json"); // Employee positions
+const EmployeeModel = require("../db/employee.model"); // Employee data model
 
-const mongoUrl = process.env.MONGO_URL; // MongoDB URL környezeti változóból
+const mongoUrl = process.env.MONGO_URL; // MongoDB URL from environment variable
 
-// MongoDB URL ellenőrzése
+// Check MongoDB URL
 if (!mongoUrl) {
   console.error("Missing MONGO_URL environment variable");
-  process.exit(1); // Kilépés a programból
+  process.exit(1); // Exit the program
 }
 
-// Véletlenszerű elem kiválasztása tömbből
-const pick = (from) => from[Math.floor(Math.random() * (from.length - 0))];
+// Pick a random element from an array
+const pick = (from) => from[Math.floor(Math.random() * from.length)];
 
-// Alkalmazottak létrehozása és feltöltése a MongoDB-be
+// Create and populate employees in MongoDB
 const populateEmployees = async () => {
-  await EmployeeModel.deleteMany({}); // Az összes alkalmazott törlése
+  await EmployeeModel.deleteMany({}); // Delete all employees
 
   const employees = names.map((name) => {
-    const [firstName, middleName, lastName] = name.split(" ");
+    const parts = name.split(" ");
+    const firstName = parts[0];
+    const lastName = parts[parts.length - 1];
+    const middleName = parts.length === 3 ? parts[1] : ""; // Use middle name if present
+
     return {
       firstName,
-      middleName,
+      middleName: middleName || undefined, // Use undefined if no middle name
       lastName,
-      level: pick(levels), // Véletlenszerű szint választása
-      position: pick(positions), // Véletlenszerű pozíció választása
+      level: pick(levels), // Pick a random level
+      position: pick(positions), // Pick a random position
     };
   });
 
-  await EmployeeModel.create(...employees); // Alkalmazottak létrehozása
+  await EmployeeModel.create(employees); // Create employees
   console.log("Employees created");
 };
 
-// Fő függvény indítása
+// Main function
 const main = async () => {
-  await mongoose.connect(mongoUrl); // MongoDB kapcsolat létrehozása
+  await mongoose.connect(mongoUrl); // Connect to MongoDB
 
-  await populateEmployees(); // Alkalmazottak feltöltése
+  await populateEmployees(); // Populate employees
 
-  await mongoose.disconnect(); // Kapcsolat bontása
+  await mongoose.disconnect(); // Disconnect
 };
 
-// Fő függvény hívása és hibakezelés
+// Call the main function and handle errors
 main().catch((error) => {
   console.error(error);
-  process.exit(1); // Kilépés a programból
+  process.exit(1); // Exit the program
 });
