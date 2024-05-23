@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EquipmentForm from "../Components/EquipmentForm";
 import Loading from "../Components/Loading";
+import "./ErrorMessage.css";
 
 const fetchEquipmentById = async (id) => {
   const response = await fetch(`/api/equipment/${id}`);
