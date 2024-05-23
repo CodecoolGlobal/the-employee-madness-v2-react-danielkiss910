@@ -1,79 +1,86 @@
-// Szükséges modulok importálása
-require("dotenv").config(); // Környezeti változók kezelése
-const express = require("express"); // Express keretrendszer
-const mongoose = require("mongoose"); // MongoDB kezelése
-const EmployeeModel = require("./db/employee.model"); // Az alkalmazottak adatmodellje
-const EquipmentModel = require("./db/equipment.model"); // Az eszközök adatmodellje
+require("dotenv").config(); // Load environment variables
+const express = require("express"); // Express framework
+const mongoose = require("mongoose"); // MongoDB handling
+const EmployeeModel = require("./db/employee.model"); // Employee data model
+const EquipmentModel = require("./db/equipment.model"); // Equipment data model
 
-// Környezeti változók beállítása
+// Environment variables setup
 const { MONGO_URL, PORT = 8080 } = process.env;
 
-// MongoDB URL ellenőrzése
+// Check for MongoDB URL
 if (!MONGO_URL) {
   console.error("Missing MONGO_URL environment variable");
   process.exit(1);
 }
 
-// Express alkalmazás inicializálása
+// Initialize Express application
 const app = express();
-app.use(express.json()); // JSON adatok kezelése
+app.use(express.json()); // Handle JSON data
 
-// Alkalmazottak kezelése
+// Employee routes
 
-// Alkalmazottak lekérdezése
-app.get("/api/employees/", async (req, res) => {
-  const employees = await EmployeeModel.find().sort({ created: "desc" });
-  return res.json(employees);
-});
-
-// Egy alkalmazott lekérdezése azonosító alapján
-app.get("/api/employees/:id", async (req, res) => {
-  const employee = await EmployeeModel.findById(req.params.id);
-  return res.json(employee);
-});
-
-// Alkalmazottra valo kereses azonosito alapjan
-app.get("/api/employees/:search", async (req, res, next) => {
+// Get all employees
+app.get("/api/employees/", async (req, res, next) => {
   try {
-    const searchQuery = req.params.search;
-    const matchingEmployees = await EmployeeModel.find({
-      $or: [ // Az `$or` operátor miatt bármelyik feltétel teljesülése esetén az adott dokumentum bekerül a lekérdezés eredményébe.
-        { firstName: { $regex: searchQuery, $options: "i" } }, // $regex operátor a reguláris kifejezés illesztésére szolgál.
-        { middleName: { $regex: searchQuery, $options: "i" } }, // $options: "i" pedig azt jelzi, hogy a keresés legyen nem kis- és nagybetűk közötti különbség érzékeny.
-        { lastName: { $regex: searchQuery, $options: "i" } },
-      ]
-    }).sort({ created: "desc" }); // `created` mező alapján csökkenő sorrendben rendezzük őket
-
-    return res.json(matchingEmployees);
-  } catch (error) {
-    return next(err);
-  }
-});
-
-// Kipipalt alkalmazottak lekerdezese
-app.get("/api/missing", async (req, res, next) => {
-  try {
-    const missingEmployees = await EmployeeModel.find({ isPicked: true });
-    return res.json(missingEmployees)
+    const employees = await EmployeeModel.find().sort({ created: "desc" });
+    return res.json(employees);
   } catch (error) {
     return next(error);
   }
 });
 
-// Új alkalmazott létrehozása
+// Get a single employee by ID
+app.get("/api/employees/:id", async (req, res, next) => {
+  try {
+    const employee = await EmployeeModel.findById(req.params.id);
+    return res.json(employee);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Search for employees by a search query
+app.get("/api/employees/search/:search", async (req, res, next) => {
+  try {
+    const searchQuery = req.params.search;
+    const matchingEmployees = await EmployeeModel.find({
+      $or: [
+        { firstName: { $regex: searchQuery, $options: "i" } },
+        { middleName: { $regex: searchQuery, $options: "i" } },
+        { lastName: { $regex: searchQuery, $options: "i" } },
+      ],
+    }).sort({ created: "desc" });
+
+    return res.json(matchingEmployees);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Get missing employees
+app.get("/api/missing", async (req, res, next) => {
+  try {
+    const missingEmployees = await EmployeeModel.find({ isPicked: true });
+    return res.json(missingEmployees);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Create a new employee
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
   try {
-    employee.isPicked = false // Alapertelmezett ertek false (nem hianyzo)
+    employee.isPicked = false; // Default value is false (not missing)
     const saved = await EmployeeModel.create(employee);
     return res.json(saved);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Alkalmazott frissítése azonosító alapján
+// Update an employee by ID
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
     if (req.body.isPicked === undefined) {
@@ -82,88 +89,100 @@ app.patch("/api/employees/:id", async (req, res, next) => {
 
     const employee = await EmployeeModel.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: { ...req.body } },
+      { $set: req.body },
       { new: true }
     );
     return res.json(employee);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Alkalmazott törlése azonosító alapján
+// Delete an employee by ID
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findById(req.params.id);
     const deleted = await employee.delete();
     return res.json(deleted);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Eszközök kezelése
+// Equipment routes
 
-// Összes eszköz lekérdezése
-app.get("/api/equipment", async (req, res) => {
-  const equipment = await EquipmentModel.find().sort({ created: "desc" });
-  return res.json(equipment);
+// Get all equipment
+app.get("/api/equipment", async (req, res, next) => {
+  try {
+    const equipment = await EquipmentModel.find().sort({ created: "desc" });
+    return res.json(equipment);
+  } catch (error) {
+    return next(error);
+  }
 });
 
-// Egy eszköz lekérdezése azonosító alapján
-app.get("/api/equipment/:id", async (req, res) => {
-  const equipment = await EquipmentModel.findById(req.params.id);
-  return res.json(equipment);
+// Get a single equipment by ID
+app.get("/api/equipment/:id", async (req, res, next) => {
+  try {
+    const equipment = await EquipmentModel.findById(req.params.id);
+    return res.json(equipment);
+  } catch (error) {
+    return next(error);
+  }
 });
 
-// Új eszköz létrehozása
+// Create a new equipment
 app.post("/api/equipment/", async (req, res, next) => {
   const equipment = req.body;
 
   try {
     const saved = await EquipmentModel.create(equipment);
     return res.json(saved);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Egy eszköz frissítése azonosító alapján
+// Update equipment by ID
 app.patch("/api/equipment/:id", async (req, res, next) => {
   try {
     const equipment = await EquipmentModel.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: { ...req.body } },
+      { $set: req.body },
       { new: true }
     );
     return res.json(equipment);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Egy eszköz törlése azonosító alapján
+// Delete equipment by ID
 app.delete("/api/equipment/:id", async (req, res, next) => {
   try {
     const equipment = await EquipmentModel.findById(req.params.id);
     const deleted = await equipment.delete();
     return res.json(deleted);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 });
 
-// Fő függvény indítása
+// Main function to start the server
 const main = async () => {
-  await mongoose.connect(MONGO_URL); // MongoDB kapcsolat létrehozása
-
-  app.listen(PORT, () => {
-    console.log(`App is listening on ${PORT}`);
-    console.log("Try /api/employees route right now");
-  });
+  try {
+    await mongoose.connect(MONGO_URL); // Establish MongoDB connection
+    app.listen(PORT, () => {
+      console.log(`App is listening on ${PORT}`);
+      console.log("Try /api/employees route right now");
+    });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 };
 
-main().catch((err) => {
-  console.error(err);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });
