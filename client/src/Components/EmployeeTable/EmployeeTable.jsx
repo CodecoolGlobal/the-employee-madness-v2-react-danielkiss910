@@ -28,7 +28,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
     const matchesLevel =
       !levelFilter || employee.level.toLowerCase().includes(levelFilter.toLowerCase());
     const matchesSearch =
-      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.middleName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.level.toLowerCase().includes(searchQuery.toLowerCase());
 
