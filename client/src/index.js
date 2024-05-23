@@ -1,11 +1,11 @@
-// Az alapvető React és ReactDOM modulok importálása
+// Importing essential React and ReactDOM modules
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// React alkalmazásunkhoz szükséges modulok importálása a react-router-dom-ból
+// Importing modules needed for routing in our React application
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// Az alkalmazásunk egyéb moduljainak importálása
+// Importing other modules for our application
 import reportWebVitals from "./reportWebVitals";
 import Layout from "./Pages/Layout";
 import ErrorPage from "./Pages/ErrorPage";
@@ -19,50 +19,50 @@ import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
 
-// Az alkalmazás útválasztó konfigurációjának létrehozása
+// Creating the router configuration for the application
 const router = createBrowserRouter([
   {
-    path: "/", // Az alapértelmezett útvonal
-    element: <Layout />, // Az alkalmazás gyökérelem (Layout)
-    errorElement: <ErrorPage />, // Az hibás útvonal esetén megjelenítendő elem (ErrorPage)
+    path: "/", // Default path
+    element: <Layout />, // Root element of the application (Layout)
+    errorElement: <ErrorPage />, // Element displayed in case of a wrong path (ErrorPage)
     children: [
       {
-        path: "/", // Az útvonal az alkalmazás főoldalához
-        element: <EmployeeList />, // Az alkalmazás főoldala (EmployeeList)
+        path: "/", // Path for the application's main page
+        element: <EmployeeList />, // Main page of the application (EmployeeList)
       },
       {
-        path: "/create", // Az útvonal az új alkalmazott létrehozásához
-        element: <EmployeeCreator />, // Az új alkalmazott létrehozásának oldala (EmployeeCreator)
+        path: "/create", // Path for creating a new employee
+        element: <EmployeeCreator />, // Page for creating a new employee (EmployeeCreator)
       },
       {
-        path: "/update/:id", // Az útvonal egy alkalmazott frissítéséhez, az :id paraméter az alkalmazott azonosítója
-        element: <EmployeeUpdater />, // Az alkalmazott frissítés oldala (EmployeeUpdater)
+        path: "/update/:id", // Path for updating an employee, :id is the employee's identifier
+        element: <EmployeeUpdater />, // Page for updating an employee (EmployeeUpdater)
       },
       {
-        path: "/table-test", // Az útvonal a táblázat teszt oldalhoz
-        element: <TableTest />, // A táblázat teszt oldala (TableTest)
+        path: "/table-test", // Path for the table test page
+        element: <TableTest />, // Table test page (TableTest)
       },
       {
-        path: "/form-test", // Az útvonal a űrlap teszt oldalhoz
-        element: <FormTest />, // Az űrlap teszt oldala (FormTest)
+        path: "/form-test", // Path for the form test page
+        element: <FormTest />, // Form test page (FormTest)
       },
       {
-        path: "/equipment", // Az útvonal az eszközök listájához
-        element: <EquipmentList />, // Az eszközök listájának oldala (EquipmentList)
+        path: "/equipment", // Path for the equipment list
+        element: <EquipmentList />, // Page for the equipment list (EquipmentList)
       },
       {
-        path: "/createequipment", // Az útvonal az új eszköz létrehozásához
-        element: <EquipmentCreator />, // Az új eszköz létrehozásának oldala (EquipmentCreator)
+        path: "/createequipment", // Path for creating a new equipment
+        element: <EquipmentCreator />, // Page for creating a new equipment (EquipmentCreator)
       },
       {
-        path: "/update-equipment/:id", // Az útvonal egy eszköz frissítéséhez, az :id paraméter az eszköz azonosítója
-        element: <EquipmentUpdater />, // Az eszköz frissítés oldala (EquipmentUpdater)
+        path: "/update-equipment/:id", // Path for updating an equipment, :id is the equipment's identifier
+        element: <EquipmentUpdater />, // Page for updating an equipment (EquipmentUpdater)
       },
     ],
   },
 ]);
 
-// Az alkalmazás gyökér elemének elkészítése és renderelése a DOM-ba
+// Creating the root element and rendering the application to the DOM
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -70,5 +70,5 @@ root.render(
   </React.StrictMode>
 );
 
-// Alkalmazás teljesítményének méréséhez szükséges függvény hívása
+// Function call needed to measure the application's performance
 reportWebVitals();
