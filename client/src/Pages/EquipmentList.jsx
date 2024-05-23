@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import EquipmentTable from "../Components/EquipmentTable/EquipmentTable";
 import Loading from "../Components/Loading";
-import "./ErrorMessage.css";
+import "../Components/ErrorMessage.css";
 
 const fetchEquipment = async () => {
   const response = await fetch("/api/equipment");
