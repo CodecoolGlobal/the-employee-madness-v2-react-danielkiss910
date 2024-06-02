@@ -150,11 +150,11 @@ const EmployeeTable = ({ employees, onDelete }) => {
         </thead>
         <tbody>
           {currentEmployees.map((employee) => (
-            <tr key={employee._id}>
+            <tr key={employee._id} onClick={() => window.location.href = `/update/${employee._id}`} className="clickable-row">
               <td>
                 <input
                   type="checkbox"
-                  onChange={() => handleSelect(employee._id)}
+                  onChange={(e) => { e.stopPropagation(); handleSelect(employee._id); }}
                   checked={selectedEmployees.includes(employee._id)}
                 />
               </td>
@@ -163,11 +163,11 @@ const EmployeeTable = ({ employees, onDelete }) => {
               <td>{employee.position}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>
-                  <button type="button">
+                  <button type="button" onClick={(e) => e.stopPropagation()}>
                     Update
                   </button>
                 </Link>
-                <button type="button" onClick={() => onDelete(employee._id)}>
+                <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(employee._id); }}>
                   Delete
                 </button>
               </td>
