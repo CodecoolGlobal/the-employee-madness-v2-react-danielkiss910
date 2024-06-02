@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
+import Papa from "papaparse";
 import "./EmployeeTable.css";
 
 const EmployeeTable = ({ employees, onDelete }) => {
@@ -8,7 +9,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortAttribute, setSortAttribute] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [sortDirection, setSortDirection] = useState(1); // 1 for ascending, -1 for descending
+  const [sortDirection, setSortDirection] = useState(1);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 10;
@@ -20,7 +21,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
       setSortAttribute(attribute);
       setSortOrder("asc");
     }
-    setSortDirection(sortOrder === "asc" ? 1 : -1); // For lists to work in both ascending and descending order
+    setSortDirection(sortOrder === "asc" ? 1 : -1);
   };
 
   const filteredEmployees = employees.filter((employee) => {
@@ -70,6 +71,26 @@ const EmployeeTable = ({ employees, onDelete }) => {
     }
   };
 
+  const handleExport = () => {
+    const csvData = sortedEmployees.map((employee) => ({
+      firstName: employee.firstName,
+      middleName: employee.middleName,
+      lastName: employee.lastName,
+      level: employee.level,
+      position: employee.position,
+    }));
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "employees.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Pagination logic
   const indexOfLastEmployee = currentPage * employeesPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
@@ -116,6 +137,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
       <div className="missing-employees-link">
         <Link to="/missing-employees" className="missing-link">View Missing Employees</Link>
       </div>
+      <button onClick={handleExport} className="export-button">Export to CSV</button>
       <table>
         <thead>
           <tr>
