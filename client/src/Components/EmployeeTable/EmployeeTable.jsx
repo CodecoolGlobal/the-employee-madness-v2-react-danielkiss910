@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./EmployeeTable.css";
 
 const EmployeeTable = ({ employees, onDelete }) => {
-  // State variables for filters, sorting, and selected employees
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,8 +10,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [sortDirection, setSortDirection] = useState(1); // 1 for ascending, -1 for descending
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const employeesPerPage = 10;
 
-  // Function to handle sorting
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -23,7 +23,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
     setSortDirection(sortOrder === "asc" ? 1 : -1); // For lists to work in both ascending and descending order
   };
 
-  // Function to filter employees based on filters and search query
   const filteredEmployees = employees.filter((employee) => {
     const matchesPosition =
       !positionFilter || employee.position.toLowerCase().includes(positionFilter.toLowerCase());
@@ -39,11 +38,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
     return matchesPosition && matchesLevel && matchesSearch;
   });
 
-  // Function to sort employees
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
     let aValue, bValue;
 
-    // Sorting logic based on attribute
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
       if (sortAttribute === "firstName") {
         aValue = a.firstName;
@@ -65,7 +62,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
     return 0;
   });
 
-  // Function to handle selection of an employee
   const handleSelect = (id) => {
     if (selectedEmployees.includes(id)) {
       setSelectedEmployees(selectedEmployees.filter((employeeId) => employeeId !== id));
@@ -74,44 +70,52 @@ const EmployeeTable = ({ employees, onDelete }) => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastEmployee = currentPage * employeesPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(sortedEmployees.length / employeesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const handleClick = (event) => {
+    setCurrentPage(Number(event.target.id));
+  };
+
   return (
     <div className="EmployeeTable">
-      {/* Filters section */}
       <div className="filters">
-        <h3>Filter Employees</h3>
         <input
           type="text"
-          placeholder="...by Position"
+          placeholder="Filter by Position"
           value={positionFilter}
           onChange={(e) => setPositionFilter(e.target.value)}
         />
         <input
           type="text"
-          placeholder="...by Level"
+          placeholder="Filter by Level"
           value={levelFilter}
           onChange={(e) => setLevelFilter(e.target.value)}
         />
         <input
           type="text"
-          placeholder="...by All fields"
+          placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      {/* Sort buttons */}
       <div className="sort-buttons">
-        <h3>Sort Employees by</h3>
         <button onClick={() => handleSort("firstName")}>First Name</button>
         <button onClick={() => handleSort("lastName")}>Last Name</button>
         <button onClick={() => handleSort("middleName")}>Middle Name</button>
         <button onClick={() => handleSort("position")}>Position</button>
         <button onClick={() => handleSort("level")}>Level</button>
       </div>
-      {/* Link to the Missing Employees page */}
       <div className="missing-employees-link">
         <Link to="/missing-employees" className="missing-link">View Missing Employees</Link>
       </div>
-      {/* Employee table */}
       <table>
         <thead>
           <tr>
@@ -123,9 +127,8 @@ const EmployeeTable = ({ employees, onDelete }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedEmployees.map((employee) => (
+          {currentEmployees.map((employee) => (
             <tr key={employee._id}>
-              {/* Checkbox for selection */}
               <td>
                 <input
                   type="checkbox"
@@ -133,11 +136,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
                   checked={selectedEmployees.includes(employee._id)}
                 />
               </td>
-              {/* Employee details */}
               <td>{`${employee.firstName} ${employee.middleName ? employee.middleName + ' ' : ''}${employee.lastName}`}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
-              {/* Buttons for update and delete */}
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button">
@@ -152,6 +153,13 @@ const EmployeeTable = ({ employees, onDelete }) => {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        {pageNumbers.map((number) => (
+          <button key={number} id={number} onClick={handleClick} className={currentPage === number ? 'active' : ''}>
+            {number}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
