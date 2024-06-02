@@ -1,10 +1,9 @@
-// .env file reading and creating environment variables
 require("dotenv").config();
 const mongoose = require("mongoose");
-const names = require("./names.json"); // Employee names
-const levels = require("./levels.json"); // Employee levels
-const positions = require("./positions.json"); // Employee positions
-const EmployeeModel = require("../db/employee.model"); // Employee data model
+const names = require("./names.json");
+const levels = require("./levels.json");
+const positions = require("./positions.json");
+const EmployeeModel = require("../db/employee.model");
 
 const mongoUrl = process.env.MONGO_URL; // MongoDB URL from environment variable
 
@@ -31,8 +30,8 @@ const populateEmployees = async () => {
       firstName,
       middleName: middleName || undefined, // Use undefined if no middle name
       lastName,
-      level: pick(levels), // Pick a random level
-      position: pick(positions), // Pick a random position
+      level: pick(levels),
+      position: pick(positions),
     };
   });
 
@@ -42,15 +41,15 @@ const populateEmployees = async () => {
 
 // Main function
 const main = async () => {
-  await mongoose.connect(mongoUrl); // Connect to MongoDB
+  await mongoose.connect(mongoUrl);
 
-  await populateEmployees(); // Populate employees
+  await populateEmployees();
 
-  await mongoose.disconnect(); // Disconnect
+  await mongoose.disconnect();
 };
 
 // Call the main function and handle errors
 main().catch((error) => {
   console.error(error);
-  process.exit(1); // Exit the program
+  process.exit(1);
 });
