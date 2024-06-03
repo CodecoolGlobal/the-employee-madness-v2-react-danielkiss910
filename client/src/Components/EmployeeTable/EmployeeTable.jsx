@@ -144,6 +144,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
         <button onClick={() => handleSort("position")}>Position</button>
         <button onClick={() => handleSort("level")}>Level</button>
       </div>
+      <div className="dashboard-link">
+        <Link to="/dashboard" className="dashboard-link">Go to Dashboard</Link>
+      </div>
       <div className="missing-employees-link">
         <Link to="/missing-employees" className="missing-link">View Missing Employees</Link>
       </div>
