@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Papa from "papaparse";
+import EmployeeDetailsModal from "../EmployeeDetailsModal/EmployeeDetailsModal";
 import "./EmployeeTable.css";
 
 const EmployeeTable = ({ employees, onDelete }) => {
@@ -13,6 +14,8 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 10;
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
 
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
@@ -105,6 +108,15 @@ const EmployeeTable = ({ employees, onDelete }) => {
     setCurrentPage(Number(event.target.id));
   };
 
+  const openModal = (employee) => {
+    setSelectedEmployee(employee);
+  };
+
+  const closeModal = () => {
+    setSelectedEmployee(null);
+  };
+
+
   return (
     <div className="EmployeeTable">
       <div className="filters">
@@ -138,6 +150,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
         <Link to="/missing-employees" className="missing-link">View Missing Employees</Link>
       </div>
       <button onClick={handleExport} className="export-button">Export to CSV</button>
+      <EmployeeDetailsModal employee={selectedEmployee} onClose={closeModal} />
       <table>
         <thead>
           <tr>
@@ -150,7 +163,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
         </thead>
         <tbody>
           {currentEmployees.map((employee) => (
-            <tr key={employee._id} onClick={() => window.location.href = `/update/${employee._id}`} className="clickable-row">
+            <tr key={employee._id} onClick={() => openModal(employee)} className="clickable-row">
               <td>
                 <input
                   type="checkbox"
