@@ -16,7 +16,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
   const employeesPerPage = 10;
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-
   const handleSort = (attribute) => {
     if (attribute === sortAttribute) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -116,7 +115,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
     setSelectedEmployee(null);
   };
 
-
   return (
     <div className="EmployeeTable">
       <div className="filters">
@@ -163,7 +161,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
         </thead>
         <tbody>
           {currentEmployees.map((employee) => (
-            <tr key={employee._id} onClick={() => openModal(employee)} className="clickable-row">
+            <tr key={employee._id}>
               <td>
                 <input
                   type="checkbox"
@@ -171,9 +169,21 @@ const EmployeeTable = ({ employees, onDelete }) => {
                   checked={selectedEmployees.includes(employee._id)}
                 />
               </td>
-              <td>{`${employee.firstName} ${employee.middleName ? employee.middleName + ' ' : ''}${employee.lastName}`}</td>
-              <td>{employee.level}</td>
-              <td>{employee.position}</td>
+              <td>
+                <span onClick={(e) => { e.stopPropagation(); openModal(employee); }} className="clickable-name">
+                  {`${employee.firstName} ${employee.middleName ? employee.middleName + ' ' : ''}${employee.lastName}`}
+                </span>
+              </td>
+              <td>
+                <Link to={`/update/${employee._id}`} onClick={(e) => e.stopPropagation()}>
+                  {employee.level}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/update/${employee._id}`} onClick={(e) => e.stopPropagation()}>
+                  {employee.position}
+                </Link>
+              </td>
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button" onClick={(e) => e.stopPropagation()}>
