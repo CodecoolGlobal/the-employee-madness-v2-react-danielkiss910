@@ -168,6 +168,41 @@ app.delete("/api/equipment/:id", async (req, res, next) => {
   }
 });
 
+// Dashboard route
+app.get("/api/dashboard", async (req, res, next) => {
+  try {
+    const totalEmployees = await EmployeeModel.countDocuments();
+    
+    const positionDistribution = await EmployeeModel.aggregate([
+      { $group: { _id: "$position", count: { $sum: 1 } } }
+    ]);
+
+    const levelDistribution = await EmployeeModel.aggregate([
+      { $group: { _id: "$level", count: { $sum: 1 } } }
+    ]);
+
+    const recentlyAddedEmployees = await EmployeeModel.find().sort({ created: -1 }).limit(5);
+
+    const dashboardData = {
+      totalEmployees,
+      positions: positionDistribution.reduce((acc, { _id, count }) => {
+        acc[_id] = count;
+        return acc;
+      }, {}),
+      levels: levelDistribution.reduce((acc, { _id, count }) => {
+        acc[_id] = count;
+        return acc;
+      }, {}),
+      recentlyAddedEmployees: recentlyAddedEmployees.map(employee => ({ id: employee._id, name: `${employee.firstName} ${employee.lastName}`, position: employee.position }))
+    };
+
+    res.json(dashboardData);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // Main function to start the server
 const main = async () => {
   try {
