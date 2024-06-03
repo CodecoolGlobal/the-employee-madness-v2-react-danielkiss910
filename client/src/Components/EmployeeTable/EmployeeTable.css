@@ -70,3 +70,17 @@
   color: black;
   border: 2px solid #4CAF50;
 }
+
+.clickable-name {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.pagination button.active {
+  font-weight: bold;
+}
