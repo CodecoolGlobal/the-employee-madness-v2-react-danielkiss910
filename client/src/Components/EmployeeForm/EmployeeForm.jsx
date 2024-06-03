@@ -7,6 +7,8 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
   const [lastName, setLastName] = useState("");
   const [level, setLevel] = useState("");
   const [position, setPosition] = useState("");
+  const [equipment, setEquipment] = useState([]);
+  const [equipmentOptions, setEquipmentOptions] = useState([]);
 
   useEffect(() => {
     if (employee) {
@@ -15,8 +17,16 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       setLastName(employee.lastName || "");
       setLevel(employee.level || "");
       setPosition(employee.position || "");
+      setEquipment(employee.equipment || []);
     }
   }, [employee]);
+
+  useEffect(() => {
+    // Fetch available equipment options from the server
+    fetch('/api/equipment')
+      .then(response => response.json())
+      .then(data => setEquipmentOptions(data));
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -27,6 +37,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       lastName,
       level,
       position,
+      equipment,
     };
 
     if (employee) {
@@ -34,6 +45,17 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
     }
 
     onSave(employeeData);
+  };
+
+  const handleEquipmentChange = (e) => {
+    const { options } = e.target;
+    const selectedEquipment = [];
+    for (const option of options) {
+      if (option.selected) {
+        selectedEquipment.push(option.value);
+      }
+    }
+    setEquipment(selectedEquipment);
   };
 
   return (
@@ -88,6 +110,15 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
         />
       </div>
 
+      <div className="control">
+        <label htmlFor="equipment">Assigned Equipment:</label>
+        <select multiple name="equipment" value={equipment} onChange={handleEquipmentChange}>
+          {equipmentOptions.map((equip) => (
+            <option key={equip._id} value={equip._id}>{equip.name}</option>
+          ))}
+        </select>
+      </div>
+
       <div className="buttons">
         <button type="submit" disabled={disabled}>
           {employee ? "Update Employee" : "Create Employee"}
@@ -110,6 +141,7 @@ EmployeeForm.propTypes = {
     lastName: PropTypes.string,
     level: PropTypes.string,
     position: PropTypes.string,
+    equipment: PropTypes.arrayOf(PropTypes.string),
   }),
   onCancel: PropTypes.func.isRequired,
 };

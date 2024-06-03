@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
-import Loading from "../Components/Loading";
 
 const createEmployee = async (employee) => {
-  const response = await fetch("/api/employees", {
-    method: "POST",
+  const response = await fetch('/api/employees', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(employee),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create employee");
+    throw new Error('Failed to create employee');
   }
 
   return response.json();
@@ -26,13 +25,12 @@ const EmployeeCreator = () => {
 
   const handleCreateEmployee = async (employee) => {
     setLoading(true);
-    setError(null);
-
     try {
       await createEmployee(employee);
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      setError('Failed to create employee');
     } finally {
       setLoading(false);
     }
@@ -40,16 +38,13 @@ const EmployeeCreator = () => {
 
   return (
     <div>
-      {loading ? (
-        <Loading />
-      ) : (
-        <EmployeeForm
-          onCancel={() => navigate("/")}
-          disabled={loading}
-          onSave={handleCreateEmployee}
-        />
-      )}
-      {error && <p className="error">{error}</p>}
+      <h2>Create Employee</h2>
+      {error && <div>Error: {error}</div>}
+      <EmployeeForm
+        onSave={handleCreateEmployee}
+        disabled={loading}
+        onCancel={() => navigate('/')}
+      />
     </div>
   );
 };
