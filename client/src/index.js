@@ -15,7 +15,7 @@ import EmployeeUpdater from "./Pages/EmployeeUpdater";
 import EquipmentList from "./Pages/EquipmentList";
 import EquipmentCreator from "./Pages/EquipmentCreator";
 import EquipmentUpdater from "./Pages/EquipmentUpdater";
-import MissingEmployees from "./Pages/MissingEmployees";
+import MissingEmployees from "./Components/MissingEmployees/MissingEmployees";
 import DashboardPage from "./Components/Dashboard/DashboardPage";
 import "./index.css";
 import TableTest from "./Pages/TableTest";
