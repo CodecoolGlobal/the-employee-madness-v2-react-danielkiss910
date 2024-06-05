@@ -58,10 +58,22 @@ const EmployeeTable = ({ employees, onDelete }) => {
   });
 
   const handleSelect = (id) => {
-    setSelectedEmployees((prev) =>
-      prev.includes(id) ? prev.filter((employeeId) => employeeId !== id) : [...prev, id]
-    );
-  };
+    const updatedEmployees = selectedEmployees.includes(id)
+      ? selectedEmployees.filter((employeeId) => employeeId !== id)
+      : [...selectedEmployees, id];
+  
+    setSelectedEmployees(updatedEmployees);
+  
+    // Update the employee's isPicked status in the database
+    const isPicked = updatedEmployees.includes(id);
+    fetch(`/api/employees/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isPicked }),
+    }).catch((error) => console.error('Error updating employee:', error));
+  };  
 
   const handleExport = () => {
     const csvData = sortedEmployees.map((employee) => ({

@@ -11,10 +11,9 @@ const MissingEmployees = () => {
   }, []);
 
   const fetchMissingEmployees = () => {
-    fetch("/api/missing-employees")
+    fetch("/api/missing")
       .then((res) => res.json())
       .then((data) => {
-        // Set the missing employees data and update loading state
         setMissingEmployees(data);
         setLoading(false);
       })

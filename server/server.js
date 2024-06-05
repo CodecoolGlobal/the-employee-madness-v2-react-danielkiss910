@@ -60,7 +60,7 @@ app.get("/api/employees/search/:search", async (req, res, next) => {
 // Get missing employees
 app.get("/api/missing", async (req, res, next) => {
   try {
-    const missingEmployees = await EmployeeModel.find({ isPicked: true });
+    const missingEmployees = await EmployeeModel.find({ isPicked: false });
     return res.json(missingEmployees);
   } catch (error) {
     return next(error);
