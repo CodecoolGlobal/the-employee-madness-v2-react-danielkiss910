@@ -127,3 +127,9 @@ button.delete-button:hover {
   color: blue;
   text-decoration: underline;
 }
+
+.sort-info {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+

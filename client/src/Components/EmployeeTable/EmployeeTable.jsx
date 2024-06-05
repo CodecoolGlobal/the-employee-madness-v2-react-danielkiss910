@@ -127,6 +127,13 @@ const EmployeeTable = ({ employees, onDelete }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
+      <div className="sort-info">
+        {sortAttribute && (
+          <p>
+            Sorted by {sortAttribute.charAt(0).toUpperCase() + sortAttribute.slice(1)} ({sortOrder})
+          </p>
+        )}
+      </div>
       <div className="sort-buttons">
         <button onClick={() => handleSort("firstName")}>First Name</button>
         <button onClick={() => handleSort("lastName")}>Last Name</button>
