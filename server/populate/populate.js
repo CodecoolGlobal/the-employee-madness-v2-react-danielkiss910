@@ -16,6 +16,9 @@ if (!mongoUrl) {
 // Pick a random element from an array
 const pick = (from) => from[Math.floor(Math.random() * from.length)];
 
+// Generate a random phone number starting with 0630 followed by 7 digits
+const generatePhoneNumber = () => `0630${Math.floor(1000000 + Math.random() * 9000000)}`;
+
 // Create and populate employees in MongoDB
 const populateEmployees = async () => {
   await EmployeeModel.deleteMany({}); // Delete all employees
@@ -26,12 +29,16 @@ const populateEmployees = async () => {
     const lastName = parts[parts.length - 1];
     const middleName = parts.length === 3 ? parts[1] : ""; // Use middle name if present
 
+    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@gmail.com`;
+
     return {
       firstName,
       middleName: middleName || undefined, // Use undefined if no middle name
       lastName,
       level: pick(levels),
       position: pick(positions),
+      phone: generatePhoneNumber(),
+      email: email,
     };
   });
 
