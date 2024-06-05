@@ -186,6 +186,20 @@ app.get("/api/dashboard", async (req, res, next) => {
 
     const recentlyAddedEmployees = await EmployeeModel.find().sort({ created: -1 }).limit(5);
 
+    const equipmentStatistics = await EmployeeModel.aggregate([
+      { $unwind: "$equipment" },
+      {
+        $lookup: {
+          from: "equipment", // Assuming the name of the equipment collection is "equipment"
+          localField: "equipment",
+          foreignField: "_id",
+          as: "equipmentDetails"
+        }
+      },
+      { $unwind: "$equipmentDetails" },
+      { $group: { _id: "$equipment", name: { $first: "$equipmentDetails.name" }, count: { $sum: 1 } } }
+    ]);
+
     const dashboardData = {
       totalEmployees,
       positions: positionDistribution.reduce((acc, { _id, count }) => {
@@ -196,7 +210,8 @@ app.get("/api/dashboard", async (req, res, next) => {
         acc[_id] = count;
         return acc;
       }, {}),
-      recentlyAddedEmployees: recentlyAddedEmployees.map(employee => ({ id: employee._id, name: `${employee.firstName} ${employee.lastName}`, position: employee.position }))
+      recentlyAddedEmployees: recentlyAddedEmployees.map(employee => ({ id: employee._id, name: `${employee.firstName} ${employee.lastName}`, position: employee.position })),
+      equipmentStatistics: equipmentStatistics.map(stat => ({ id: stat._id, name: stat.name, count: stat.count }))
     };
 
     res.json(dashboardData);
@@ -204,7 +219,6 @@ app.get("/api/dashboard", async (req, res, next) => {
     next(error);
   }
 });
-
 
 // Main function to start the server
 const main = async () => {
