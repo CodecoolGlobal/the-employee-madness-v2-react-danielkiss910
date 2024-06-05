@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import EmployeeDetailsModal from "../EmployeeDetailsModal/EmployeeDetailsModal";
 import "./EmployeeTable.css";
 
-const EmployeeTable = ({ employees, onDelete }) => {
+const EmployeeTable = ({ employees, onDelete, equipmentList }) => {
   const [positionFilter, setPositionFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -61,9 +61,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
     const updatedEmployees = selectedEmployees.includes(id)
       ? selectedEmployees.filter((employeeId) => employeeId !== id)
       : [...selectedEmployees, id];
-  
+
     setSelectedEmployees(updatedEmployees);
-  
+
     // Update the employee's isPicked status in the database
     const isPicked = updatedEmployees.includes(id);
     fetch(`/api/employees/${id}`, {
@@ -73,7 +73,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
       },
       body: JSON.stringify({ isPicked }),
     }).catch((error) => console.error('Error updating employee:', error));
-  };  
+  };
 
   const handleExport = () => {
     const csvData = sortedEmployees.map((employee) => ({
@@ -168,6 +168,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
             <th>Name</th>
             <th>Level</th>
             <th>Position</th>
+            <th>Assigned Equipment</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -197,6 +198,20 @@ const EmployeeTable = ({ employees, onDelete }) => {
                 </Link>
               </td>
               <td>
+                {employee.equipment.length > 0 ? (
+                  <ul>
+                    {employee.equipment.map((equipmentId) => {
+                      const equipment = equipmentList.find(e => e._id === equipmentId);
+                      return (
+                        <li key={equipmentId}>
+                          {equipment ? equipment.name : "Unknown Equipment"}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : "No Equipment Assigned"}
+              </td>
+              <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button" className="update-button" onClick={(e) => e.stopPropagation()}>
                     Update
@@ -206,7 +221,6 @@ const EmployeeTable = ({ employees, onDelete }) => {
                   Delete
                 </button>
               </td>
-
             </tr>
           ))}
         </tbody>
@@ -223,3 +237,4 @@ const EmployeeTable = ({ employees, onDelete }) => {
 };
 
 export default EmployeeTable;
+

@@ -10,6 +10,14 @@ const fetchEmployees = async () => {
   return response.json();
 };
 
+const fetchEquipment = async () => {
+  const response = await fetch("/api/equipment");
+  if (!response.ok) {
+    throw new Error("Failed to fetch equipment");
+  }
+  return response.json();
+};
+
 const deleteEmployee = async (id) => {
   const response = await fetch(`/api/employees/${id}`, { method: "DELETE" });
   if (!response.ok) {
@@ -21,6 +29,7 @@ const deleteEmployee = async (id) => {
 const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState([]);
+  const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState(null);
 
   const handleDelete = async (id) => {
@@ -37,22 +46,32 @@ const EmployeeList = () => {
       setError("Failed to delete employee");
     }
   };
-  
 
   useEffect(() => {
     const loadEmployees = async () => {
       try {
-        const employees = await fetchEmployees();
-        setEmployees(employees);
+        const employeesData = await fetchEmployees();
+        setEmployees(employeesData);
       } catch (error) {
         console.error(error);
         setError("Failed to fetch employees");
+      }
+    };
+
+    const loadEquipment = async () => {
+      try {
+        const equipmentData = await fetchEquipment();
+        setEquipmentList(equipmentData);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to fetch equipment");
       } finally {
         setLoading(false);
       }
     };
 
     loadEmployees();
+    loadEquipment();
   }, []);
 
   if (loading) {
@@ -65,7 +84,7 @@ const EmployeeList = () => {
 
   return (
     <div>
-      <EmployeeTable employees={employees} onDelete={handleDelete} />
+      <EmployeeTable employees={employees} onDelete={handleDelete} equipmentList={equipmentList} />
     </div>
   );
 };
