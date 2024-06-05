@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import EmployeeTable from "../Components/EmployeeTable";
 import Loading from "../Components/Loading";
+import MissingEmployeesList from "./MissingEmployeesList";
 
 const MissingEmployees = () => {
   const [missingEmployees, setMissingEmployees] = useState([]);
+  const [totalEmployees, setTotalEmployees] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,7 +15,8 @@ const MissingEmployees = () => {
     fetch("/api/missing")
       .then((res) => res.json())
       .then((data) => {
-        setMissingEmployees(data);
+        setMissingEmployees(data.missingEmployees);
+        setTotalEmployees(data.totalEmployees);
         setLoading(false);
       })
       .catch((error) => {
@@ -29,8 +31,7 @@ const MissingEmployees = () => {
 
   return (
     <div>
-      <h2>Missing Employees</h2>
-      <EmployeeTable employees={missingEmployees} />
+      <MissingEmployeesList missingEmployees={missingEmployees} totalEmployees={totalEmployees} />
     </div>
   );
 };
