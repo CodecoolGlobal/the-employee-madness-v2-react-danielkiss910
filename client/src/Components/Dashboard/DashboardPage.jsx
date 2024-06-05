@@ -49,6 +49,19 @@ const DashboardPage = () => {
     ],
   };
 
+  const equipmentData = {
+    labels: dashboardData.equipmentStatistics.map(stat => stat.name),
+    datasets: [
+      {
+        label: 'Equipment Statistics',
+        data: dashboardData.equipmentStatistics.map(stat => stat.count),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+        borderColor: 'rgba(255, 159, 64, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div className="dashboard-container">
       <h1>Dashboard</h1>
@@ -73,6 +86,11 @@ const DashboardPage = () => {
             </li>
           ))}
         </ul>
+      </div>
+      {/* Equipment Statistics Section */}
+      <div className="dashboard-item">
+        <h2>Equipment Statistics</h2>
+        <Bar data={equipmentData} />
       </div>
     </div>
   );
