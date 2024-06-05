@@ -27,7 +27,7 @@ const generateEquipment = () => {
 
   for (let i = 0; i < equipmentTypes.length; i++) {
     equipment.push({
-      name: `${equipmentTypes[i]} ${i + 1}`,
+      name: `${equipmentTypes[i]}`,
       type: equipmentTypes[i],
       amount: Math.floor(1 + Math.random() * 100),
     });
