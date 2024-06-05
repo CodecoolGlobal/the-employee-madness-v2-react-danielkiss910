@@ -61,11 +61,14 @@ app.get("/api/employees/search/:search", async (req, res, next) => {
 app.get("/api/missing", async (req, res, next) => {
   try {
     const missingEmployees = await EmployeeModel.find({ isPicked: false });
-    return res.json(missingEmployees);
+    const totalEmployees = await EmployeeModel.countDocuments();
+    return res.json({ missingEmployees, totalEmployees });
   } catch (error) {
-    return next(error);
+    console.error('Error fetching missing employees:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Create a new employee
 app.post("/api/employees/", async (req, res, next) => {
