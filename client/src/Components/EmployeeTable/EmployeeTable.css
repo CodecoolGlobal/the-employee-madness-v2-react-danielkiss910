@@ -5,15 +5,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.filters,
-.sort-buttons,
-.dashboard-link,
-.missing-employees-link,
-.export-button {
+.filters, .sort-buttons {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.filters input {
+.filters input, .sort-buttons button {
   margin-right: 0.5rem;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -21,55 +19,35 @@
 }
 
 .sort-buttons button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .sort-buttons button:hover {
-  background-color: #0056b3;
+  background-color: #f1f1f1;
 }
 
-.dashboard-link,
-.missing-employees-link {
-  font-weight: bold;
+.dashboard-link, .missing-employees-link {
+  margin-bottom: 1rem;
+}
+
+.dashboard-link a, .missing-employees-link a {
   color: #007bff;
   text-decoration: none;
+  font-weight: bold;
 }
 
-.dashboard-link:hover,
-.missing-link:hover {
+.dashboard-link a:hover, .missing-employees-link a:hover {
   color: #0056b3;
-}
-
-.export-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-.export-button:hover {
-  background-color: white;
-  color: #4caf50;
-  border: 2px solid #4caf50;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 1rem;
 }
 
-th,
-td {
+th, td {
   padding: 0.75rem;
   border: 1px solid #ddd;
   text-align: left;
@@ -80,32 +58,58 @@ th {
   color: white;
 }
 
-td .clickable-name {
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  color: #007bff;
-  text-decoration: underline;
+  transition: background-color 0.3s;
 }
 
-td .clickable-name:hover {
-  color: #0056b3;
+.export-button {
+  background-color: #4CAF50;
+  color: white;
+  margin-top: 10px;
+}
+
+.export-button:hover {
+  background-color: white;
+  color: #4CAF50;
+  border: 2px solid #4CAF50;
+}
+
+button[type="button"] {
+  margin-right: 0.5rem;
+}
+
+button.update-button {
+  background-color: #007bff;
+  color: white;
+}
+
+button.update-button:hover {
+  background-color: #0056b3;
+}
+
+button.delete-button {
+  background-color: #d9534f; /* Darker shade of red */
+  color: white;
+}
+
+button.delete-button:hover {
+  background-color: #c9302c; /* Even darker shade of red */
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 20px;
 }
 
 .pagination button {
   background-color: #f1f1f1;
-  border: none;
-  color: black;
-  padding: 0.5rem 1rem;
-  margin: 0 0.25rem;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  cursor: pointer;
-  border-radius: 4px;
+  padding: 10px 20px;
+  margin: 0 5px;
 }
 
 .pagination button:hover {
@@ -116,4 +120,10 @@ td .clickable-name:hover {
   background-color: #007bff;
   color: white;
   font-weight: bold;
+}
+
+.clickable-name {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
 }

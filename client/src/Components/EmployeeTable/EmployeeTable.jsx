@@ -179,14 +179,15 @@ const EmployeeTable = ({ employees, onDelete }) => {
               </td>
               <td>
                 <Link to={`/update/${employee._id}`}>
-                  <button type="button" onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className="update-button" onClick={(e) => e.stopPropagation()}>
                     Update
                   </button>
                 </Link>
-                <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(employee._id); }}>
+                <button type="button" className="delete-button" onClick={(e) => { e.stopPropagation(); onDelete(employee._id); }}>
                   Delete
                 </button>
               </td>
+
             </tr>
           ))}
         </tbody>

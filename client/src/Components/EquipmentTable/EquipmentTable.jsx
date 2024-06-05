@@ -25,7 +25,8 @@ const EquipmentTable = () => {
   };
 
   // Handle adding new equipment
-  const handleAddEquipment = async () => {
+  const handleAddEquipment = async (e) => {
+    e.preventDefault();
     const newEquipment = { name, type, amount };
 
     try {
@@ -52,12 +53,6 @@ const EquipmentTable = () => {
 
   return (
     <div className="EquipmentTable">
-      <div className="filters">
-        {/* Add filter inputs if needed */}
-      </div>
-      <div className="sort-buttons">
-        {/* Add sorting buttons if needed */}
-      </div>
       <table>
         <thead>
           <tr>
@@ -75,9 +70,9 @@ const EquipmentTable = () => {
               <td>{item.amount}</td>
               <td>
                 <Link to={`/update-equipment/${item._id}`}>
-                  <button type="button">Update</button>
+                  <button type="button" className="update-button">Update</button>
                 </Link>
-                <button type="button" onClick={() => handleDeleteEquipment(item._id)}>
+                <button type="button" className="delete-button" onClick={() => handleDeleteEquipment(item._id)}>
                   Delete
                 </button>
               </td>
