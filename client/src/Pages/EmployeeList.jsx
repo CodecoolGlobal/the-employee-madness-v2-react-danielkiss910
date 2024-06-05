@@ -24,6 +24,11 @@ const EmployeeList = () => {
   const [error, setError] = useState(null);
 
   const handleDelete = async (id) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this employee?");
+    if (!isConfirmed) {
+      return;
+    }
+  
     try {
       await deleteEmployee(id);
       setEmployees((employees) => employees.filter((employee) => employee._id !== id));
@@ -32,6 +37,7 @@ const EmployeeList = () => {
       setError("Failed to delete employee");
     }
   };
+  
 
   useEffect(() => {
     const loadEmployees = async () => {
