@@ -1,44 +1,111 @@
 .EmployeeTable {
-  padding: 0.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.filters {
-  padding: 0.5rem;
+.filters,
+.sort-buttons,
+.dashboard-link,
+.missing-employees-link,
+.export-button {
+  margin-bottom: 1rem;
 }
 
-.sort-buttons {
+.filters input {
+  margin-right: 0.5rem;
   padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+.sort-buttons button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sort-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.dashboard-link,
 .missing-employees-link {
-  margin-top: 10px;
-}
-
-.missing-link {
   font-weight: bold;
-  color: #007bff; /* Blue color */
-  text-decoration: none; /* Remove underline */
+  color: #007bff;
+  text-decoration: none;
 }
 
+.dashboard-link:hover,
 .missing-link:hover {
-  color: #0056b3; /* Darker blue color on hover */
+  color: #0056b3;
+}
+
+.export-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.export-button:hover {
+  background-color: white;
+  color: #4caf50;
+  border: 2px solid #4caf50;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+td .clickable-name {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+td .clickable-name:hover {
+  color: #0056b3;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 
 .pagination button {
   background-color: #f1f1f1;
   border: none;
   color: black;
-  padding: 10px 20px;
-  margin: 0 5px;
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
   text-decoration: none;
   transition: background-color 0.3s;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .pagination button:hover {
@@ -48,39 +115,5 @@
 .pagination button.active {
   background-color: #007bff;
   color: white;
-}
-
-.export-button {
-  margin-top: 10px;
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-
-.export-button:hover {
-  background-color: white;
-  color: black;
-  border: 2px solid #4CAF50;
-}
-
-.clickable-name {
-  cursor: pointer;
-  color: blue;
-  text-decoration: underline;
-}
-
-.clickable-row {
-  cursor: pointer;
-}
-
-.pagination button.active {
   font-weight: bold;
 }
