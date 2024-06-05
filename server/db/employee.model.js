@@ -18,6 +18,14 @@ const EmployeeSchema = new Schema({
       ref: 'Equipment'
     }
   ],
+  phone: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
   created: {
     type: Date,
     default: Date.now,
