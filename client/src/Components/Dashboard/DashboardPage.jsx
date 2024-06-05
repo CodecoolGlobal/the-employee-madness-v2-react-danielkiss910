@@ -1,66 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import './DashboardPage.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Bar } from "react-chartjs-2";
+import "chart.js/auto";
+import "./DashboardPage.css";
 
-const Dashboard = () => {
-  const [metrics, setMetrics] = useState(null);
+const DashboardPage = () => {
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/dashboard");
+        setDashboardData(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      // Fetch data from the backend API
-      const response = await fetch('/api/dashboard');
-      if (!response.ok) {
-        throw new Error('Failed to fetch dashboard data');
-      }
-      const data = await response.json();
-      setMetrics(data);
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    }
-  };
-
-  if (!metrics) {
+  if (!dashboardData) {
     return <div>Loading...</div>;
   }
 
+  const positionData = {
+    labels: Object.keys(dashboardData.positions),
+    datasets: [
+      {
+        label: 'Position Distribution',
+        data: Object.values(dashboardData.positions),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const levelData = {
+    labels: Object.keys(dashboardData.levels),
+    datasets: [
+      {
+        label: 'Level Distribution',
+        data: Object.values(dashboardData.levels),
+        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
-    <div className="dashboard">
-      <h2>Dashboard</h2>
-      <div className="metrics">
-        <div className="metric">
-          <h3>Total Employees</h3>
-          <p>{metrics.totalEmployees}</p>
-        </div>
-        <div className="metric">
-          <h3>Position Distribution</h3>
-          <ul>
-            {Object.entries(metrics.positions).map(([position, count]) => (
-              <li key={position}>{position}: {count}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="metric">
-          <h3>Level Distribution</h3>
-          <ul>
-            {Object.entries(metrics.levels).map(([level, count]) => (
-              <li key={level}>{level}: {count}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="metric">
-          <h3>Recently Added Employees</h3>
-          <ul>
-            {metrics.recentlyAddedEmployees.map(employee => (
-              <li key={employee.id}>{employee.name} ({employee.position})</li>
-            ))}
-          </ul>
-        </div>
+    <div className="dashboard-container">
+      <h1>Dashboard</h1>
+      <div className="dashboard-item">
+        <h2>Total Employees</h2>
+        <p>{dashboardData.totalEmployees}</p>
+      </div>
+      <div className="dashboard-item">
+        <h2>Position Distribution</h2>
+        <Bar data={positionData} />
+      </div>
+      <div className="dashboard-item">
+        <h2>Level Distribution</h2>
+        <Bar data={levelData} />
+      </div>
+      <div className="dashboard-item">
+        <h2>Recent Employees</h2>
+        <ul>
+          {dashboardData.recentlyAddedEmployees.map((employee) => (
+            <li key={employee.id}>
+              {employee.name} - {employee.position}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
