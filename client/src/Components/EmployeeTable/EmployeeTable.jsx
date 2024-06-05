@@ -45,16 +45,8 @@ const EmployeeTable = ({ employees, onDelete }) => {
     let aValue, bValue;
 
     if (sortAttribute === "firstName" || sortAttribute === "middleName" || sortAttribute === "lastName") {
-      if (sortAttribute === "firstName") {
-        aValue = a.firstName;
-        bValue = b.firstName;
-      } else if (sortAttribute === "middleName") {
-        aValue = a.middleName || "";
-        bValue = b.middleName || "";
-      } else if (sortAttribute === "lastName") {
-        aValue = a.lastName;
-        bValue = b.lastName;
-      }
+      aValue = a[sortAttribute] || "";
+      bValue = b[sortAttribute] || "";
       return sortDirection * aValue.localeCompare(bValue);
     }
 
@@ -66,11 +58,9 @@ const EmployeeTable = ({ employees, onDelete }) => {
   });
 
   const handleSelect = (id) => {
-    if (selectedEmployees.includes(id)) {
-      setSelectedEmployees(selectedEmployees.filter((employeeId) => employeeId !== id));
-    } else {
-      setSelectedEmployees([...selectedEmployees, id]);
-    }
+    setSelectedEmployees((prev) =>
+      prev.includes(id) ? prev.filter((employeeId) => employeeId !== id) : [...prev, id]
+    );
   };
 
   const handleExport = () => {
@@ -159,7 +149,7 @@ const EmployeeTable = ({ employees, onDelete }) => {
             <th>Name</th>
             <th>Level</th>
             <th>Position</th>
-            <th />
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
